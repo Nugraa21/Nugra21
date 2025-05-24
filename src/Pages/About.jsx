@@ -58,7 +58,8 @@ const ProfileImage = () => {
       <div className="flex flex-col items-center bg-gradient-to-br from-orange-200 to-yellow-100 py-8 px-6">
         <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img
-            src="/Photo.png"
+            src="/Nugra.png"
+            // src="/Photo.png"
             alt="Ludang Prasetyo Nugroho"
             className="object-cover w-full h-full"
             loading="lazy"
