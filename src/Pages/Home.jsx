@@ -46,7 +46,7 @@ const WORDS = ["Computer Engineering Student", "Tech & Robotics Enthusiast"];
 const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
-const TECH_STACK = ["Flutter", "React", "MQTT", "ESP32", "TailwindCSS"];
+const TECH_STACK = [ "React", "MQTT", "ESP32", "TailwindCSS"];
 const SOCIAL_LINKS = [
   { icon: Github, link: "https://github.com/nugra21" },
   { icon: Linkedin, link: "https://www.linkedin.com/in/ludangprasetyo/" },
