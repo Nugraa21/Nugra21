@@ -1,6 +1,4 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { db, collection } from "../firebase";
-import { getDocs } from "firebase/firestore";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views";
 import { useTheme } from "@mui/material/styles";
@@ -16,33 +14,38 @@ import "aos/dist/aos.css";
 import Certificate from "../components/Certificate";
 import { Code, Award, Boxes } from "lucide-react";
 
-// Separate ShowMore/ShowLess button component
+// Dummy data for projects
+const dummyProjects = [
+  {
+    id: "1",
+    Img: "project1.jpg",
+    Title: "Weather App",
+    Description: "A simple weather forecast app using React and OpenWeatherMap API.",
+    Link: "https://example.com/project1",
+    TechStack: ["React", "API", "CSS"],
+  },
+  {
+    id: "2",
+    Img: "project2.jpg",
+    Title: "Portfolio Website",
+    Description: "Personal website to showcase my portfolio and resume.",
+    Link: "https://example.com/project2",
+    TechStack: ["HTML", "CSS", "JavaScript"],
+  },
+  // Tambahkan lebih banyak proyek di sini jika diperlukan
+];
+
+// Dummy data for certificates
+const dummyCertificates = [
+  { Img: "certificate1.jpg" },
+  { Img: "certificate2.jpg" },
+  // Tambahkan lebih banyak sertifikat di sini jika diperlukan
+];
+
 const ToggleButton = ({ onClick, isShowingMore }) => (
   <button
     onClick={onClick}
-    className="
-      px-3 py-1.5
-      text-slate-300 
-      hover:text-white 
-      text-sm 
-      font-medium 
-      transition-all 
-      duration-300 
-      ease-in-out
-      flex 
-      items-center 
-      gap-2
-      bg-white/5 
-      hover:bg-white/10
-      rounded-md
-      border 
-      border-white/10
-      hover:border-white/20
-      backdrop-blur-sm
-      group
-      relative
-      overflow-hidden
-    "
+    className="px-3 py-1.5 text-slate-300 hover:text-white text-sm font-medium transition-all duration-300 ease-in-out flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-md border border-white/10 hover:border-white/20 backdrop-blur-sm group relative overflow-hidden"
   >
     <span className="relative z-10 flex items-center gap-2">
       {isShowingMore ? "See Less" : "See More"}
@@ -56,11 +59,9 @@ const ToggleButton = ({ onClick, isShowingMore }) => (
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className={`
-          transition-transform 
-          duration-300 
-          ${isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"}
-        `}
+        className={`transition-transform duration-300 ${
+          isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"
+        }`}
       >
         <polyline points={isShowingMore ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
       </svg>
@@ -126,54 +127,20 @@ export default function FullWidthTabs() {
   const initialItems = isMobile ? 4 : 6;
 
   useEffect(() => {
-    // Initialize AOS once
-    AOS.init({
-      once: false, // This will make animations occur only once
-    });
+    AOS.init({ once: false });
+    setProjects(dummyProjects);
+    setCertificates(dummyCertificates);
   }, []);
-
-  const fetchData = useCallback(async () => {
-    try {
-      const projectCollection = collection(db, "projects");
-      const certificateCollection = collection(db, "certificates");
-
-      const [projectSnapshot, certificateSnapshot] = await Promise.all([
-        getDocs(projectCollection),
-        getDocs(certificateCollection),
-      ]);
-
-      const projectData = projectSnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-        TechStack: doc.data().TechStack || [],
-      }));
-
-      const certificateData = certificateSnapshot.docs.map((doc) => doc.data());
-
-      setProjects(projectData);
-      setCertificates(certificateData);
-
-      // Store in localStorage
-      localStorage.setItem("projects", JSON.stringify(projectData));
-      localStorage.setItem("certificates", JSON.stringify(certificateData));
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const toggleShowMore = useCallback((type) => {
-    if (type === 'projects') {
-      setShowAllProjects(prev => !prev);
+    if (type === "projects") {
+      setShowAllProjects((prev) => !prev);
     } else {
-      setShowAllCertificates(prev => !prev);
+      setShowAllCertificates((prev) => !prev);
     }
   }, []);
 
@@ -182,27 +149,27 @@ export default function FullWidthTabs() {
 
   return (
     <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Portofolio">
-      {/* Header section - unchanged */}
       <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
         <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
-          <span style={{
-            color: '#6366f1',
-            backgroundImage: 'linear-gradient(45deg, #6366f1 10%, #a855f7 93%)',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
+          <span
+            style={{
+              color: "#6366f1",
+              backgroundImage: "linear-gradient(45deg, #6366f1 10%, #a855f7 93%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+          >
             Portfolio Showcase
           </span>
         </h2>
         <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          Explore my journey through projects, certifications, and technical expertise. 
-          Each section represents a milestone in my continuous learning path.
+          Explore my journey through projects, certifications, and technical expertise. Each section represents a
+          milestone in my continuous learning path.
         </p>
       </div>
 
       <Box sx={{ width: "100%" }}>
-        {/* AppBar and Tabs section - unchanged */}
         <AppBar
           position="static"
           elevation={0}
@@ -226,7 +193,6 @@ export default function FullWidthTabs() {
           }}
           className="md:px-4"
         >
-          {/* Tabs remain unchanged */}
           <Tabs
             value={value}
             onChange={handleChange}
@@ -234,7 +200,6 @@ export default function FullWidthTabs() {
             indicatorColor="secondary"
             variant="fullWidth"
             sx={{
-              // Existing styles remain unchanged
               minHeight: "70px",
               "& .MuiTab-root": {
                 fontSize: { xs: "0.9rem", md: "1rem" },
@@ -271,29 +236,13 @@ export default function FullWidthTabs() {
               },
             }}
           >
-            <Tab
-              icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Projects"
-              {...a11yProps(0)}
-            />
-            <Tab
-              icon={<Award className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Certificates"
-              {...a11yProps(1)}
-            />
-            <Tab
-              icon={<Boxes className="mb-2 w-5 h-5 transition-all duration-300" />}
-              label="Tech Stack"
-              {...a11yProps(2)}
-            />
+            <Tab icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />} label="Projects" {...a11yProps(0)} />
+            <Tab icon={<Award className="mb-2 w-5 h-5 transition-all duration-300" />} label="Certificates" {...a11yProps(1)} />
+            <Tab icon={<Boxes className="mb-2 w-5 h-5 transition-all duration-300" />} label="Tech Stack" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
 
-        <SwipeableViews
-          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-          index={value}
-          onChangeIndex={setValue}
-        >
+        <SwipeableViews axis={theme.direction === "rtl" ? "x-reverse" : "x"} index={value} onChangeIndex={setValue}>
           <TabPanel value={value} index={0} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
@@ -316,10 +265,7 @@ export default function FullWidthTabs() {
             </div>
             {projects.length > initialItems && (
               <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={() => toggleShowMore('projects')}
-                  isShowingMore={showAllProjects}
-                />
+                <ToggleButton onClick={() => toggleShowMore("projects")} isShowingMore={showAllProjects} />
               </div>
             )}
           </TabPanel>
@@ -340,10 +286,7 @@ export default function FullWidthTabs() {
             </div>
             {certificates.length > initialItems && (
               <div className="mt-6 w-full flex justify-start">
-                <ToggleButton
-                  onClick={() => toggleShowMore('certificates')}
-                  isShowingMore={showAllCertificates}
-                />
+                <ToggleButton onClick={() => toggleShowMore("certificates")} isShowingMore={showAllCertificates} />
               </div>
             )}
           </TabPanel>
