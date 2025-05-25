@@ -172,7 +172,7 @@ const AboutPage = () => {
       <div className="w-full mx-auto pt-10 sm:pt-14 relative">
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Nama dan deskripsi */}
-          <div className="space-y-8 text-center lg:text-left max-w-full lg:max-w-none">
+          <div className="space-y-8 text-center lg:text-left">
             <h2
               className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight"
               data-aos="fade-right"
@@ -225,9 +225,7 @@ const AboutPage = () => {
           </div>
 
           {/* ProfileImage dengan loading skeleton */}
-          <div className="w-full max-w-xs mx-auto lg:mx-0">
-            <ProfileImage />
-          </div>
+          <ProfileImage />
         </div>
 
         {/* Skill bars */}
@@ -274,3 +272,5 @@ const AboutPage = () => {
 };
 
 export default memo(AboutPage);
+
+// --------------------------- fix

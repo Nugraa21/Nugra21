@@ -32,84 +32,96 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
           <About />
           <Portofolio />
           <ContactPage />
-          
-          {/* Footer manual keren */}
-          <footer style={{
-            backgroundColor: "#fff",
-            borderTop: "3px solid #ff6600",
-            padding: "40px 20px",
-            color: "#222",
-            fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-            fontSize: "15px",
-            lineHeight: "1.6",
-            marginTop: "60px"
-          }}>
-            <div style={{
-              maxWidth: 1200,
-              margin: "0 auto",
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "40px"
-            }}>
-              {/* Kolom 1: Tentang Aku */}
+
+          {/* Footer Tailwind */}
+          <footer className="bg-white border-t-4 border-orange-500 mt-16 px-6 py-10 text-gray-800 text-sm font-medium">
+            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {/* Kolom 1 */}
               <div>
-                <h3 style={{ color: "#ff6600", marginBottom: "16px", fontSize: "20px", fontWeight: "700" }}>
+                <h3 className="text-orange-500 text-lg font-bold mb-4">
                   Kata kata hari ini
                 </h3>
-                <p style={{ marginBottom: "12px", fontWeight: "600" }}>Apa yah kata katanya</p>
-                <p>
+                <p className="mb-2 font-semibold">Apa yah kata katanya</p>
+                <p className="text-gray-600">
                   G ada si aku lagi g kepikiran kata kata hehe
                 </p>
               </div>
 
-              {/* Kolom 2: Navigasi */}
+              {/* Kolom 2 */}
               <div>
-                <h3 style={{ color: "#ff6600", marginBottom: "16px", fontSize: "20px", fontWeight: "700" }}>
+                <h3 className="text-orange-500 text-lg font-bold mb-4">
                   Hal yang sedang ku pelajari
                 </h3>
-                <ul style={{ listStyle: "none", padding: 0 }}>
-                  <li style={{ marginBottom: "10px" }}>
-                    <a href="/" style={{ color: "#222", textDecoration: "none", transition: "color 0.3s" }}
-                       onMouseEnter={e => e.target.style.color = "#ff6600"}
-                       onMouseLeave={e => e.target.style.color = "#222"}>
+                <ul className="space-y-2">
+                  <li>
+                    <a
+                      href="/"
+                      className="hover:text-orange-500 transition-colors"
+                    >
                       | Node js
                     </a>
                   </li>
-                  <li style={{ marginBottom: "10px" }}>
-                    <a href="/about" style={{ color: "#222", textDecoration: "none", transition: "color 0.3s" }}
-                       onMouseEnter={e => e.target.style.color = "#ff6600"}
-                       onMouseLeave={e => e.target.style.color = "#222"}>
-                      | Iot dengan mqtt
+                  <li>
+                    <a
+                      href="/about"
+                      className="hover:text-orange-500 transition-colors"
+                    >
+                      | Iot dengan MQTT
                     </a>
                   </li>
-                  <li style={{ marginBottom: "10px" }}>
-                    <a href="/contact" style={{ color: "#222", textDecoration: "none", transition: "color 0.3s" }}
-                       onMouseEnter={e => e.target.style.color = "#ff6600"}
-                       onMouseLeave={e => e.target.style.color = "#222"}>
-                      Pythone ( ML \ Encription )
+                  <li>
+                    <a
+                      href="/contact"
+                      className="hover:text-orange-500 transition-colors"
+                    >
+                      Python ( ML / Enkripsi )
                     </a>
                   </li>
                 </ul>
               </div>
 
-              {/* Kolom 3: Kontak & Sosial Media */}
+              {/* Kolom 3 */}
               <div>
-                <h3 style={{ color: "#ff6600", marginBottom: "16px", fontSize: "20px", fontWeight: "700" }}>
+                <h3 className="text-orange-500 text-lg font-bold mb-4">
                   Mampir juga di sini
                 </h3>
-                <p style={{ marginBottom: "8px" }}>
-                  <strong>GitHub:</strong> <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" style={{ color: "#ff6600", textDecoration: "none" }}>github.com/yourusername</a>
+                <p className="mb-2">
+                  <strong>GitHub:</strong>{" "}
+                  <a
+                    href="https://github.com/yourusername"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-orange-500 hover:underline"
+                  >
+                    github.com/yourusername
+                  </a>
                 </p>
-                <p style={{ marginBottom: "8px" }}>
-                  <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" style={{ color: "#ff6600", textDecoration: "none" }}>linkedin.com/in/yourprofile</a>
+                <p className="mb-2">
+                  <strong>LinkedIn:</strong>{" "}
+                  <a
+                    href="https://linkedin.com/in/yourprofile"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-orange-500 hover:underline"
+                  >
+                    linkedin.com/in/yourprofile
+                  </a>
                 </p>
-                <p style={{ marginBottom: "8px" }}>
-                  <strong>Youtube:</strong> <a href="https://t.me/yourtelegram" target="_blank" rel="noopener noreferrer" style={{ color: "#ff6600", textDecoration: "none" }}>@yourtelegram</a>
+                <p className="mb-2">
+                  <strong>Telegram:</strong>{" "}
+                  <a
+                    href="https://t.me/yourtelegram"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-orange-500 hover:underline"
+                  >
+                    @yourtelegram
+                  </a>
                 </p>
               </div>
             </div>
 
-            <div style={{ textAlign: "center", marginTop: "40px", color: "#555", fontSize: "14px" }}>
+            <div className="text-center mt-10 text-gray-500 text-xs">
               © 2025 Ludang Prasetyo Nugroho. All rights reserved.
             </div>
           </footer>
@@ -118,6 +130,7 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
     </>
   );
 };
+
 
 const ProjectPageLayout = () => (
   <>
