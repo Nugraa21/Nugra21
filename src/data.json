@@ -49,6 +49,56 @@
     "Github": "https://github.com/ludangprasetyo/portofolio-react",
     "TechStack": ["React", "Tailwind CSS"],
     "Features": ["Tampilan terang dengan aksen oranye", "Responsive", "Halaman detail proyek"]
+  },
+    {
+    "id": "6",
+    "Title": "Aplikasi Manajemen Keuangan",
+    "Description": "Aplikasi berbasis web untuk mencatat dan mengelola pemasukan serta pengeluaran pribadi.",
+    "Img": "/images/keuangan-app.jpg",
+    "Link": "https://github.com/ludangprasetyo/keuangan-app",
+    "Github": "https://github.com/ludangprasetyo/keuangan-app",
+    "TechStack": ["React", "Node.js", "Express", "MongoDB"],
+    "Features": ["Pencatatan transaksi", "Laporan keuangan", "Autentikasi pengguna"]
+  },
+  {
+    "id": "7",
+    "Title": "Sistem Informasi Perpustakaan",
+    "Description": "Sistem untuk mengelola data buku, anggota, dan peminjaman di perpustakaan sekolah.",
+    "Img": "/images/perpustakaan-system.jpg",
+    "Link": "https://github.com/ludangprasetyo/perpustakaan-system",
+    "Github": "https://github.com/ludangprasetyo/perpustakaan-system",
+    "TechStack": ["PHP", "MySQL", "Bootstrap"],
+    "Features": ["Manajemen buku", "Peminjaman dan pengembalian", "Laporan aktivitas"]
+  },
+  {
+    "id": "8",
+    "Title": "Aplikasi Catatan Harian",
+    "Description": "Aplikasi mobile untuk mencatat kegiatan harian dengan fitur pengingat.",
+    "Img": "/images/catatan-harian.jpg",
+    "Link": "https://github.com/ludangprasetyo/catatan-harian",
+    "Github": "https://github.com/ludangprasetyo/catatan-harian",
+    "TechStack": ["Flutter", "Firebase"],
+    "Features": ["Pencatatan harian", "Pengingat", "Sinkronisasi cloud"]
+  },
+  {
+    "id": "9",
+    "Title": "Website Portfolio Pribadi",
+    "Description": "Website untuk menampilkan profil, proyek, dan kontak pribadi.",
+    "Img": "/images/portfolio-website.jpg",
+    "Link": "https://github.com/ludangprasetyo/portfolio-website",
+    "Github": "https://github.com/ludangprasetyo/portfolio-website",
+    "TechStack": ["HTML", "CSS", "JavaScript"],
+    "Features": ["Profil pribadi", "Daftar proyek", "Formulir kontak"]
+  },
+  {
+    "id": "10",
+    "Title": "Aplikasi Resep Masakan",
+    "Description": "Aplikasi untuk mencari dan menyimpan resep masakan favorit.",
+    "Img": "/images/resep-masakan.jpg",
+    "Link": "https://github.com/ludangprasetyo/resep-masakan",
+    "Github": "https://github.com/ludangprasetyo/resep-masakan",
+    "TechStack": ["React Native", "SQLite"],
+    "Features": ["Pencarian resep", "Penyimpanan lokal", "Kategori resep"]
   }
   ],
   "certificates": [
