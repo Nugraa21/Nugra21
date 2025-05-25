@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
 import { Github, Linkedin, Mail, Instagram } from "lucide-react";
 import {
-  SiReact, SiMqtt, SiEspressif, SiTailwindcss, SiHtml5, SiCss3, SiJavascript,
-  SiGit, SiNodedotjs, SiFlutter, SiDart
+  SiReact, SiMqtt, SiEspressif, SiTailwindcss, SiHtml5, SiCss3,
+  SiJavascript, SiGit, SiNodedotjs, SiFlutter, SiDart
 } from "react-icons/si";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
-// --- Komponen kecil ---
+// Komponen kecil
 const MainTitle = memo(() => (
   <div className="space-y-2" data-aos="fade-up" data-aos-delay="600">
     <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-600">
@@ -48,7 +48,7 @@ const SocialLink = memo(({ icon: Icon, link }) => (
   </a>
 ));
 
-// --- Data ---
+// Data
 const WORDS = ["Computer Engineering Student", "Tech & Robotics Enthusiast"];
 const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
@@ -74,9 +74,9 @@ const TECH_ICONS = [
   { icon: SiDart, name: "Dart" },
 ];
 
-// --- Komponen utama ---
+// Animasi scrolling ikon teknologi
 const ScrollingTechText = () => (
-  <div className="scrolling-tech-wrapper overflow-hidden whitespace-nowrap pt-6 mt-12 max-w-xl mx-auto">
+  <div className="scrolling-tech-wrapper px-2 mt-12 w-full overflow-hidden">
     <div className="scrolling-tech-text inline-flex items-center gap-12 text-orange-600 select-none">
       {TECH_ICONS.map(({ icon: Icon, name }, i) => (
         <div key={i} title={name} className="flex flex-col items-center">
@@ -94,6 +94,7 @@ const ScrollingTechText = () => (
   </div>
 );
 
+// Komponen utama
 const Home = () => {
   const [text, setText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
@@ -143,11 +144,11 @@ const Home = () => {
 
   return (
     <section
-      className="min-h-screen bg-white text-orange-800 flex flex-col items-center justify-center px-6 sm:px-10 lg:px-20 pt-24 pb-16"
+      className="min-h-screen bg-white text-orange-800 flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 lg:px-20 pt-24 pb-16 overflow-x-hidden"
       id="Home"
     >
-      <div className="max-w-screen-lg w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-16">
-        {/* Kiri - teks dan info */}
+      <div className="max-w-6xl w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-12 sm:gap-16">
+        {/* Kiri */}
         <div className="flex flex-col space-y-8 w-full lg:w-1/2">
           <MainTitle />
           <div
@@ -183,9 +184,9 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Kanan - Foto profil */}
+        {/* Kanan */}
         <div
-          className="flex justify-center items-center relative w-full lg:w-1/2"
+          className="flex justify-center items-center w-full lg:w-1/2"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
           data-aos="zoom-in"
@@ -196,7 +197,7 @@ const Home = () => {
             <img
               src="Nugra.png"
               alt="Ludang Prasetyo"
-              className={`w-72 h-72 object-cover rounded-full shadow-2xl border-8 border-orange-200 transition-transform duration-500 ease-in-out ${
+              className={`w-64 h-64 sm:w-72 sm:h-72 object-cover rounded-full shadow-2xl border-8 border-orange-200 transition-transform duration-500 ease-in-out ${
                 isHovering ? "scale-105 rotate-2" : "scale-100"
               }`}
               loading="lazy"
@@ -206,7 +207,7 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Animasi ikon teknologi bergulir */}
+      {/* Tech Icons */}
       <ScrollingTechText />
     </section>
   );

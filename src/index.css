@@ -92,31 +92,25 @@ body {
 [data-aos] {
 	will-change: transform, opacity !important;
 }
+/*  */
 
+
+/* === Animasi Umum === */
 @keyframes shine {
-	from {
-		left: -100%;
-	}
-	to {
-		left: 200%;
-	}
+  from {
+    left: -100%;
+  }
+  to {
+    left: 200%;
+  }
 }
 
-.animate-shine {
-	animation: shine 1.5s ease-in-out infinite;
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
 }
 
-@layer utilities {
-	.animate-blink {
-		animation: blink 1s steps(2, start) infinite;
-	}
-
-	@keyframes blink {
-		to {
-			visibility: hidden;
-		}
-	}
-}
 @keyframes scrollTech {
   0% {
     transform: translateX(0);
@@ -126,6 +120,18 @@ body {
   }
 }
 
+/* === Utility Class Custom === */
+.animate-shine {
+  animation: shine 1.5s ease-in-out infinite;
+}
+
+@layer utilities {
+  .animate-blink {
+    animation: blink 1s steps(2, start) infinite;
+  }
+}
+
+/* === Scrolling Tech Section === */
 .scrolling-tech-wrapper {
   position: relative;
   overflow: hidden;
@@ -133,9 +139,21 @@ body {
   margin: 0 auto;
   padding-top: 2rem;
 
-  /* Gradien fade kiri kanan */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  /* Gradien Fade Kiri dan Kanan */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
 }
 
 .scrolling-tech-text {
@@ -146,6 +164,7 @@ body {
   will-change: transform;
   user-select: none;
 }
+
 
 /* 
   .container {
