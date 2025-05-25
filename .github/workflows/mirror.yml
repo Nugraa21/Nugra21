@@ -18,3 +18,4 @@ jobs:
           git config --global user.email "action@github.com"
           git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/nugraaa21/nama-repo.git
           git push --force mirror main
+ 
