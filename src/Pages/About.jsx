@@ -135,7 +135,6 @@ const Chip = ({ text }) => (
     {text}
   </span>
 );
-
 const SkillCard = ({ icon: Icon, title, description, tools = [], delay }) => (
   <div
     className="bg-white bg-opacity-30 backdrop-blur-md border border-orange-300 rounded-xl p-6 flex flex-col items-center text-center cursor-pointer shadow-md

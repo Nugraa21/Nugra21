@@ -1,8 +1,24 @@
 import React, { useState, useEffect, useCallback, memo } from "react";
 import { Github, Linkedin, Mail, Instagram } from "lucide-react";
 import {
-  SiReact, SiMqtt, SiEspressif, SiTailwindcss, SiHtml5, SiCss3,
-  SiJavascript, SiGit, SiNodedotjs, SiFlutter, SiDart
+  SiReact,
+  SiMqtt,
+  SiEspressif,
+  SiTailwindcss,
+  SiHtml5,
+  SiCss3,
+  SiJavascript,
+  SiGit,
+  SiNodedotjs,
+  SiFlutter,
+  SiDart,
+  SiFirebase,
+  SiLatex,
+  SiPhp,
+  SiPython,
+  SiVuedotjs,
+  SiGithub,
+  SiVercel,
 } from "react-icons/si";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -80,10 +96,18 @@ const TECH_ICONS = [
   { icon: SiCss3, name: "CSS3" },
   { icon: SiJavascript, name: "JavaScript" },
   { icon: SiGit, name: "Git" },
+  { icon: SiGithub, name: "GitHub" },
   { icon: SiNodedotjs, name: "NodeJS" },
   { icon: SiFlutter, name: "Flutter" },
   { icon: SiDart, name: "Dart" },
+  { icon: SiFirebase, name: "Firebase" },
+  { icon: SiLatex, name: "LaTeX" },
+  { icon: SiPhp, name: "PHP" },
+  { icon: SiPython, name: "Python" },
+  { icon: SiVuedotjs, name: "Vue" },
+  { icon: SiVercel, name: "Vercel" },
 ];
+
 
 // Animasi scrolling ikon teknologi
 const ScrollingTechText = () => (
