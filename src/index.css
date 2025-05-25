@@ -117,6 +117,35 @@ body {
 		}
 	}
 }
+@keyframes scrollTech {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.scrolling-tech-wrapper {
+  position: relative;
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-top: 2rem;
+
+  /* Gradien fade kiri kanan */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.scrolling-tech-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 3rem;
+  animation: scrollTech 25s linear infinite;
+  will-change: transform;
+  user-select: none;
+}
 
 /* 
   .container {

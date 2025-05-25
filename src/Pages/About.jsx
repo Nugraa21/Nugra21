@@ -59,7 +59,6 @@ const ProfileImage = () => {
         <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
           <img
             src="/Nugra.png"
-            // src="/Photo.png"
             alt="Ludang Prasetyo Nugroho"
             className="object-cover w-full h-full"
             loading="lazy"
@@ -108,20 +107,25 @@ const SkillBar = ({ name, percent }) => {
   );
 };
 
-const StatsCard = ({ icon: Icon, value, label, delay }) => (
+const StatsCard = ({ icon: Icon, value, label, description, delay }) => (
   <div
-    className="flex flex-col items-center text-center p-5 rounded-xl shadow-lg bg-white border border-orange-200 transform transition-transform hover:scale-105 hover:shadow-xl cursor-pointer"
+    className="flex items-center p-5 rounded-xl bg-white bg-opacity-20 backdrop-blur-md border border-orange-300 shadow-md transition-transform hover:scale-105 hover:shadow-xl cursor-pointer"
     data-aos="fade-up"
     data-aos-delay={delay}
     role="group"
     tabIndex={0}
     aria-label={`${label}: ${value}`}
   >
-    <div className="bg-gradient-to-tr from-orange-400 to-yellow-300 text-white p-4 rounded-full mb-4 shadow-md">
+    <div className="bg-gradient-to-tr from-orange-400 to-yellow-300 text-white p-4 rounded-full shadow-md flex-shrink-0 mr-5">
       <Icon className="w-7 h-7" aria-hidden="true" />
     </div>
-    <div className="text-2xl font-extrabold text-orange-700">{value}</div>
-    <div className="text-md text-gray-700 font-semibold mt-1">{label}</div>
+    <div className="flex flex-col flex-grow">
+      <div className="text-md text-gray-800 font-semibold">{label}</div>
+      {description && (
+        <div className="text-sm text-gray-600 mt-1">{description}</div>
+      )}
+    </div>
+    <div className="text-orange-700 font-extrabold text-2xl ml-6 self-end">{value}</div>
   </div>
 );
 
@@ -224,6 +228,7 @@ const AboutPage = () => {
           <ProfileImage />
         </div>
 
+        {/* Skill bars */}
         <div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-20"
           data-aos="fade-up"
@@ -237,10 +242,29 @@ const AboutPage = () => {
           <SkillBar name="Photography" percent={65} />
         </div>
 
+        {/* Stats cards with blur background */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-20">
-          <StatsCard icon={Code2} value={totalProjects} label="Total Projects" delay={100} />
-          <StatsCard icon={BadgeCheck} value={totalCertificates} label="Certificates" delay={300} />
-          <StatsCard icon={Clock} value={`${YearExperience}+`} label="Years of Experience" delay={500} />
+          <StatsCard
+            icon={Code2}
+            value={totalProjects}
+            label="Total Projects"
+            description="Projects I have completed"
+            delay={100}
+          />
+          <StatsCard
+            icon={BadgeCheck}
+            value={totalCertificates}
+            label="Certificates"
+            description="Verified skill certificates"
+            delay={300}
+          />
+          <StatsCard
+            icon={Clock}
+            value={`${YearExperience}+`}
+            label="Years of Experience"
+            description="In software development"
+            delay={500}
+          />
         </div>
       </div>
     </section>
