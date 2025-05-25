@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
 import {
-  AiOutlineUser, AiOutlineMail, AiOutlineMessage, AiOutlineSend,
-  AiFillGithub, AiFillInstagram, AiFillLinkedin, AiOutlineTwitter,
-  AiFillFacebook, AiFillYoutube
+  AiOutlineUser,
+  AiOutlineMail,
+  AiOutlineMessage,
+  AiOutlineSend,
+  AiFillGithub,
+  AiFillInstagram,
+  AiFillLinkedin,
+  AiOutlineTwitter,
+  AiFillFacebook,
+  AiFillYoutube,
 } from "react-icons/ai";
 import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
 const ContactFooter = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -26,33 +38,61 @@ const ContactFooter = () => {
     setIsSubmitting(true);
 
     Swal.fire({
-      title: 'Mengirim Pesan...',
-      html: 'Harap tunggu sebentar',
+      title: "Mengirim Pesan...",
+      html: "Harap tunggu sebentar",
       allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
+      didOpen: () => Swal.showLoading(),
     });
 
     try {
-      const form = e.target;
-      const formData = new FormData(form);
-      await form.submit();
+      const url =
+        "https://script.google.com/macros/s/AKfycbzw4t8VIVo09kbX2eAW6dtbLEpnAV5i4dV7LoqOgcuh8fhMNUtrCaFVyl6C9k8ZQK0/exec";
 
-      Swal.fire({
-        title: 'Berhasil!',
-        text: 'Pesan kamu sudah terkirim!',
-        icon: 'success',
-        confirmButtonColor: '#f97316',
-        timer: 2000,
-        timerProgressBar: true
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Kalau perlu, tambahkan ini untuk menghindari masalah CORS:
+          // "Accept": "application/json",
+        },
+        body: JSON.stringify(formData),
+        mode: "cors", // pastikan mode CORS aktif
       });
 
-      setFormData({ name: "", email: "", message: "" });
+      // Cek status respon dulu
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Karena response dari Apps Script kadang string, kita coba parse json aman:
+      const text = await response.text();
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error("Response dari server tidak valid JSON");
+      }
+
+      if (data.result === "success") {
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Pesan kamu sudah terkirim!",
+          icon: "success",
+          confirmButtonColor: "#f97316",
+          timer: 2000,
+          timerProgressBar: true,
+        });
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        throw new Error(data.error || "Gagal mengirim pesan");
+      }
     } catch (error) {
       Swal.fire({
-        title: 'Gagal!',
-        text: 'Terjadi kesalahan. Coba lagi nanti.',
-        icon: 'error',
-        confirmButtonColor: '#f97316'
+        title: "Gagal!",
+        text: error.message,
+        icon: "error",
+        confirmButtonColor: "#f97316",
       });
     } finally {
       setIsSubmitting(false);
@@ -71,7 +111,6 @@ const ContactFooter = () => {
   return (
     <footer className="bg-gradient-to-r from-orange-100 to-orange-50 border-t border-orange-300 mt-20 px-6 py-16 rounded-t-3xl shadow-lg">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
-
         {/* Left Section */}
         <div data-aos="fade-right" className="flex flex-col justify-between">
           <div>
@@ -123,15 +162,7 @@ const ContactFooter = () => {
         {/* Right Section - Contact Form */}
         <div data-aos="fade-left">
           <h3 className="text-3xl font-bold text-orange-600 mb-8 tracking-wide">Kirim Pesan</h3>
-          <form
-            action="https://formsubmit.co/ludang@nugra.my.id"
-            method="POST"
-            onSubmit={handleSubmit}
-            className="space-y-6"
-          >
-            <input type="hidden" name="_template" value="table" />
-            <input type="hidden" name="_captcha" value="false" />
-
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="relative">
               <AiOutlineUser className="absolute left-4 top-4 text-orange-300" size={20} />
               <input
@@ -170,7 +201,7 @@ const ContactFooter = () => {
                 disabled={isSubmitting}
                 className="w-full pl-12 pr-4 py-4 bg-white border rounded-2xl border-orange-300 text-md h-36 resize-none focus:outline-none focus:ring-4 focus:ring-orange-300 placeholder-orange-400"
                 required
-              ></textarea>
+              />
             </div>
 
             <button
