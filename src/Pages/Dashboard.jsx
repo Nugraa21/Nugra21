@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import {
   FaBars,
   FaTimes,
-  FaChartPie,
   FaCog,
   FaSignOutAlt,
   FaTable,
@@ -54,19 +53,18 @@ const Dashboard = () => {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [navbarOpen, setNavbarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("contacts");
   const [commentFormOpen, setCommentFormOpen] = useState(false);
   const [commentFormData, setCommentFormData] = useState({ id: null, name: "", message: "" });
   const [commentLoading, setCommentLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [settings, setSettings] = useState({ theme: "light", language: "id", notifications: true });
+  const [settings, setSettings] = useState({ theme: "light", language: "id" });
 
   const navigate = useNavigate();
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-    console.log("isLoggedIn:", isLoggedIn); // Debugging
     if (!isLoggedIn) {
       navigate("/login");
       return;
@@ -81,7 +79,6 @@ const Dashboard = () => {
         if (activeTab === "contacts") {
           unsubscribe = onSnapshot(collection(db, "contacts"), (querySnapshot) => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-            console.log("Contacts data:", data); // Debugging
             setContacts(data);
             setLoading(false);
           }, (error) => {
@@ -93,7 +90,6 @@ const Dashboard = () => {
           const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
           unsubscribe = onSnapshot(q, (querySnapshot) => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-            console.log("Comments data:", data); // Debugging
             setComments(data);
             setLoading(false);
           }, (error) => {
@@ -201,12 +197,12 @@ const Dashboard = () => {
     setCommentLoading(false);
   };
 
-  const handleSettingsChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setSettings((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const handleThemeChange = (theme) => {
+    setSettings((prev) => ({ ...prev, theme }));
+  };
+
+  const handleLanguageChange = (language) => {
+    setSettings((prev) => ({ ...prev, language }));
   };
 
   const exportData = () => {
@@ -233,53 +229,48 @@ const Dashboard = () => {
   return (
     <ErrorBoundary>
       <div style={{ ...styles.container, backgroundColor: settings.theme === "dark" ? "#222" : "#f9f9f9", color: settings.theme === "dark" ? "#fff" : "#333" }}>
-        <button
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          style={styles.toggleButton}
-        >
-          {sidebarOpen ? <FaTimes /> : <FaBars />}
-        </button>
-
-        <aside style={{ ...styles.sidebar, transform: sidebarOpen ? "translateX(0)" : "translateX(-100%)" }}>
-          <h2 style={styles.logo}>📊 Dashboard</h2>
-          <nav style={styles.nav}>
+        <header style={styles.navbar}>
+          <div style={styles.navbarBrand}>
+                        <button onClick={handleLogout} style={styles.logoutButton}>
+              <FaSignOutAlt /> {settings.language === "id" ? "Logout" : "Sign Out"}
+            </button>
+            <h2 style={styles.logo}>Dashboard</h2>
             <button
-              onClick={() => { setActiveTab("contacts"); setSearchTerm(""); }}
+              onClick={() => setNavbarOpen(!navbarOpen)}
+              style={styles.toggleButton}
+            >
+              {navbarOpen ? <FaTimes /> : <FaBars />}
+            </button>
+          </div>
+          <nav style={{ ...styles.nav, display: navbarOpen ? "flex" : "none" }}>
+            <button
+              onClick={() => { setActiveTab("contacts"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "contacts" ? styles.navItemActive : styles.navItem}
             >
               <FaTable /> {settings.language === "id" ? "Data Kontak" : "Contacts"}
             </button>
             <button
-              onClick={() => { setActiveTab("comments"); setSearchTerm(""); }}
+              onClick={() => { setActiveTab("comments"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "comments" ? styles.navItemActive : styles.navItem}
             >
               <FaComments /> {settings.language === "id" ? "Komentar" : "Comments"}
             </button>
-            <button
-              onClick={() => { setActiveTab("statistics"); setSearchTerm(""); }}
-              style={activeTab === "statistics" ? styles.navItemActive : styles.navItem}
-            >
-              <FaChartPie /> {settings.language === "id" ? "Statistik" : "Statistics"}
-            </button>
-            <button
-              onClick={() => { setActiveTab("settings"); setSearchTerm(""); }}
+            {/* <button
+              onClick={() => { setActiveTab("settings"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "settings" ? styles.navItemActive : styles.navItem}
             >
               <FaCog /> {settings.language === "id" ? "Pengaturan" : "Settings"}
             </button>
             <button
-              onClick={() => { setActiveTab("info"); setSearchTerm(""); }}
+              onClick={() => { setActiveTab("info"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "info" ? styles.navItemActive : styles.navItem}
             >
               <FaInfoCircle /> {settings.language === "id" ? "Informasi" : "Info"}
-            </button>
-            <button onClick={handleLogout} style={styles.logoutButton}>
-              <FaSignOutAlt /> {settings.language === "id" ? "Logout" : "Sign Out"}
-            </button>
+            </button> */}
           </nav>
-        </aside>
+        </header>
 
-        <main style={{ ...styles.mainContent, marginLeft: sidebarOpen ? 250 : 0 }}>
+        <main style={styles.mainContent}>
           {error && (
             <div style={{ color: "red", marginBottom: 16, padding: "10px", backgroundColor: "#ffe6e6", borderRadius: 4 }}>
               <strong>Error:</strong> {error}
@@ -289,11 +280,10 @@ const Dashboard = () => {
             <h1 style={styles.title}>
               {activeTab === "contacts" ? (settings.language === "id" ? "📋 Kontak Masuk" : "📋 Incoming Contacts") :
                activeTab === "comments" ? (settings.language === "id" ? "💬 Komentar" : "💬 Comments") :
-               activeTab === "statistics" ? (settings.language === "id" ? "📊 Statistik" : "📊 Statistics") :
                activeTab === "settings" ? (settings.language === "id" ? "⚙️ Pengaturan" : "⚙️ Settings") :
                (settings.language === "id" ? "ℹ️ Informasi" : "ℹ️ Info")}
             </h1>
-            {activeTab !== "settings" && activeTab !== "statistics" && activeTab !== "info" && (
+            {activeTab !== "settings" && activeTab !== "info" && (
               <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 <input
                   type="text"
@@ -310,6 +300,9 @@ const Dashboard = () => {
                     <FaPlus /> {settings.language === "id" ? "Tambah Komentar" : "Add Comment"}
                   </button>
                 )}
+                <button onClick={exportData} style={styles.submitButton}>
+                  <FaFileExport /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
+                </button>
               </div>
             )}
           </div>
@@ -407,70 +400,50 @@ const Dashboard = () => {
                 </table>
               </div>
             )
-          ) : activeTab === "statistics" ? (
-            <div style={styles.statsContainer}>
-              <h3 style={{ fontSize: 20, marginBottom: 16 }}>{settings.language === "id" ? "Ringkasan Data" : "Data Summary"}</h3>
-              <div style={styles.statsBox}>
-                <p><strong>{settings.language === "id" ? "Total Kontak:" : "Total Contacts:"}</strong> {contacts.length}</p>
-                <p><strong>{settings.language === "id" ? "Total Komentar:" : "Total Comments:"}</strong> {comments.length}</p>
-                <p><strong>{settings.language === "id" ? "Kontak Terbaru:" : "Latest Contact:"}</strong> {contacts[0]?.createdAt?.toDate().toLocaleString() || "-"}</p>
-                <p><strong>{settings.language === "id" ? "Komentar Terbaru:" : "Latest Comment:"}</strong> {comments[0]?.createdAt?.toDate().toLocaleString() || "-"}</p>
-              </div>
-              <button onClick={exportData} style={styles.submitButton}>
-                <FaFileExport /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
-              </button>
-            </div>
           ) : activeTab === "settings" ? (
             <div style={styles.settingsContainer}>
               <h3 style={{ fontSize: 20, marginBottom: 16 }}>{settings.language === "id" ? "Pengaturan Dashboard" : "Dashboard Settings"}</h3>
               <div style={styles.formGroup}>
-                <label htmlFor="theme" style={{ fontWeight: "bold" }}>{settings.language === "id" ? "Tema:" : "Theme:"}</label>
-                <select
-                  name="theme"
-                  id="theme"
-                  value={settings.theme}
-                  onChange={handleSettingsChange}
-                  style={styles.formInput}
-                >
-                  <option value="light">{settings.language === "id" ? "Terang" : "Light"}</option>
-                  <option value="dark">{settings.language === "id" ? "Gelap" : "Dark"}</option>
-                </select>
+                <label style={{ fontWeight: "bold", marginBottom: 8 }}>{settings.language === "id" ? "Tema:" : "Theme:"}</label>
+                <div style={{ display: "flex", gap: 12 }}>
+                  <button
+                    onClick={() => handleThemeChange("light")}
+                    style={settings.theme === "light" ? styles.submitButton : styles.cancelButton}
+                  >
+                    {settings.language === "id" ? "Terang" : "Light"}
+                  </button>
+                  <button
+                    onClick={() => handleThemeChange("dark")}
+                    style={settings.theme === "dark" ? styles.submitButton : styles.cancelButton}
+                  >
+                    {settings.language === "id" ? "Gelap" : "Dark"}
+                  </button>
+                </div>
               </div>
               <div style={styles.formGroup}>
-                <label htmlFor="language" style={{ fontWeight: "bold" }}>{settings.language === "id" ? "Bahasa:" : "Language:"}</label>
-                <select
-                  name="language"
-                  id="language"
-                  value={settings.language}
-                  onChange={handleSettingsChange}
-                  style={styles.formInput}
-                >
-                  <option value="id">Bahasa Indonesia</option>
-                  <option value="en">English</option>
-                </select>
+                <label style={{ fontWeight: "bold", marginBottom: 8 }}>{settings.language === "id" ? "Bahasa:" : "Language:"}</label>
+                <div style={{ display: "flex", gap: 12 }}>
+                  <button
+                    onClick={() => handleLanguageChange("id")}
+                    style={settings.language === "id" ? styles.submitButton : styles.cancelButton}
+                  >
+                    Bahasa Indonesia
+                  </button>
+                  <button
+                    onClick={() => handleLanguageChange("en")}
+                    style={settings.language === "en" ? styles.submitButton : styles.cancelButton}
+                  >
+                    English
+                  </button>
+                </div>
               </div>
-              <div style={styles.formGroup}>
-                <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <input
-                    type="checkbox"
-                    name="notifications"
-                    checked={settings.notifications}
-                    onChange={handleSettingsChange}
-                    style={{ width: 16, height: 16 }}
-                  />
-                  {settings.language === "id" ? "Aktifkan Notifikasi" : "Enable Notifications"}
-                </label>
-              </div>
-              <button onClick={exportData} style={styles.submitButton}>
-                <FaFileExport /> {settings.language === "id" ? "Ekspor Data Saat Ini" : "Export Current Data"}
-              </button>
             </div>
           ) : (
             <div style={styles.infoContainer}>
               <h3 style={{ fontSize: 20, marginBottom: 16 }}>{settings.language === "id" ? "Tentang Dashboard" : "About Dashboard"}</h3>
               <p style={{ marginBottom: 12 }}>{settings.language === "id" ? 
-                "Dashboard ini dirancang untuk mengelola kontak dan komentar dengan mudah. Gunakan tab navigasi di sisi kiri untuk beralih antara fitur." :
-                "This dashboard is designed to manage contacts and comments easily. Use the navigation tabs on the left to switch between features."}</p>
+                "Dashboard ini dirancang untuk mengelola kontak dan komentar dengan mudah. Gunakan navigasi di atas untuk beralih antara fitur." :
+                "This dashboard is designed to manage contacts and comments easily. Use the navigation above to switch between features."}</p>
               <h4 style={{ fontSize: 18, marginBottom: 8 }}>{settings.language === "id" ? "Tips Penggunaan" : "Usage Tips"}</h4>
               <ul style={{ listStyleType: "disc", paddingLeft: 20, marginBottom: 12 }}>
                 <li>{settings.language === "id" ? "Gunakan kolom pencarian untuk menemukan data spesifik." : "Use the search field to find specific data."}</li>
@@ -541,102 +514,92 @@ const Dashboard = () => {
 const styles = {
   container: {
     display: "flex",
+    flexDirection: "column",
     minHeight: "100vh",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
   },
-  toggleButton: {
-    position: "fixed",
-    top: 15,
-    left: 15,
-    backgroundColor: "#ff6600",
-    border: "none",
-    color: "#fff",
-    padding: "10px 14px",
-    borderRadius: 6,
-    cursor: "pointer",
-    zIndex: 1001,
-    fontSize: 22,
-    boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
-    transition: "background-color 0.2s",
-  },
-  sidebar: {
-    width: 250,
+  navbar: {
     backgroundColor: "#ff6600",
     color: "#fff",
-    padding: "20px",
+    padding: "10px 20px",
     display: "flex",
-    flexDirection: "column",
-    position: "fixed",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    position: "sticky",
     top: 0,
-    bottom: 0,
-    left: 0,
     zIndex: 1000,
-    transition: "transform 0.3s ease",
-    boxShadow: "2px 0 8px rgba(0,0,0,0.1)",
+  },
+  navbarBrand: {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
   },
   logo: {
     margin: 0,
-    marginBottom: 30,
     fontWeight: "bold",
     fontSize: 24,
     userSelect: "none",
-    textAlign: "center",
+  },
+  toggleButton: {
+    backgroundColor: "transparent",
+    border: "none",
+    color: "#fff",
+    padding: "8px",
+    cursor: "pointer",
+    fontSize: 22,
+    display: "block",
   },
   nav: {
     display: "flex",
-    flexDirection: "column",
     gap: 8,
-    flexGrow: 1,
+    flexWrap: "wrap",
   },
   navItem: {
     backgroundColor: "transparent",
     border: "none",
     color: "#fff",
-    padding: "12px 16px",
-    textAlign: "left",
+    padding: "10px 16px",
     fontSize: 16,
     cursor: "pointer",
     borderRadius: 6,
     display: "flex",
     alignItems: "center",
-    gap: 10,
-    textDecoration: "none",
+    gap: 8,
     transition: "background-color 0.2s",
   },
   navItemActive: {
     backgroundColor: "#e65c00",
     border: "none",
     color: "#fff",
-    padding: "12px 16px",
-    textAlign: "left",
+    padding: "10px 16px",
     fontSize: 16,
     cursor: "pointer",
     borderRadius: 6,
     display: "flex",
     alignItems: "center",
-    gap: 10,
+    gap: 8,
     fontWeight: "bold",
     transition: "background-color 0.2s",
   },
   logoutButton: {
-    marginTop: "auto",
     backgroundColor: "#cc3300",
     border: "none",
     color: "#fff",
-    padding: "12px 16px",
+    padding: "10px 16px",
     cursor: "pointer",
     borderRadius: 6,
     display: "flex",
     alignItems: "center",
-    gap: 10,
+    gap: 8,
     fontSize: 16,
     transition: "background-color 0.2s",
   },
   mainContent: {
     flexGrow: 1,
     padding: 30,
-    transition: "margin-left 0.3s ease",
-    minHeight: "100vh",
+    transition: "margin-top 0.3s ease",
   },
   headerRow: {
     display: "flex",
@@ -788,19 +751,6 @@ const styles = {
     gap: 8,
     transition: "background-color 0.2s",
   },
-  statsContainer: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 8,
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    maxWidth: 600,
-  },
-  statsBox: {
-    marginBottom: 20,
-    padding: 16,
-    backgroundColor: "#f7f7f7",
-    borderRadius: 6,
-  },
   settingsContainer: {
     backgroundColor: "#fff",
     padding: 20,
@@ -814,6 +764,27 @@ const styles = {
     borderRadius: 8,
     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
     maxWidth: 600,
+  },
+  // Responsive styles
+  "@media (max-width: 768px)": {
+    toggleButton: {
+      display: "block",
+    },
+    nav: {
+      flexDirection: "column",
+      width: "100%",
+      backgroundColor: "#ff6600",
+      position: "absolute",
+      top: 60,
+      left: 0,
+      padding: "10px 20px",
+    },
+    mainContent: {
+      padding: "20px",
+    },
+    searchInput: {
+      width: "100%",
+    },
   },
 };
 
