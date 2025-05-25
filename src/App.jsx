@@ -88,36 +88,26 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
                 <p className="mb-2">
                   <strong>GitHub:</strong>{" "}
                   <a
-                    href="https://github.com/yourusername"
+                    href="https://github.com/Nugraa21"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-orange-500 hover:underline"
                   >
-                    github.com/yourusername
+                    https://github.com/Nugraa21
                   </a>
                 </p>
                 <p className="mb-2">
                   <strong>LinkedIn:</strong>{" "}
                   <a
-                    href="https://linkedin.com/in/yourprofile"
+                    href="https://www.linkedin.com/in/ludang-prasetyo-4773b6361/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-orange-500 hover:underline"
                   >
-                    linkedin.com/in/yourprofile
+                   www.linkedin.com/in/ludang-prasetyo
                   </a>
                 </p>
-                <p className="mb-2">
-                  <strong>Telegram:</strong>{" "}
-                  <a
-                    href="https://t.me/yourtelegram"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-orange-500 hover:underline"
-                  >
-                    @yourtelegram
-                  </a>
-                </p>
+{/*  */}
               </div>
             </div>
 

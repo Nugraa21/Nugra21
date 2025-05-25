@@ -20,6 +20,7 @@ const AnimatedBackground = () => {
       const newScroll = window.pageYOffset
       currentScroll = newScroll
 
+      // Blob animasi mengikuti scroll
       blobRefs.current.forEach((blob, index) => {
         const initialPos = initialPositions[index]
         const xOffset = Math.sin(newScroll / 100 + index * 0.5) * 340
@@ -30,6 +31,7 @@ const AnimatedBackground = () => {
         blob.style.transition = "transform 1.4s ease-out"
       })
 
+      // Partikel dan sparkles bergoyang vertikal
       particleRefs.current.forEach((p, i) => {
         const y = Math.sin(newScroll / 50 + i) * 10
         p.style.transform = `translateY(${y}px)`
@@ -39,6 +41,13 @@ const AnimatedBackground = () => {
         const y = Math.cos(newScroll / 60 + i) * 6
         s.style.transform = `translateY(${y}px)`
       })
+
+      // Slide animasi background atas & grid
+      const slideOffset = Math.min(newScroll * 0.2, 120)
+      const headerBlob = document.querySelector(".animated-slide")
+      const gridBg = document.querySelector(".grid-slide")
+      if (headerBlob) headerBlob.style.transform = `translateY(${slideOffset}px)`
+      if (gridBg) gridBg.style.transform = `translateY(${slideOffset * 0.5}px)`
 
       requestId = requestAnimationFrame(handleScroll)
     }
@@ -53,7 +62,7 @@ const AnimatedBackground = () => {
   return (
     <div className="fixed inset-0 z-[-1] overflow-hidden">
       {/* 🌓 Setengah lingkaran terang di pojok kanan atas */}
-      <div className="absolute -top-[220px] -right-[200px] w-[700px] h-[350px] rounded-b-full bg-gradient-to-tr from-orange-300 via-pink-400 to-purple-400 opacity-60 blur-2xl rotate-[20deg]"></div>
+      <div className="absolute -top-[220px] -right-[200px] w-[700px] h-[350px] rounded-b-full bg-gradient-to-tr from-orange-300 via-pink-400 to-purple-400 opacity-60 blur-2xl rotate-[20deg] animated-slide transition-transform duration-700 ease-out"></div>
 
       {/* 🔮 Blob Gradasi terang */}
       <div className="absolute inset-0">
@@ -108,7 +117,7 @@ const AnimatedBackground = () => {
       </div>
 
       {/* 🔲 Grid Lines */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0c_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0c_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none"></div>
+      <div className="absolute inset-0 grid-slide bg-[linear-gradient(to_right,#ffffff0c_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0c_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none transition-transform duration-700 ease-out"></div>
     </div>
   )
 }

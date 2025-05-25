@@ -228,7 +228,7 @@ const AboutPage = () => {
 
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-6 mt-4 w-full max-w-md mx-auto lg:mx-0">
               <a
-                href="https://drive.google.com/drive/folders/1BOm51Grsabb3zj6Xk27K-iRwI1zITcpo"
+                href="#" // CV 
                 className="w-full lg:w-auto"
                 target="_blank"
                 rel="noreferrer noopener"

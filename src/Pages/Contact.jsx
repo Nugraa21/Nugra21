@@ -148,12 +148,12 @@ const ContactFooter = () => {
   };
 
   const socialLinks = [
-    { icon: <AiFillGithub size={28} />, name: "GitHub", href: "https://github.com/ludangp" },
-    { icon: <AiFillInstagram size={28} />, name: "Instagram", href: "https://instagram.com/ludangprasetyo" },
-    { icon: <AiFillLinkedin size={28} />, name: "LinkedIn", href: "https://linkedin.com/in/ludangprasetyo" },
-    { icon: <AiOutlineTwitter size={28} />, name: "Twitter", href: "https://twitter.com/ludangprasetyo" },
-    { icon: <AiFillFacebook size={28} />, name: "Facebook", href: "https://facebook.com/ludangprasetyo" },
-    { icon: <AiFillYoutube size={28} />, name: "YouTube", href: "https://youtube.com/@ludangprasetyo" },
+    { icon: <AiFillGithub size={28} />, name: "GitHub", href: "https://github.com/Nugraa21" },
+    { icon: <AiFillInstagram size={28} />, name: "Instagram", href: "https://www.instagram.com/nugraa_21/" },
+    { icon: <AiFillLinkedin size={28} />, name: "LinkedIn", href: "https://www.linkedin.com/in/ludang-prasetyo-4773b6361/" },
+    // { icon: <AiOutlineTwitter size={28} />, name: "Twitter", href: "https://twitter.com/ludangprasetyo" },
+    // { icon: <AiFillFacebook size={28} />, name: "Facebook", href: "https://facebook.com/ludangprasetyo" },
+    { icon: <AiFillYoutube size={28} />, name: "YouTube", href: "https://youtube.com/@nugra21" },
   ];
 
   return (
@@ -165,14 +165,13 @@ const ContactFooter = () => {
         {/* ABOUT */}
         <div data-aos="fade-right" className="flex flex-col">
           <h2 className="text-4xl font-extrabold text-orange-700 mb-6 tracking-wide">
-            Tentang Saya
+            Ingin Menghubungi Nugra?
           </h2>
           <p className="text-gray-800 mb-8 text-lg leading-relaxed">
-            Halo! Saya <strong>Ludang Prasetyo Nugroho</strong>, mahasiswa Teknik Komputer di
-            UTDI Yogyakarta. Tertarik pada pengembangan web, IoT, dan UI/UX modern.
-            Terbuka untuk kolaborasi & proyek!
+            Hai! Saya <strong>Ludang Prasetyo Nugroho</strong>, mahasiswa Teknik Komputer di UTDI Yogyakarta.  
+            Passion saya adalah pengembangan web, IoT, dan desain UI/UX yang modern dan fungsional.  
+            Saya terbuka untuk kerja sama, diskusi, atau proyek menarik. Yuk, kita ngobrol!
           </p>
-
           <div className="space-y-4 text-gray-700 text-md font-medium">
             <div className="flex items-center gap-3">
               <AiOutlineUser className="text-orange-600" size={22} />
@@ -180,7 +179,7 @@ const ContactFooter = () => {
             </div>
             <div className="flex items-center gap-3">
               <AiOutlineMail className="text-orange-600" size={22} />
-              ludang@nugra.my.id
+              ludang.prasetyo@students.utdi.ac.id
             </div>
             <div className="flex items-center gap-3">
               <AiOutlineMessage className="text-orange-600" size={22} />

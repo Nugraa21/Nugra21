@@ -30,7 +30,7 @@ const MainTitle = memo(() => (
       NUGRA21
       <br />
       <span className="text-xl sm:text-2xl text-orange-600 font-light">
-        Ludang Prasetyo Nugroho
+        ヌグラ Hi  .  .  .  .
       </span>
     </h1>
   </div>
@@ -82,9 +82,9 @@ const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
 
 const SOCIAL_LINKS = [
-  { icon: Github, link: "https://github.com/nugra21" },
-  { icon: Linkedin, link: "https://www.linkedin.com/in/ludangprasetyo/" },
-  { icon: Instagram, link: "https://instagram.com/nugra.online" },
+  { icon: Github, link: "https://github.com/Nugraa21" },
+  { icon: Linkedin, link: "https://www.linkedin.com/in/ludang-prasetyo-4773b6361/" },
+  { icon: Instagram, link: "https://www.instagram.com/nugraa_21/" },
 ];
 
 const TECH_ICONS = [
@@ -199,7 +199,7 @@ const Home = () => {
             data-aos="fade-up"
             data-aos-delay="1000"
           >
-            Membuat Web Inovatif, Modern, dan Interaktif untuk Dunia Digital.
+            "Empowering the future through innovative coding and creative design, turning ideas into impactful solutions." <br />
           </p>
           <div
             className="flex flex-wrap sm:flex-nowrap gap-4 mt-2"
