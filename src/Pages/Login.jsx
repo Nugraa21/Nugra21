@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+  const [pwData, setPwData] = useState(null);
+  const [showReset, setShowReset] = useState(false);
+  const [resetCode, setResetCode] = useState("");
+  const [editData, setEditData] = useState({ username: "", password: "", fullName: "", email: "" });
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    fetch("/pw.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setPwData(data);
+        setEditData(data); // untuk edit nanti
+      })
+      .catch(() => setError("Gagal memuat data akun"));
+  }, []);
 
-    if (username === "nugra" && password === "081328") {
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (!pwData) return;
+    if (form.username === pwData.username && form.password === pwData.password) {
       localStorage.setItem("isLoggedIn", "true");
       navigate("/dashboard");
     } else {
@@ -18,40 +32,93 @@ const Login = () => {
     }
   };
 
+  const handleResetCode = () => {
+    if (resetCode === "081328") {
+      setShowReset("edit");
+      setError("");
+    } else {
+      setError("Kode reset salah!");
+    }
+  };
+
+  const handleSaveEdit = () => {
+    alert("Perubahan berhasil disimpan secara lokal.\n\nUntuk permanen, ubah file `pw.json` di folder /public secara manual.");
+    setPwData(editData);
+    setShowReset(false);
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.card}>
         <h2 style={styles.title}>🔐 Login Admin</h2>
-        <form onSubmit={handleSubmit}>
-          <div style={styles.inputGroup}>
-            <label htmlFor="username" style={styles.label}>Username</label>
-            <input
-              id="username"
-              type="text"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              style={styles.input}
-              placeholder="Masukkan username"
-            />
-          </div>
-          <div style={styles.inputGroup}>
-            <label htmlFor="password" style={styles.label}>Password</label>
-            <input
-              id="password"
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={styles.input}
-              placeholder="Masukkan password"
-            />
-          </div>
 
-          {error && <p style={styles.error}>{error}</p>}
-
-          <button type="submit" style={styles.button}>Masuk</button>
-        </form>
+        {showReset === "edit" ? (
+          <>
+            <label style={styles.label}>Username Baru</label>
+            <input
+              style={styles.input}
+              value={editData.username}
+              onChange={(e) => setEditData({ ...editData, username: e.target.value })}
+            />
+            <label style={styles.label}>Password Baru</label>
+            <input
+              style={styles.input}
+              value={editData.password}
+              onChange={(e) => setEditData({ ...editData, password: e.target.value })}
+            />
+            <label style={styles.label}>Nama Lengkap</label>
+            <input
+              style={styles.input}
+              value={editData.fullName}
+              onChange={(e) => setEditData({ ...editData, fullName: e.target.value })}
+            />
+            <label style={styles.label}>Email</label>
+            <input
+              style={styles.input}
+              value={editData.email}
+              onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+            />
+            <button onClick={handleSaveEdit} style={styles.button}>💾 Simpan Perubahan</button>
+          </>
+        ) : showReset ? (
+          <>
+            <input
+              style={styles.input}
+              placeholder="Masukkan kode reset"
+              value={resetCode}
+              onChange={(e) => setResetCode(e.target.value)}
+            />
+            <button onClick={handleResetCode} style={styles.button}>🔓 Verifikasi</button>
+          </>
+        ) : (
+          <form onSubmit={handleLogin}>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Username</label>
+              <input
+                type="text"
+                style={styles.input}
+                value={form.username}
+                onChange={(e) => setForm({ ...form, username: e.target.value })}
+              />
+            </div>
+            <div style={styles.inputGroup}>
+              <label style={styles.label}>Password</label>
+              <input
+                type="password"
+                style={styles.input}
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+              />
+            </div>
+            {error && <p style={styles.error}>{error}</p>}
+            <button type="submit" style={styles.button}>🔐 Masuk</button>
+            <p style={{ marginTop: 10, textAlign: "center" }}>
+              <button onClick={() => setShowReset(true)} style={styles.linkButton}>
+                Lupa password?
+              </button>
+            </p>
+          </form>
+        )}
       </div>
     </div>
   );
@@ -94,6 +161,7 @@ const styles = {
     borderRadius: 6,
     border: "1px solid #ccc",
     fontSize: 14,
+    marginBottom: 12,
   },
   error: {
     color: "red",
@@ -112,7 +180,14 @@ const styles = {
     fontSize: 16,
     cursor: "pointer",
     boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-    transition: "background-color 0.3s",
+  },
+  linkButton: {
+    background: "none",
+    border: "none",
+    color: "#ff6600",
+    cursor: "pointer",
+    fontWeight: "bold",
+    textDecoration: "underline",
   },
 };
 
