@@ -4,7 +4,7 @@
     "id": "1",
     "Title": "Aplikasi IoT Kolam Lele",
     "Description": "Aplikasi Flutter untuk monitoring kolam lele dengan ESP32 dan MQTT, menampilkan data sensor secara real-time dari 3 kolam.",
-    "Img": "../imimages/prj1.png",
+    "Img": "/images/kolam-lele.jpg",
     "Link": "https://github.com/ludangprasetyo/kolam-lele-flutter",
     "Github": "https://github.com/ludangprasetyo/kolam-lele-flutter",
     "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
