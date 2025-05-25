@@ -14,6 +14,7 @@ import {
 import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { db, collection, addDoc, serverTimestamp } from "../firebase"; // Sesuaikan path jika perlu
 
 const ContactFooter = () => {
   const [formData, setFormData] = useState({
@@ -45,48 +46,24 @@ const ContactFooter = () => {
     });
 
     try {
-      const url =
-        "https://script.google.com/macros/s/AKfycbzw4t8VIVo09kbX2eAW6dtbLEpnAV5i4dV7LoqOgcuh8fhMNUtrCaFVyl6C9k8ZQK0/exec";
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          // Kalau perlu, tambahkan ini untuk menghindari masalah CORS:
-          // "Accept": "application/json",
-        },
-        body: JSON.stringify(formData),
-        mode: "cors", // pastikan mode CORS aktif
+      // Tambah dokumen baru ke koleksi "contacts"
+      await addDoc(collection(db, "contacts"), {
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        createdAt: serverTimestamp(),
       });
 
-      // Cek status respon dulu
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Pesan kamu sudah terkirim!",
+        icon: "success",
+        confirmButtonColor: "#f97316",
+        timer: 2000,
+        timerProgressBar: true,
+      });
 
-      // Karena response dari Apps Script kadang string, kita coba parse json aman:
-      const text = await response.text();
-
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error("Response dari server tidak valid JSON");
-      }
-
-      if (data.result === "success") {
-        Swal.fire({
-          title: "Berhasil!",
-          text: "Pesan kamu sudah terkirim!",
-          icon: "success",
-          confirmButtonColor: "#f97316",
-          timer: 2000,
-          timerProgressBar: true,
-        });
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        throw new Error(data.error || "Gagal mengirim pesan");
-      }
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       Swal.fire({
         title: "Gagal!",
