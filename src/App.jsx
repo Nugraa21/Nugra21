@@ -34,7 +34,7 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
           <ContactPage />
 
           {/* Footer Tailwind */}
-          <footer className="bg-white border-t-4 border-orange-500 mt-16 px-6 py-10 text-gray-800 text-sm font-medium">
+          <footer className=" border-t-4 border-orange-500 mt-16 px-6 py-10 text-gray-800 text-sm font-medium">
             <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {/* Kolom 1 */}
               <div>

@@ -27,7 +27,7 @@ const CTAButton = memo(({ href, text, icon: Icon }) => (
     target="_blank"
     rel="noopener noreferrer"
   >
-    <button className="relative w-[160px] h-11 rounded-lg bg-white border border-orange-300 shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 text-orange-800 font-semibold text-sm">
+    <button className="relative w-[160px] h-11 rounded-lg  border border-orange-300 shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 text-orange-800 font-semibold text-sm">
       <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-300 opacity-60 blur-md group-hover:opacity-90 transition-opacity duration-500 rounded-lg"></div>
       <span className="relative flex items-center justify-center gap-2">
         {text}
@@ -155,7 +155,7 @@ const Home = () => {
 
   return (
     <section
-      className="min-h-screen bg-white text-orange-800 flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 lg:px-20 pt-24 pb-16 overflow-x-hidden"
+      className="min-h-screen  text-orange-800 flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 lg:px-20 pt-24 pb-16 overflow-x-hidden"
       id="Home"
     >
       <div className="max-w-6xl w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-12 sm:gap-16">

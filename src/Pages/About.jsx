@@ -1,5 +1,5 @@
 import React, { useEffect, memo, useMemo, useState } from "react";
-import { FileText, Code2, BadgeCheck, Clock } from "lucide-react";
+import { FileText, Code2, BadgeCheck, Clock, MonitorSmartphone, Edit3, Layout, Cpu } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -129,6 +129,38 @@ const StatsCard = ({ icon: Icon, value, label, description, delay }) => (
   </div>
 );
 
+// ** Tambahan: Skills Cards Section **
+const Chip = ({ text }) => (
+  <span className="inline-block bg-orange-200 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full mr-2 mb-2 shadow-sm select-none">
+    {text}
+  </span>
+);
+
+const SkillCard = ({ icon: Icon, title, description, tools = [], delay }) => (
+  <div
+    className="bg-white bg-opacity-30 backdrop-blur-md border border-orange-300 rounded-xl p-6 flex flex-col items-center text-center cursor-pointer shadow-md
+               hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out"
+    data-aos="fade-up"
+    data-aos-delay={delay}
+    role="group"
+    tabIndex={0}
+    aria-label={`${title} skill`}
+  >
+    <div className="bg-gradient-to-tr from-orange-500 to-yellow-400 text-white p-5 rounded-full shadow-lg mb-4 flex items-center justify-center">
+      <Icon className="w-12 h-12" aria-hidden="true" />
+    </div>
+    <h3 className="text-2xl font-bold text-orange-700 mb-3">{title}</h3>
+    <p className="text-sm text-gray-800 mb-4">{description}</p>
+
+    {/* Tools chips */}
+    <div className="flex flex-wrap justify-center max-w-full">
+      {tools.map((tool) => (
+        <Chip key={tool} text={tool} />
+      ))}
+    </div>
+  </div>
+);
+
 const AboutPage = () => {
   const { totalProjects, totalCertificates, YearExperience } = useMemo(() => {
     const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
@@ -164,7 +196,7 @@ const AboutPage = () => {
 
   return (
     <section
-      className="min-h-screen bg-white text-gray-900 overflow-hidden px-[5%] sm:px-[8%] lg:px-[12%] mt-[80px] sm:mt-[100px] scroll-smooth pb-20"
+      className="min-h-screen  text-gray-900 overflow-hidden px-[5%] sm:px-[8%] lg:px-[12%] mt-[80px] sm:mt-[100px] scroll-smooth pb-20"
       id="About"
     >
       <Header />
@@ -266,11 +298,49 @@ const AboutPage = () => {
             delay={500}
           />
         </div>
+      {/* New Skills Cards Section */}
+      <div className="mt-20">
+        <h3
+          className="text-5xl font-extrabold text-orange-600 mb-12 text-center"
+          data-aos="fade-up"
+          data-aos-duration="800"
+        >
+          My Skills
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 px-4 sm:px-8">
+          <SkillCard
+            icon={Code2}
+            title="Programming"
+            description="Expertise in multiple programming languages and algorithms."
+            tools={["JavaScript", "Python", "C++", "Dart", "Java"]}
+            delay={100}
+          />
+          <SkillCard
+            icon={Edit3}
+            title="Video & Photo Editing"
+            description="Skilled in video and photo editing tools to create compelling visuals."
+            tools={["Adobe Premiere", "Photoshop", "DaVinci Resolve", "Lightroom"]}
+            delay={300}
+          />
+          <SkillCard
+            icon={Layout}
+            title="UI/UX Design"
+            description="Designing intuitive and modern user interfaces and experiences."
+            tools={["Figma", "Adobe XD", "Sketch", "TailwindCSS"]}
+            delay={500}
+          />
+          <SkillCard
+            icon={Cpu}
+            title="IoT & Robotics"
+            description="Experience building and programming IoT devices and robots."
+            tools={["ESP32", "Arduino", "MQTT", "ROS"]}
+            delay={700}
+          />
+        </div>
+      </div>
       </div>
     </section>
   );
 };
 
 export default memo(AboutPage);
-
-// --------------------------- fix

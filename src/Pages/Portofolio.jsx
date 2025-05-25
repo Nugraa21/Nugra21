@@ -93,7 +93,7 @@ export default function FullWidthTabs() {
 
   return (
     <div
-      className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-10 bg-white rounded-xl  overflow-visible"
+      className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-10  rounded-xl  overflow-visible"
       id="Portofolio"
     >
       <div
