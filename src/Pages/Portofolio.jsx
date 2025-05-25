@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -14,50 +14,6 @@ import Certificate from "../components/Certificate";
 import { Code, Award, Boxes } from "lucide-react";
 import data from "../data.json";
 
-// Komponen ToggleButton
-const ToggleButton = ({ onClick, isShowingMore }) => (
-  <button
-    onClick={onClick}
-    className="
-      px-4 py-2
-      text-black 
-      hover:text-orange-500 
-      text-sm 
-      font-medium 
-      transition-all 
-      duration-200 
-      ease-in-out
-      flex 
-      items-center 
-      gap-2
-      bg-orange-100 
-      hover:bg-orange-200
-      rounded-lg
-      border 
-      border-orange-300
-      hover:border-orange-400
-      shadow-sm
-      hover:shadow-md
-    "
-  >
-    {isShowingMore ? "See Less" : "See More"}
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={`transition-transform duration-200 ${isShowingMore ? "rotate-180" : ""}`}
-    >
-      <polyline points="6 9 12 15 18 9"></polyline>
-    </svg>
-  </button>
-);
-
 function TabPanel({ children, value, index, ...other }) {
   return (
     <div
@@ -68,8 +24,8 @@ function TabPanel({ children, value, index, ...other }) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: { xs: 2, sm: 3 } }}>
-          <Typography>{children}</Typography>
+        <Box sx={{ p: { xs: 2, md: 4 } }}>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>
@@ -109,15 +65,15 @@ export default function FullWidthTabs() {
   const [value, setValue] = useState(0);
   const [projects, setProjects] = useState([]);
   const [certificates, setCertificates] = useState([]);
+  // State untuk tombol tampilkan semua/sembunyikan
   const [showAllProjects, setShowAllProjects] = useState(false);
   const [showAllCertificates, setShowAllCertificates] = useState(false);
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const initialItems = isMobile ? 4 : 6;
 
   useEffect(() => {
     AOS.init({
       once: false,
       duration: 800,
+      easing: "ease-in-out",
     });
 
     setProjects(data.projects || []);
@@ -131,147 +87,213 @@ export default function FullWidthTabs() {
     setValue(newValue);
   };
 
-  const toggleShowMore = useCallback((type) => {
-    if (type === "projects") {
-      setShowAllProjects((prev) => !prev);
-    } else {
-      setShowAllCertificates((prev) => !prev);
-    }
-  }, []);
-
-  const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
-  const displayedCertificates = showAllCertificates ? certificates : certificates.slice(0, initialItems);
+  // Batas default item yang tampil sebelum tombol tampilkan semua
+  const DEFAULT_DISPLAY_COUNT = 6;
 
   return (
-    <div className="md:px-[8%] px-[4%] w-full sm:mt-0 mt-8 bg-white overflow-hidden" id="Portofolio">
-      <div className="text-center pb-8" data-aos="fade-up" data-aos-duration="800">
-        <h2 className="inline-block text-2xl md:text-4xl font-bold text-orange-500">
+    <div
+      className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-10 bg-white rounded-xl  overflow-visible"
+      id="Portofolio"
+    >
+      <div
+        className="text-center pb-10"
+        data-aos="fade-up"
+        data-aos-duration="800"
+      >
+        <h2 className="inline-block text-3xl md:text-5xl font-extrabold text-orange-500 tracking-wide">
           Portfolio Showcase
         </h2>
-        <p className="text-gray-600 max-w-xl mx-auto text-sm md:text-base mt-2">
-          Discover my projects, certifications, and tech skills, showcasing my growth and expertise.
+        <p className="text-gray-700 max-w-3xl mx-auto text-base md:text-lg mt-3 font-medium">
+          Discover my projects, certifications, and tech skills, showcasing my
+          growth and expertise.
         </p>
       </div>
 
       <Box sx={{ width: "100%" }}>
-        <AppBar
-          position="static"
-          elevation={1}
-          sx={{
-            bgcolor: "#F5F5F5",
-            borderRadius: "12px",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-          }}
-          className="md:px-3"
-        >
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            textColor="inherit"
-            indicatorColor="primary"
-            variant="fullWidth"
-            sx={{
-              minHeight: "60px",
-              "& .MuiTab-root": {
-                fontSize: { xs: "0.85rem", md: "1rem" },
-                fontWeight: "500",
-                color: "#1F2937",
-                textTransform: "none",
-                transition: "all 0.3s ease",
-                padding: "16px 0",
-                "&:hover": {
-                  color: "#F97316",
-                  backgroundColor: "#FFFFFF",
-                  "& .lucide": {
-                    color: "#F97316",
-                    transform: "scale(1.05)",
-                  },
-                },
-                "&.Mui-selected": {
-                  color: "#F97316",
-                  backgroundColor: "#FFFFFF",
-                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                  "& .lucide": {
-                    color: "#F97316",
-                  },
-                },
-              },
-              "& .MuiTabs-indicator": {
-                backgroundColor: "#F97316",
-                height: "3px",
-                borderRadius: "2px 2px 0 0",
-              },
-            }}
-          >
-            <Tab icon={<Code className="mb-1 w-4 h-4 transition-all duration-300" />} label="Projects" {...a11yProps(0)} />
-            <Tab icon={<Award className="mb-1 w-4 h-4 transition-all duration-300" />} label="Certificates" {...a11yProps(1)} />
-            <Tab icon={<Boxes className="mb-1 w-4 h-4 transition-all duration-300" />} label="Tech Stack" {...a11yProps(2)} />
-          </Tabs>
-        </AppBar>
+<AppBar
+  position="static"
+  elevation={0} // hilangkan shadow supaya transparan clean
+  sx={{
+    bgcolor: "transparent",
+    borderRadius: "12px",
+    px: { xs: 2, md: 6 },
+  }}
+>
+  <Tabs
+    value={value}
+    onChange={handleChange}
+    textColor="inherit"
+    indicatorColor="primary"
+    variant="fullWidth"
+    sx={{
+      minHeight: "64px",
+      "& .MuiTab-root": {
+        fontSize: { xs: "1rem", md: "1.1rem" },
+        fontWeight: 600,
+        color: "#000000", // teks utama hitam
+        textTransform: "none",
+        paddingY: "18px",
+        marginX: 1,
+        borderRadius: "12px",
+        transition: "all 0.3s ease",
+        "&:hover": {
+          color: "#FB923C", // oranye cerah saat hover
+          backgroundColor: "rgba(251, 146, 60, 0.1)", // oranye semi transparan background hover
+          "& .lucide": {
+            color: "#FB923C",
+            transform: "scale(1.1)",
+          },
+        },
+        "&.Mui-selected": {
+          color: "#FB923C", // oranye untuk tab aktif
+          backgroundColor: "rgba(251, 146, 60, 0.15)", // bg tab aktif oranye transparent
+          borderRadius: "12px",
+          "& .lucide": {
+            color: "#FB923C",
+            transform: "scale(1.15)",
+          },
+          fontWeight: 700,
+        },
+        "&.Mui-focusVisible": {
+          backgroundColor: "rgba(251, 146, 60, 0.08)",
+          outline: "2px solid #FB923C",
+          outlineOffset: "2px",
+        },
+      },
+      "& .MuiTabs-indicator": {
+        backgroundColor: "#FB923C",
+        height: 4,
+        borderRadius: "4px 4px 0 0",
+        boxShadow: "0 0 8px rgba(251, 146, 60, 0.5)",
+      },
+    }}
+  >
+    <Tab
+      icon={
+        <Code className="mb-1 w-5 h-5 transition-transform duration-300" />
+      }
+      label="Projects"
+      {...a11yProps(0)}
+    />
+    <Tab
+      icon={
+        <Award className="mb-1 w-5 h-5 transition-transform duration-300" />
+      }
+      label="Certificates"
+      {...a11yProps(1)}
+    />
+    <Tab
+      icon={
+        <Boxes className="mb-1 w-5 h-5 transition-transform duration-300" />
+      }
+      label="Tech Stack"
+      {...a11yProps(2)}
+    />
+  </Tabs>
+</AppBar>
 
-        {[0, 1, 2].map((index) => (
-          <TabPanel key={index} value={value} index={index} dir={theme.direction}>
-            {index === 0 && (
-              <>
-                <div className="container mx-auto flex justify-center items-center overflow-hidden">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {displayedProjects.map((project, i) => (
-                      <div key={project.id || i} data-aos="fade-up" data-aos-duration="800">
-                        <CardProject
-                          Img={project.Img}
-                          Title={project.Title}
-                          Description={project.Description}
-                          Link={project.Link}
-                          id={project.id}
-                        />
-                      </div>
-                    ))}
-                  </div>
+
+        {/* Projects Tab */}
+        <TabPanel value={value} index={0} dir={theme.direction}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {(showAllProjects ? projects : projects.slice(0, DEFAULT_DISPLAY_COUNT)).map(
+              (project, i) => (
+                <div
+                  key={project.id || i}
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                  className="transform hover:-translate-y-1  transition duration-300 rounded-lg"
+                >
+                  <CardProject
+                    Img={project.Img}
+                    Title={project.Title}
+                    Description={project.Description}
+                    Link={project.Link}
+                    id={project.id}
+                  />
                 </div>
-                {projects.length > initialItems && (
-                  <div className="mt-4 w-full flex justify-center">
-                    <ToggleButton
-                      onClick={() => toggleShowMore("projects")}
-                      isShowingMore={showAllProjects}
-                    />
-                  </div>
-                )}
-              </>
+              )
             )}
-            {index === 1 && (
-              <>
-                <div className="container mx-auto flex justify-center items-center overflow-hidden">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {displayedCertificates.map((certificate, i) => (
-                      <div key={i} data-aos="fade-up" data-aos-duration="800">
-                        <Certificate ImgSertif={certificate.Img} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                {certificates.length > initialItems && (
-                  <div className="mt-4 w-full flex justify-center">
-                    <ToggleButton
-                      onClick={() => toggleShowMore("certificates")}
-                      isShowingMore={showAllCertificates}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-            {index === 2 && (
-              <div className="container mx-auto flex justify-center items-center overflow-hidden pb-6">
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                  {techStacks.map((stack, i) => (
-                    <div key={i} data-aos="fade-up" data-aos-duration="800">
-                      <TechStackIcon TechStackIcon={stack.icon} Language={stack.language} />
-                    </div>
-                  ))}
-                </div>
+          </div>
+
+          {/* Tombol tampilkan semua / sembunyikan */}
+          {projects.length > DEFAULT_DISPLAY_COUNT && (
+            <div
+              className="flex justify-center mt-6"
+              style={{ position: "relative", zIndex: 10  }} // border buat debugging
+            >
+              <button
+                onClick={() => setShowAllProjects(!showAllProjects)}
+                className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg  transition duration-300"
+                aria-label={
+                  showAllProjects ? "Sembunyikan proyek" : "Tampilkan semua proyek"
+                }
+              >
+                {showAllProjects
+                  ? "Sembunyikan"
+                  : `Tampilkan Semua (${projects.length})`}
+              </button>
+            </div>
+          )}
+        </TabPanel>
+
+        {/* Certificates Tab */}
+        <TabPanel value={value} index={1} dir={theme.direction}>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {(showAllCertificates
+              ? certificates
+              : certificates.slice(0, DEFAULT_DISPLAY_COUNT)
+            ).map((certificate, i) => (
+              <div
+                key={i}
+                data-aos="fade-up"
+                data-aos-duration="800"
+                className="rounded-lg  transition-transform transform hover:-translate-y-1"
+              >
+                <Certificate ImgSertif={certificate.Img} />
               </div>
-            )}
-          </TabPanel>
-        ))}
+            ))}
+          </div>
+
+          {/* Tombol tampilkan semua / sembunyikan */}
+          {certificates.length > DEFAULT_DISPLAY_COUNT && (
+            <div
+              className="flex justify-center mt-6"
+              style={{ position: "relative", zIndex: 10, border: "1px solid red" }} // border buat debugging
+            >
+              <button
+                onClick={() => setShowAllCertificates(!showAllCertificates)}
+                className="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-lg  transition duration-300"
+                aria-label={
+                  showAllCertificates ? "Sembunyikan sertifikat" : "Tampilkan semua sertifikat"
+                }
+              >
+                {showAllCertificates
+                  ? "Sembunyikan"
+                  : `Tampilkan Semua (${certificates.length})`}
+              </button>
+            </div>
+          )}
+        </TabPanel>
+
+        {/* Tech Stack Tab (tidak ada tombol karena biasanya fixed) */}
+        <TabPanel value={value} index={2} dir={theme.direction}>
+          <div className="pb-6 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            {techStacks.map((stack, i) => (
+              <div
+                key={i}
+                data-aos="fade-up"
+                data-aos-duration="800"
+                className="hover:scale-110 transition-transform duration-300 cursor-pointer"
+              >
+                <TechStackIcon
+                  TechStackIcon={stack.icon}
+                  Language={stack.language}
+                />
+              </div>
+            ))}
+          </div>
+        </TabPanel>
       </Box>
     </div>
   );
