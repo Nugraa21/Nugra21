@@ -273,30 +273,6 @@ const ContactFooter = () => {
           </form>
         </div>
 
-        {/* OUTPUT KOMENTAR */}
-        <div data-aos="fade-up" className="flex flex-col max-h-[400px] overflow-y-auto pr-4 mt-16 md:mt-0">
-          <h3 className="text-3xl font-bold text-orange-700 mb-6 tracking-wide">Komentar</h3>
-
-          {comments.length === 0 ? (
-            <p className="text-gray-500 italic">Belum ada komentar. Jadilah yang pertama!</p>
-          ) : (
-            <div className="space-y-5">
-              {comments.map(({ id, name, message }) => (
-                <div
-                  key={id}
-                  className="bg-white border border-orange-300 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-shadow"
-                >
-                  <div className="flex items-center mb-3">
-                    <AiOutlineUser className="text-orange-600 mr-3" size={24} />
-                    <h4 className="font-semibold text-orange-700">{name || "Anonim"}</h4>
-                  </div>
-                  <p className="text-gray-800">{message || "Tidak ada pesan"}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
         {/* FORM KOMENTAR */}
         <div data-aos="fade-up" className="flex flex-col mt-16 md:mt-0">
           <h3 className="text-3xl font-bold text-orange-700 mb-6 tracking-wide">
@@ -353,6 +329,62 @@ const ContactFooter = () => {
             </button>
           </form>
         </div>
+
+        {/* OUTPUT KOMENTAR */}
+        <div
+          data-aos="fade-up"
+          className="flex flex-col max-h-[400px] mt-16 md:mt-0 relative backdrop-blur-md bg-white/30 rounded-2xl shadow-xl ring-1 ring-orange-100 overflow-hidden"
+        >
+          {/* Judul tetap di atas */}
+          <div className="sticky top-0 z-10 px-4 py-3 bg-white/40 backdrop-blur-sm border-b border-orange-200 flex items-center">
+            <span className="text-orange-600 text-2xl mr-2"></span>
+            <h3 className="text-2xl font-bold text-orange-700 tracking-wide">Komentar</h3>
+          </div>
+
+          {/* Area Komentar Scroll */}
+          <div className="flex flex-col overflow-y-auto px-4 py-4 space-y-4 custom-scroll">
+            {comments.length === 0 ? (
+              <p className="text-gray-500 italic">Belum ada komentar. Jadilah yang pertama!</p>
+            ) : (
+              comments.map(({ id, name, message, isUser }) => (
+                <div key={id} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
+                  <div className="flex items-end space-x-2 max-w-[80%]">
+                    {/* Icon User (kiri) */}
+                    {!isUser && (
+                      <div className="w-8 h-8 bg-orange-200 text-orange-700 flex items-center justify-center rounded-full shadow-inner text-sm font-bold">
+                        {name?.[0]?.toUpperCase() || "A"}
+                      </div>
+                    )}
+
+                    {/* Bubble/Card */}
+                    <div
+                      className={`px-4 py-3 rounded-2xl transition-all duration-300 ease-in-out shadow-md ${
+                        isUser
+                          ? 'bg-orange-500/90 text-white rounded-br-none'
+                          : 'bg-white/80 text-gray-800 border border-orange-100 backdrop-blur-sm rounded-bl-none'
+                      }`}
+                    >
+                      <p className="text-xs font-semibold mb-1 opacity-80">
+                        {name || (isUser ? "Saya" : "Anonim")}
+                      </p>
+                      <p className="text-sm leading-snug whitespace-pre-wrap">
+                        {message || "Tidak ada pesan"}
+                      </p>
+                    </div>
+
+                    {/* Icon User (kanan) */}
+                    {isUser && (
+                      <div className="w-8 h-8 bg-orange-200 text-orange-700 flex items-center justify-center rounded-full shadow-inner text-sm font-bold">
+                        {name?.[0]?.toUpperCase() || "S"}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+{/*  */}
       </div>
     </footer>
   );
