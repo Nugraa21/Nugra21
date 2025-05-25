@@ -1,0 +1,42 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "Title": "Project One",
+      "Description": "A web application for managing tasks with a modern UI.",
+      "Img": "/images/project1.jpg",
+      "Link": "https://project1-demo.com",
+      "Github": "https://github.com/user/project1",
+      "TechStack": ["React", "Tailwind", "Firebase"],
+      "Features": ["User authentication", "Real-time updates", "Responsive design"]
+    },
+    {
+      "id": "2",
+      "Title": "Project Two",
+      "Description": "An e-commerce platform with payment integration.",
+      "Img": "/images/project2.jpg",
+      "Link": "https://project2-demo.com",
+      "Github": "Private",
+      "TechStack": ["React", "NodeJS", "Stripe"],
+      "Features": ["Payment processing", "Product filtering", "Cart management"]
+    },
+        {
+      "id": "3",
+      "Title": "Project tree",
+      "Description": "An e-commerce platform with payment integration.",
+      "Img": "/images/project2.jpg",
+      "Link": "https://project2-demo.com",
+      "Github": "Private",
+      "TechStack": ["React", "NodeJS", "Stripe"],
+      "Features": ["Payment processing", "Product filtering", "Cart management"]
+    }
+  ],
+  "certificates": [
+    {
+      "Img": "/images/certificate1.jpg"
+    },
+    {
+      "Img": "/images/certificate2.jpg"
+    }
+  ]
+}

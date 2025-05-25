@@ -188,16 +188,18 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <>
-      <CustomCursor />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
-          <Route path="/project/:id" element={<ProjectPageLayout />} />
-        </Routes>
-      </BrowserRouter>
-    </>
+<>
+  <CustomCursor />
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
+      <Route path="/project/:id" element={<ProjectPageLayout />} />
+    </Routes>
+  </BrowserRouter>
+</>
+
   );
 }
 
 export default App;
+// ===================

@@ -13,60 +13,49 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import Certificate from "../components/Certificate";
 import { Code, Award, Boxes } from "lucide-react";
+import data from "../data.json";
 
-// Dummy data for projects
-const dummyProjects = [
-  {
-    id: "1",
-    Img: "project1.jpg",
-    Title: "Weather App",
-    Description: "A simple weather forecast app using React and OpenWeatherMap API.",
-    Link: "https://example.com/project1",
-    TechStack: ["React", "API", "CSS"],
-  },
-  {
-    id: "2",
-    Img: "project2.jpg",
-    Title: "Portfolio Website",
-    Description: "Personal website to showcase my portfolio and resume.",
-    Link: "https://example.com/project2",
-    TechStack: ["HTML", "CSS", "JavaScript"],
-  },
-  // Tambahkan lebih banyak proyek di sini jika diperlukan
-];
-
-// Dummy data for certificates
-const dummyCertificates = [
-  { Img: "certificate1.jpg" },
-  { Img: "certificate2.jpg" },
-  // Tambahkan lebih banyak sertifikat di sini jika diperlukan
-];
-
+// Komponen ToggleButton yang disederhanakan
 const ToggleButton = ({ onClick, isShowingMore }) => (
   <button
     onClick={onClick}
-    className="px-3 py-1.5 text-slate-300 hover:text-white text-sm font-medium transition-all duration-300 ease-in-out flex items-center gap-2 bg-white/5 hover:bg-white/10 rounded-md border border-white/10 hover:border-white/20 backdrop-blur-sm group relative overflow-hidden"
+    className="
+      px-4 py-2
+      text-black 
+      hover:text-orange-500 
+      text-sm 
+      font-medium 
+      transition-all 
+      duration-200 
+      ease-in-out
+      flex 
+      items-center 
+      gap-2
+      bg-orange-100 
+      hover:bg-orange-200
+      rounded-lg
+      border 
+      border-orange-300
+      hover:border-orange-400
+      shadow-sm
+      hover:shadow-md
+    "
   >
-    <span className="relative z-10 flex items-center gap-2">
-      {isShowingMore ? "See Less" : "See More"}
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className={`transition-transform duration-300 ${
-          isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"
-        }`}
-      >
-        <polyline points={isShowingMore ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
-      </svg>
-    </span>
-    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-500/50 transition-all duration-300 group-hover:w-full"></span>
+    {isShowingMore ? "See Less" : "See More"}
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={`transition-transform duration-200 ${isShowingMore ? "rotate-180" : ""}`}
+    >
+      <polyline points="6 9 12 15 18 9"></polyline>
+    </svg>
   </button>
 );
 
@@ -80,7 +69,7 @@ function TabPanel({ children, value, index, ...other }) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: { xs: 1, sm: 3 } }}>
+        <Box sx={{ p: { xs: 2, sm: 3 } }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -127,9 +116,16 @@ export default function FullWidthTabs() {
   const initialItems = isMobile ? 4 : 6;
 
   useEffect(() => {
-    AOS.init({ once: false });
-    setProjects(dummyProjects);
-    setCertificates(dummyCertificates);
+    AOS.init({
+      once: false,
+      duration: 800, // Durasi animasi lebih pendek
+    });
+
+    setProjects(data.projects || []);
+    setCertificates(data.certificates || []);
+
+    localStorage.setItem("projects", JSON.stringify(data.projects || []));
+    localStorage.setItem("certificates", JSON.stringify(data.certificates || []));
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -148,109 +144,97 @@ export default function FullWidthTabs() {
   const displayedCertificates = showAllCertificates ? certificates : certificates.slice(0, initialItems);
 
   return (
-    <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Portofolio">
-      <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
-        <h2 className="inline-block text-3xl md:text-5xl font-bold text-center mx-auto text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
-          <span
-            style={{
-              color: "#6366f1",
-              backgroundImage: "linear-gradient(45deg, #6366f1 10%, #a855f7 93%)",
-              WebkitBackgroundClip: "text",
-              backgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Portfolio Showcase
-          </span>
+    <div className="md:px-[8%] px-[4%] w-full sm:mt-0 mt-8 bg-white overflow-hidden" id="Portofolio">
+      <div className="text-center pb-8" data-aos="fade-up" data-aos-duration="800">
+        <h2 className="inline-block text-2xl md:text-4xl font-bold text-orange-500">
+          Portfolio Showcase
         </h2>
-        <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-          Explore my journey through projects, certifications, and technical expertise. Each section represents a
-          milestone in my continuous learning path.
+        <p className="text-gray-600 max-w-xl mx-auto text-sm md:text-base mt-2">
+          Discover my projects, certifications, and tech skills, showcasing my growth and expertise.
         </p>
       </div>
 
       <Box sx={{ width: "100%" }}>
         <AppBar
           position="static"
-          elevation={0}
+          elevation={1}
           sx={{
-            bgcolor: "transparent",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: "20px",
-            position: "relative",
-            overflow: "hidden",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "linear-gradient(180deg, rgba(139, 92, 246, 0.03) 0%, rgba(59, 130, 246, 0.03) 100%)",
-              backdropFilter: "blur(10px)",
-              zIndex: 0,
-            },
+            bgcolor: "#F5F5F5",
+            borderRadius: "12px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
           }}
-          className="md:px-4"
+          className="md:px-3"
         >
           <Tabs
             value={value}
             onChange={handleChange}
-            textColor="secondary"
-            indicatorColor="secondary"
+            textColor="inherit"
+            indicatorColor="primary"
             variant="fullWidth"
             sx={{
-              minHeight: "70px",
+              minHeight: "60px",
               "& .MuiTab-root": {
-                fontSize: { xs: "0.9rem", md: "1rem" },
-                fontWeight: "600",
-                color: "#94a3b8",
+                fontSize: { xs: "0.85rem", md: "1rem" },
+                fontWeight: "500",
+                color: "#1F2937",
                 textTransform: "none",
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                padding: "20px 0",
-                zIndex: 1,
-                margin: "8px",
-                borderRadius: "12px",
+                transition: "all 0.3s ease",
+                padding: "16px 0",
                 "&:hover": {
-                  color: "#ffffff",
-                  backgroundColor: "rgba(139, 92, 246, 0.1)",
-                  transform: "translateY(-2px)",
+                  color: "#F97316",
+                  backgroundColor: "#FFFFFF",
                   "& .lucide": {
-                    transform: "scale(1.1) rotate(5deg)",
+                    color: "#F97316",
+                    transform: "scale(1.05)",
                   },
                 },
                 "&.Mui-selected": {
-                  color: "#fff",
-                  background: "linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2))",
-                  boxShadow: "0 4px 15px -3px rgba(139, 92, 246, 0.2)",
+                  color: "#F97316",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                   "& .lucide": {
-                    color: "#a78bfa",
+                    color: "#F97316",
                   },
                 },
               },
               "& .MuiTabs-indicator": {
-                height: 0,
-              },
-              "& .MuiTabs-flexContainer": {
-                gap: "8px",
+                backgroundColor: "#F97316",
+                height: "3px",
+                borderRadius: "2px 2px 0 0",
               },
             }}
           >
-            <Tab icon={<Code className="mb-2 w-5 h-5 transition-all duration-300" />} label="Projects" {...a11yProps(0)} />
-            <Tab icon={<Award className="mb-2 w-5 h-5 transition-all duration-300" />} label="Certificates" {...a11yProps(1)} />
-            <Tab icon={<Boxes className="mb-2 w-5 h-5 transition-all duration-300" />} label="Tech Stack" {...a11yProps(2)} />
+            <Tab
+              icon={<Code className="mb-1 w-4 h-4 transition-all duration-300" />}
+              label="Projects"
+              {...a11yProps(0)}
+            />
+            <Tab
+              icon={<Award className="mb-1 w-4 h-4 transition-all duration-300" />}
+              label="Certificates"
+              {...a11yProps(1)}
+            />
+            <Tab
+              icon={<Boxes className="mb-1 w-4 h-4 transition-all duration-300" />}
+              label="Tech Stack"
+              {...a11yProps(2)}
+            />
           </Tabs>
         </AppBar>
 
-        <SwipeableViews axis={theme.direction === "rtl" ? "x-reverse" : "x"} index={value} onChangeIndex={setValue}>
+        <SwipeableViews
+          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+          index={value}
+          onChangeIndex={setValue}
+        >
           <TabPanel value={value} index={0} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {displayedProjects.map((project, index) => (
                   <div
                     key={project.id || index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
+                    data-aos="fade-up"
+                    data-aos-duration="800"
                   >
                     <CardProject
                       Img={project.Img}
@@ -264,20 +248,23 @@ export default function FullWidthTabs() {
               </div>
             </div>
             {projects.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
-                <ToggleButton onClick={() => toggleShowMore("projects")} isShowingMore={showAllProjects} />
+              <div className="mt-4 w-full flex justify-center">
+                <ToggleButton
+                  onClick={() => toggleShowMore("projects")}
+                  isShowingMore={showAllProjects}
+                />
               </div>
             )}
           </TabPanel>
 
           <TabPanel value={value} index={1} dir={theme.direction}>
             <div className="container mx-auto flex justify-center items-center overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-3 md:gap-5 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {displayedCertificates.map((certificate, index) => (
                   <div
                     key={index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
+                    data-aos="fade-up"
+                    data-aos-duration="800"
                   >
                     <Certificate ImgSertif={certificate.Img} />
                   </div>
@@ -285,20 +272,23 @@ export default function FullWidthTabs() {
               </div>
             </div>
             {certificates.length > initialItems && (
-              <div className="mt-6 w-full flex justify-start">
-                <ToggleButton onClick={() => toggleShowMore("certificates")} isShowingMore={showAllCertificates} />
+              <div className="mt-4 w-full flex justify-center">
+                <ToggleButton
+                  onClick={() => toggleShowMore("certificates")}
+                  isShowingMore={showAllCertificates}
+                />
               </div>
             )}
           </TabPanel>
 
           <TabPanel value={value} index={2} dir={theme.direction}>
-            <div className="container mx-auto flex justify-center items-center overflow-hidden pb-[5%]">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 lg:gap-8 gap-5">
+            <div className="container mx-auto flex justify-center items-center overflow-hidden pb-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                 {techStacks.map((stack, index) => (
                   <div
                     key={index}
-                    data-aos={index % 3 === 0 ? "fade-up-right" : index % 3 === 1 ? "fade-up" : "fade-up-left"}
-                    data-aos-duration={index % 3 === 0 ? "1000" : index % 3 === 1 ? "1200" : "1000"}
+                    data-aos="fade-up"
+                    data-aos-duration="800"
                   >
                     <TechStackIcon TechStackIcon={stack.icon} Language={stack.language} />
                   </div>
