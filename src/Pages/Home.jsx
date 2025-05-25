@@ -49,7 +49,18 @@ const SocialLink = memo(({ icon: Icon, link }) => (
 ));
 
 // Data
-const WORDS = ["Computer Engineering Student", "Tech & Robotics Enthusiast"];
+const WORDS = [
+  "Creative UI/UX Designer",
+  "Tech & Robotics Enthusiast",
+  "Full-Stack Web Developer",
+  "IoT & Embedded Systems Builder",
+  "Passionate Open-Source Contributor",
+  "Visionary Digital Creator",
+  "Flutter & MQTT Specialist",
+  "Automation & AI Explorer",
+  "Code with Heart, Build with Purpose",
+  "Nugra21 — Crafting Future with Tech"
+];
 const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;

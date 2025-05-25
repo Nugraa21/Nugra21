@@ -86,7 +86,8 @@ const ContactFooter = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-r from-orange-100 to-orange-50 border-t border-orange-300 mt-20 px-6 py-16 rounded-t-3xl shadow-lg">
+    <footer id="contact" className="bg-gradient-to-r from-orange-100 to-orange-50 border-t border-orange-300 mt-20 px-6 py-16 rounded-t-3xl shadow-lg"
+    >
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16">
         {/* Left Section */}
         <div data-aos="fade-right" className="flex flex-col justify-between">
@@ -194,9 +195,9 @@ const ContactFooter = () => {
       </div>
 
       {/* Footer Text */}
-      <div className="text-center text-sm text-orange-400 mt-14 font-semibold" data-aos="fade-up">
+      {/* <div className="text-center text-sm text-orange-400 mt-14 font-semibold" data-aos="fade-up">
         © {new Date().getFullYear()} Ludang Prasetyo Nugroho — All rights reserved.
-      </div>
+      </div> */}
     </footer>
   );
 };

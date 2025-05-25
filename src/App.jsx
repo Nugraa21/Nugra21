@@ -54,39 +54,39 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
               {/* Kolom 1: Tentang Aku */}
               <div>
                 <h3 style={{ color: "#ff6600", marginBottom: "16px", fontSize: "20px", fontWeight: "700" }}>
-                  Tentang Aku
+                  Kata kata hari ini
                 </h3>
-                <p style={{ marginBottom: "12px", fontWeight: "600" }}>Ludang Prasetyo Nugroho</p>
+                <p style={{ marginBottom: "12px", fontWeight: "600" }}>Apa yah kata katanya</p>
                 <p>
-                  Mahasiswa Teknik Komputer yang bersemangat dalam pengembangan perangkat lunak, desain web, dan inovasi teknologi.  
+                  G ada si aku lagi g kepikiran kata kata hehe
                 </p>
               </div>
 
               {/* Kolom 2: Navigasi */}
               <div>
                 <h3 style={{ color: "#ff6600", marginBottom: "16px", fontSize: "20px", fontWeight: "700" }}>
-                  Navigasi
+                  Hal yang sedang ku pelajari
                 </h3>
                 <ul style={{ listStyle: "none", padding: 0 }}>
                   <li style={{ marginBottom: "10px" }}>
                     <a href="/" style={{ color: "#222", textDecoration: "none", transition: "color 0.3s" }}
                        onMouseEnter={e => e.target.style.color = "#ff6600"}
                        onMouseLeave={e => e.target.style.color = "#222"}>
-                      Home
+                      | Node js
                     </a>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <a href="/about" style={{ color: "#222", textDecoration: "none", transition: "color 0.3s" }}
                        onMouseEnter={e => e.target.style.color = "#ff6600"}
                        onMouseLeave={e => e.target.style.color = "#222"}>
-                      About
+                      | Iot dengan mqtt
                     </a>
                   </li>
                   <li style={{ marginBottom: "10px" }}>
                     <a href="/contact" style={{ color: "#222", textDecoration: "none", transition: "color 0.3s" }}
                        onMouseEnter={e => e.target.style.color = "#ff6600"}
                        onMouseLeave={e => e.target.style.color = "#222"}>
-                      Contact
+                      Pythone ( ML \ Encription )
                     </a>
                   </li>
                 </ul>
@@ -95,11 +95,8 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
               {/* Kolom 3: Kontak & Sosial Media */}
               <div>
                 <h3 style={{ color: "#ff6600", marginBottom: "16px", fontSize: "20px", fontWeight: "700" }}>
-                  Kontak & Sosial Media
+                  Mampir juga di sini
                 </h3>
-                <p style={{ marginBottom: "12px" }}>
-                  <strong>Email:</strong> <a href="mailto:your.email@example.com" style={{ color: "#ff6600", textDecoration: "none" }}>your.email@example.com</a>
-                </p>
                 <p style={{ marginBottom: "8px" }}>
                   <strong>GitHub:</strong> <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" style={{ color: "#ff6600", textDecoration: "none" }}>github.com/yourusername</a>
                 </p>
@@ -107,7 +104,7 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
                   <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" style={{ color: "#ff6600", textDecoration: "none" }}>linkedin.com/in/yourprofile</a>
                 </p>
                 <p style={{ marginBottom: "8px" }}>
-                  <strong>Telegram:</strong> <a href="https://t.me/yourtelegram" target="_blank" rel="noopener noreferrer" style={{ color: "#ff6600", textDecoration: "none" }}>@yourtelegram</a>
+                  <strong>Youtube:</strong> <a href="https://t.me/yourtelegram" target="_blank" rel="noopener noreferrer" style={{ color: "#ff6600", textDecoration: "none" }}>@yourtelegram</a>
                 </p>
               </div>
             </div>
