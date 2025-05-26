@@ -70,9 +70,8 @@ const WORDS = [
   "Tech & Robotics Enthusiast",
   "Full-Stack Web Developer",
   "IoT & Embedded Systems Builder",
-  "Passionate Open-Source Contributor",
   "Visionary Digital Creator",
-  "Flutter & MQTT Specialist",
+  "Flutter & MQTT ",
   "Automation & AI Explorer",
   "Code with Heart, Build with Purpose",
   "Nugra21 — Crafting Future with Tech"
