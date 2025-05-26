@@ -9,11 +9,10 @@ import Portofolio from "./Pages/Portofolio";
 import ContactPage from "./Pages/Contact";
 import ProjectDetails from "./components/ProjectDetail";
 import WelcomeScreen from "./Pages/WelcomeScreen";
-import LoginPage from "./Pages/Login";  // Import halaman Login yang baru kamu buat
+import LoginPage from "./Pages/Login";
+import Pengalaman from "./components/Pengalaman";
+import Dashboard from "./Pages/Dashboard";
 import { AnimatePresence } from 'framer-motion';
-import Pengalaman from "./components/Pengalaman"; // tambahkan ini
-import Dashboard from "./Pages/Dashboard"; // atau sesuaikan path jika filenya berbeda
-
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   return (
@@ -25,57 +24,59 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
       </AnimatePresence>
 
       {!showWelcome && (
-        <>
+        <div className="relative w-full min-h-screen overflow-x-hidden">
           <Navbar />
           <AnimatedBackground />
-          <Home />
-          <About />
-          <Pengalaman />
-          <Portofolio />
-          <ContactPage />
+          <main className="flex flex-col">
+            <Home />
+            <About />
+            <Pengalaman />
+            <Portofolio />
+            <ContactPage />
+          </main>
 
-          {/* Footer Tailwind */}
-          <footer className=" border-t-4 border-orange-500 mt-16 px-6 py-10 text-gray-800 text-sm font-medium">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {/* Footer */}
+          <footer className="border-t-4 border-orange-500 mt-12 xs:mt-16 px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 py-8 xs:py-10 bg-orange-50 text-gray-800 text-[10px] xs:text-xs sm:text-sm font-medium">
+            <div className="max-w-7xl mx-auto w-full grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8">
               {/* Kolom 1 */}
               <div>
-                <h3 className="text-orange-500 text-lg font-bold mb-4">
-                  Kata kata hari ini
+                <h3 className="text-orange-500 text-base xs:text-lg sm:text-xl font-bold mb-3 xs:mb-4">
+                  Kata-kata Hari Ini
                 </h3>
-                <p className="mb-2 font-semibold">Apa yah kata katanya</p>
-                <p className="text-gray-600">
-                  G ada si aku lagi g kepikiran kata kata hehe
+                <p className="mb-1 xs:mb-2 font-semibold">Apa yah kata-katanya</p>
+                <p className="text-gray-600 leading-relaxed">
+                  G ada sih, aku lagi g kepikiran kata-kata hehe
                 </p>
               </div>
 
               {/* Kolom 2 */}
               <div>
-                <h3 className="text-orange-500 text-lg font-bold mb-4">
-                  Hal yang sedang ku pelajari
+                <h3 className="text-orange-500 text-base xs:text-lg sm:text-xl font-bold mb-3 xs:mb-4">
+                  Hal yang Sedang Kupelajari
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1 xs:space-y-2">
                   <li>
                     <a
                       href="/"
-                      className="hover:text-orange-500 transition-colors"
+                      className="hover:text-orange-500 transition-colors truncate block"
                     >
-                      | Node js
+                      | Node.js
                     </a>
                   </li>
                   <li>
                     <a
                       href="/about"
-                      className="hover:text-orange-500 transition-colors"
+                      className="hover:text-orange-500 transition-colors truncate block"
                     >
-                      | Iot dengan MQTT
+                      | IoT dengan MQTT
                     </a>
                   </li>
                   <li>
                     <a
                       href="/contact"
-                      className="hover:text-orange-500 transition-colors"
+                      className="hover:text-orange-500 transition-colors truncate block"
                     >
-                      Python ( ML / Enkripsi )
+                      | Python (ML / Enkripsi)
                     </a>
                   </li>
                 </ul>
@@ -83,10 +84,10 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
 
               {/* Kolom 3 */}
               <div>
-                <h3 className="text-orange-500 text-lg font-bold mb-4">
-                  Mampir juga di sini
+                <h3 className="text-orange-500 text-base xs:text-lg sm:text-xl font-bold mb-3 xs:mb-4">
+                  Mampir Juga di Sini
                 </h3>
-                <p className="mb-2">
+                <p className="mb-1 xs:mb-2 truncate">
                   <strong>GitHub:</strong>{" "}
                   <a
                     href="https://github.com/Nugraa21"
@@ -94,10 +95,10 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
                     rel="noopener noreferrer"
                     className="text-orange-500 hover:underline"
                   >
-                    https://github.com/Nugraa21
+                    github.com/Nugraa21
                   </a>
                 </p>
-                <p className="mb-2">
+                <p className="mb-1 xs:mb-2 truncate">
                   <strong>LinkedIn:</strong>{" "}
                   <a
                     href="https://www.linkedin.com/in/ludang-prasetyo-4773b6361/"
@@ -105,40 +106,45 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
                     rel="noopener noreferrer"
                     className="text-orange-500 hover:underline"
                   >
-                   www.linkedin.com/in/ludang-prasetyo
+                    linkedin.com/in/ludang-prasetyo
                   </a>
                 </p>
-{/*  */}
               </div>
             </div>
 
-            <div className="text-center mt-10 text-gray-500 text-xs">
+            <div className="text-center mt-6 xs:mt-8 sm:mt-10 text-gray-500 text-[10px] xs:text-xs">
               © 2025 Ludang Prasetyo Nugroho. All rights reserved.
             </div>
           </footer>
-        </>
+        </div>
       )}
     </>
   );
 };
 
-
 const ProjectPageLayout = () => (
-  <>
-    <ProjectDetails />
-    <footer>
-      <center>
-        <hr className="my-3 border-gray-400 opacity-15 sm:mx-auto lg:my-6 text-center" />
-        <span className="block text-sm pb-4 text-gray-500 text-center dark:text-gray-400">
+  <div className="relative w-full min-h-screen overflow-x-hidden">
+    <Navbar />
+    <main className="flex flex-col">
+      <ProjectDetails />
+    </main>
+    <footer className="border-t-4 border-orange-500 mt-12 xs:mt-16 px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 py-6 xs:py-8 bg-orange-50 text-gray-800 text-[10px] xs:text-xs sm:text-sm font-medium">
+      <div className="max-w-7xl mx-auto w-full text-center">
+        <p className="text-gray-500">
           © 2025{" "}
-          <a href="https://flowbite.com/" className="hover:underline">
+          <a
+            href="https://github.com/Nugraa21"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-orange-500 hover:underline"
+          >
             Nugra21
           </a>
           . All Rights Reserved.
-        </span>
-      </center>
+        </p>
+      </div>
     </footer>
-  </>
+  </div>
 );
 
 function CustomCursor() {
@@ -151,19 +157,22 @@ function CustomCursor() {
     };
 
     const addHoverEvents = () => {
-      const interactiveElements = document.querySelectorAll('a, button, input, textarea, select, label');
+      const interactiveElements = document.querySelectorAll('a, button, input, textarea, select, label, [role="button"]');
+
+      const handleMouseEnter = () => setHovered(true);
+      const handleMouseLeave = () => setHovered(false);
 
       interactiveElements.forEach(el => {
-        el.addEventListener('mouseenter', () => setHovered(true));
-        el.addEventListener('mouseleave', () => setHovered(false));
+        el.addEventListener('mouseenter', handleMouseEnter);
+        el.addEventListener('mouseleave', handleMouseLeave);
       });
 
       return () => {
         interactiveElements.forEach(el => {
-          el.removeEventListener('mouseenter', () => setHovered(true));
-          el.removeEventListener('mouseleave', () => setHovered(false));
+          el.removeEventListener('mouseenter', handleMouseEnter);
+          el.removeEventListener('mouseleave', handleMouseLeave);
         });
-      }
+      };
     };
 
     window.addEventListener("mousemove", moveCursor);
@@ -171,13 +180,13 @@ function CustomCursor() {
 
     return () => {
       window.removeEventListener("mousemove", moveCursor);
-      cleanupHover && cleanupHover();
+      cleanupHover();
     };
   }, []);
 
   return (
     <div
-      className={`custom-cursor ${hovered ? 'custom-cursor-hover' : ''}`}
+      className={`custom-cursor ${hovered ? 'custom-cursor-hover' : ''} hidden sm:block`}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
@@ -190,7 +199,7 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <>
+    <div className="w-full min-h-screen overflow-x-hidden bg-orange-50">
       <CustomCursor />
       <BrowserRouter>
         <Routes>
@@ -198,10 +207,11 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/project/:id" element={<ProjectPageLayout />} />
-          <Route path="/pengalaman" element={<Pengalaman />} /> {/* Tambahan */}
+          <Route path="/pengalaman" element={<Pengalaman />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
+
 export default App;

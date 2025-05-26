@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
+// Pindahkan navItems ke luar component supaya tidak berubah setiap render
 const navItems = [
   { href: "#Home", label: "Home" },
   { href: "#About", label: "About" },
@@ -18,13 +19,14 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+
       const sections = navItems
         .map((item) => {
           const section = document.querySelector(item.href);
           if (section) {
             return {
               id: item.href.replace("#", ""),
-              offset: section.offsetTop - 150,
+              offset: section.offsetTop - 150, // sesuaikan offset header navbar
               height: section.offsetHeight,
             };
           }
@@ -33,6 +35,8 @@ const Navbar = () => {
         .filter(Boolean);
 
       const currentPosition = window.scrollY;
+
+      // Cari section yang aktif
       const active = sections.find(
         (section) =>
           currentPosition >= section.offset &&
@@ -42,19 +46,25 @@ const Navbar = () => {
       if (active) {
         setActiveSection(active.id);
       } else {
-        setActiveSection("Home");
+        setActiveSection("Home"); // fallback ke Home kalau gak ada active
       }
     };
 
     window.addEventListener("scroll", handleScroll);
+
+    // Jalankan sekali supaya langsung update activeSection
     handleScroll();
+
+    // Cleanup event listener
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Disable scroll body kalau menu mobile dibuka
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
   }, [isOpen]);
 
+  // Fungsi scroll ke section dan navigate ke /login
   const scrollToSection = (e, href) => {
     if (href === "/login") {
       e.preventDefault();
@@ -74,13 +84,13 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed w-full top-0 z-50 transition-all duration-500 ${
         scrolled || isOpen
           ? "bg-white shadow-md"
           : "bg-white/80 backdrop-blur-sm"
       }`}
     >
-      <div className="w-full px-2 xs:px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-[10%]">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -116,6 +126,7 @@ const Navbar = () => {
                 />
               </a>
             ))}
+
             <Link
               to="/login"
               onClick={() => setIsOpen(false)}
@@ -167,6 +178,7 @@ const Navbar = () => {
               {item.label}
             </a>
           ))}
+
           <Link
             to="/login"
             onClick={() => setIsOpen(false)}
