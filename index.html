@@ -2,7 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/Photo.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.png" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- Google Site Verification -->
@@ -11,8 +13,6 @@
     <!-- SEO Meta Tags -->
     <meta name="keywords" content="N21, Nugra21, nugra21, siapa nugra21, nugra21 adalah, Ludang Prasetyo, nnugra21, portfolio, web developer, programmer" />
     <meta name="description" content="Ludang Prasetyo - Portfolio web developer, programmer, and tech enthusiast. Explore projects, skills, and more." />
-    <meta name="title" content="Ludang Prasetyo : Portfolio Web Developer" />
-    <meta name="mobile-web-app-capable" content="yes" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -34,6 +34,34 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
     <title>Nugra21 : Portfolio</title>
+
+    <!-- Breadcrumb JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://nugra.my.id/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://nugra.my.id/#about"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Portfolio",
+          "item": "https://nugra.my.id/#portfolio"
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
