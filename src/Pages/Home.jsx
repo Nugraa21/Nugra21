@@ -26,10 +26,10 @@ import "aos/dist/aos.css";
 // Komponen kecil
 const MainTitle = memo(() => (
   <div className="space-y-2" data-aos="fade-up" data-aos-delay="600">
-    <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-600">
+    <h1 className="text-4xl xs:text-5xl sm:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-600">
       NUGRA21
       <br />
-      <span className="text-xl sm:text-2xl text-orange-600 font-light">
+      <span className="text-lg xs:text-xl sm:text-2xl text-orange-600 font-light">
         ヌグラ Hi  .  .  .  .
       </span>
     </h1>
@@ -43,7 +43,7 @@ const CTAButton = memo(({ href, text, icon: Icon }) => (
     target="_blank"
     rel="noopener noreferrer"
   >
-    <button className="relative w-[160px] h-11 rounded-lg  border border-orange-300 shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 text-orange-800 font-semibold text-sm">
+    <button className="relative w-40 xs:w-44 sm:w-48 h-10 sm:h-11 rounded-lg border border-orange-300 shadow-md overflow-hidden transition-transform duration-300 hover:scale-105 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 text-orange-800 font-semibold text-xs sm:text-sm">
       <div className="absolute inset-0 bg-gradient-to-r from-orange-400 to-yellow-300 opacity-60 blur-md group-hover:opacity-90 transition-opacity duration-500 rounded-lg"></div>
       <span className="relative flex items-center justify-center gap-2">
         {text}
@@ -58,9 +58,9 @@ const SocialLink = memo(({ icon: Icon, link }) => (
     href={link}
     target="_blank"
     rel="noopener noreferrer"
-    className="relative group inline-block p-3 rounded-xl bg-orange-100 shadow-md hover:scale-110 hover:bg-orange-200 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+    className="relative group inline-block p-2 xs:p-3 rounded-xl bg-orange-100 shadow-md hover:scale-110 hover:bg-orange-200 transition-transform duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
   >
-    <Icon className="w-6 h-6 text-orange-700 group-hover:text-orange-600" />
+    <Icon className="w-5 h-5 xs:w-6 xs:h-6 text-orange-700 group-hover:text-orange-600" />
   </a>
 ));
 
@@ -71,10 +71,10 @@ const WORDS = [
   "Full-Stack Web Developer",
   "IoT & Embedded Systems Builder",
   "Visionary Digital Creator",
-  "Flutter & MQTT ",
+  "Flutter & MQTT",
   "Automation & AI Explorer",
   "Code with Heart, Build with Purpose",
-  "Nugra21 — Crafting Future with Tech"
+  "Nugra21 — Crafting Future with Tech",
 ];
 const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
@@ -107,21 +107,20 @@ const TECH_ICONS = [
   { icon: SiVercel, name: "Vercel" },
 ];
 
-
 // Animasi scrolling ikon teknologi
 const ScrollingTechText = () => (
-  <div className="scrolling-tech-wrapper px-2 mt-12 w-full overflow-hidden">
-    <div className="scrolling-tech-text inline-flex items-center gap-12 text-orange-600 select-none">
+  <div className="scrolling-tech-wrapper px-2 xs:px-4 sm:px-6 mt-8 sm:mt-12 w-full overflow-hidden">
+    <div className="scrolling-tech-text inline-flex items-center gap-4 xs:gap-6 sm:gap-8 lg:gap-12 text-orange-600 select-none whitespace-nowrap">
       {TECH_ICONS.map(({ icon: Icon, name }, i) => (
-        <div key={i} title={name} className="flex flex-col items-center">
-          <Icon className="w-10 h-10" />
-          <span className="text-xs mt-1 font-semibold">{name}</span>
+        <div key={i} title={name} className="flex flex-col items-center min-w-[60px] xs:min-w-[80px]">
+          <Icon className="w-6 h-6 xs:w-8 xs:h-8 sm:w-10 sm:h-10" />
+          <span className="text-[10px] xs:text-xs mt-1 font-semibold">{name}</span>
         </div>
       ))}
       {TECH_ICONS.map(({ icon: Icon, name }, i) => (
-        <div key={"dup-" + i} title={name} className="flex flex-col items-center">
-          <Icon className="w-10 h-10" />
-          <span className="text-xs mt-1 font-semibold">{name}</span>
+        <div key={"dup-" + i} title={name} className="flex flex-col items-center min-w-[60px] xs:min-w-[80px]">
+          <Icon className="w-6 h-6 xs:w-8 xs:h-8 sm:w-10 sm:h-10" />
+          <span className="text-[10px] xs:text-xs mt-1 font-semibold">{name}</span>
         </div>
       ))}
     </div>
@@ -139,7 +138,11 @@ const Home = () => {
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    AOS.init({ once: true, duration: 800, easing: "ease-in-out" });
+    AOS.init({
+      once: true,
+      duration: window.innerWidth < 640 ? 600 : 800,
+      easing: "ease-in-out",
+    });
   }, []);
 
   useEffect(() => {
@@ -178,37 +181,37 @@ const Home = () => {
 
   return (
     <section
-      className="min-h-screen  text-orange-800 flex flex-col items-center justify-center px-4 sm:px-6 md:px-10 lg:px-20 pt-24 pb-16 overflow-x-hidden"
+      className="min-h-screen text-orange-800 flex flex-col items-center justify-center px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 pt-20 sm:pt-24 pb-12 sm:pb-16 overflow-x-hidden"
       id="Home"
     >
-      <div className="max-w-6xl w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-12 sm:gap-16">
+      <div className="max-w-7xl w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-6 xs:gap-8 sm:gap-12 lg:gap-16">
         {/* Kiri */}
-        <div className="flex flex-col space-y-8 w-full lg:w-1/2">
+        <div className="flex flex-col space-y-6 xs:space-y-8 w-full lg:w-1/2">
           <MainTitle />
           <div
-            className="h-9 flex items-center font-semibold text-orange-700 text-xl sm:text-2xl tracking-wide"
+            className="h-8 xs:h-9 flex items-center font-semibold text-orange-700 text-lg xs:text-xl sm:text-2xl tracking-wide"
             data-aos="fade-up"
             data-aos-delay="800"
           >
             <span>{text}</span>
-            <span className="w-[3px] h-7 bg-orange-500 ml-2 animate-blink rounded"></span>
+            <span className="w-[3px] h-6 xs:h-7 bg-orange-500 ml-2 animate-blink rounded"></span>
           </div>
           <p
-            className="text-base md:text-lg text-orange-600 leading-relaxed font-light max-w-lg"
+            className="text-sm xs:text-base sm:text-lg text-orange-600 leading-relaxed font-light max-w-md"
             data-aos="fade-up"
             data-aos-delay="1000"
           >
-            "Empowering the future through innovative coding and creative design, turning ideas into impactful solutions." <br />
+            "Empowering the future through innovative coding and creative design, turning ideas into impactful solutions."
           </p>
           <div
-            className="flex flex-wrap sm:flex-nowrap gap-4 mt-2"
+            className="flex flex-wrap sm:flex-nowrap gap-3 xs:gap-4 mt-2"
             data-aos="fade-up"
             data-aos-delay="1400"
           >
             <CTAButton href="mailto:nugra315@gmail.com" text="Email Me" icon={Mail} />
           </div>
           <div
-            className="flex gap-5 mt-6"
+            className="flex gap-3 xs:gap-4 sm:gap-5 mt-4 xs:mt-6"
             data-aos="fade-up"
             data-aos-delay="1600"
           >
@@ -231,7 +234,7 @@ const Home = () => {
             <img
               src="Nugra.png"
               alt="Ludang Prasetyo"
-              className={`w-64 h-64 sm:w-72 sm:h-72 object-cover rounded-full shadow-2xl border-8 border-orange-200 transition-transform duration-500 ease-in-out ${
+              className={`w-48 h-48 xs:w-56 xs:h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 object-cover rounded-full shadow-2xl border-8 border-orange-200 transition-transform duration-500 ease-in-out ${
                 isHovering ? "scale-105 rotate-2" : "scale-100"
               }`}
               loading="lazy"
