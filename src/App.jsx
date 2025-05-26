@@ -199,7 +199,7 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <div className="w-full min-h-screen overflow-x-hidden bg-orange-50">
+    <div className="w-full min-h-screen overflow-x-hidden ">
       <CustomCursor />
       <BrowserRouter>
         <Routes>
