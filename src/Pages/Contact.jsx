@@ -7,8 +7,6 @@ import {
   AiFillGithub,
   AiFillInstagram,
   AiFillLinkedin,
-  AiOutlineTwitter,
-  AiFillFacebook,
   AiFillYoutube,
 } from "react-icons/ai";
 import Swal from "sweetalert2";
@@ -32,7 +30,12 @@ const ContactFooter = () => {
   const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
 
   useEffect(() => {
-    AOS.init({ once: false });
+    AOS.init({
+      once: false,
+      duration: 800,
+      easing: "ease-out-cubic",
+      mirror: true,
+    });
 
     const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -40,7 +43,6 @@ const ContactFooter = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("ContactFooter comments:", commentList); // Debugging
       setComments(commentList);
     }, (error) => {
       console.error("Error fetching comments:", error);
@@ -121,7 +123,7 @@ const ContactFooter = () => {
 
     try {
       await addDoc(collection(db, "comments"), {
-        ...commentData, // { name, message }
+        ...commentData,
         createdAt: serverTimestamp(),
       });
 
@@ -151,67 +153,160 @@ const ContactFooter = () => {
     { icon: <AiFillGithub size={28} />, name: "GitHub", href: "https://github.com/Nugraa21" },
     { icon: <AiFillInstagram size={28} />, name: "Instagram", href: "https://www.instagram.com/nugraa_21/" },
     { icon: <AiFillLinkedin size={28} />, name: "LinkedIn", href: "https://www.linkedin.com/in/ludang-prasetyo-4773b6361/" },
-    // { icon: <AiOutlineTwitter size={28} />, name: "Twitter", href: "https://twitter.com/ludangprasetyo" },
-    // { icon: <AiFillFacebook size={28} />, name: "Facebook", href: "https://facebook.com/ludangprasetyo" },
     { icon: <AiFillYoutube size={28} />, name: "YouTube", href: "https://youtube.com/@nugra21" },
   ];
 
   return (
     <footer
       id="contact"
-      className="bg-gradient-to-r from-orange-200 to-orange-100 mt-20 px-8 py-16 rounded-t-3xl shadow-lg border-t border-orange-300"
+      className="bg-gradient-to-b from-orange-50 to-orange-100 mt-16 sm:mt-20 px-4 sm:px-6 md:px-8 py-12 sm:py-16 rounded-t-3xl shadow-xl border-t border-orange-200"
     >
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-        {/* ABOUT */}
-        <div data-aos="fade-right" className="flex flex-col">
-          <h2 className="text-4xl font-extrabold text-orange-700 mb-6 tracking-wide">
-            Ingin Menghubungi Nugra?
+      <style>
+        {`
+          @keyframes slideIn {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+          }
+          @keyframes glowPulse {
+            0% { box-shadow: 0 0 5px rgba(251, 146, 60, 0.2); }
+            50% { box-shadow: 0 0 10px rgba(251, 146, 60, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(251, 146, 60, 0.2); }
+          }
+          .animate-slide-in {
+            animation: slideIn 0.8s ease-out forwards;
+          }
+          .animate-glow-pulse {
+            animation: glowPulse 2s ease-in-out infinite;
+          }
+          .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+          }
+          .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(251, 146, 60, 0.1);
+            border-radius: 10px;
+          }
+          .custom-scroll::-webkit-scrollbar-thumb {
+            background: #F97316;
+            border-radius: 10px;
+          }
+          .input-field {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(4px);
+          }
+          .input-field:focus {
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(251, 146, 60, 0.3);
+          }
+          .social-icon {
+            transition: all 0.3s ease;
+          }
+          .social-icon:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(251, 146, 60, 0.4);
+            color: #F97316;
+          }
+          .comment-card {
+            transition: all 0.3s ease;
+          }
+          .comment-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+          }
+          @media (max-width: 768px) {
+            .footer-container {
+              padding: 1rem;
+            }
+            .section-title {
+              font-size: 1.75rem;
+            }
+            .input-field {
+              padding: 0.75rem 1rem;
+              font-size: 0.9rem;
+            }
+            .submit-button {
+              padding: 0.75rem;
+              font-size: 0.9rem;
+            }
+            .social-icon {
+              padding: 0.5rem;
+            }
+            .comment-card {
+              max-width: 90%;
+            }
+          }
+          @media (max-width: 480px) {
+            .section-title {
+              font-size: 1.5rem;
+            }
+            .input-field {
+              padding: 0.6rem 0.8rem;
+              font-size: 0.85rem;
+            }
+            .submit-button {
+              padding: 0.6rem;
+              font-size: 0.85rem;
+            }
+            .social-icon {
+              padding: 0.4rem;
+            }
+            .comment-card {
+              max-width: 95%;
+            }
+          }
+        `}
+      </style>
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-10 md:gap-12 footer-container">
+        {/* ABOUT SECTION */}
+        <div data-aos="fade-right" data-aos-duration="800" className="flex flex-col">
+          <h2 className="section-title text-2xl sm:text-3xl md:text-4xl font-extrabold text-orange-700 mb-4 sm:mb-6 tracking-tight">
+            Hubungi Nugra
           </h2>
-          <p className="text-gray-800 mb-8 text-lg leading-relaxed">
-            Hai! Saya <strong>Ludang Prasetyo Nugroho</strong>, mahasiswa Teknik Komputer di UTDI Yogyakarta.  
-            Passion saya adalah pengembangan web, IoT, dan desain UI/UX yang modern dan fungsional.  
-            Saya terbuka untuk kerja sama, diskusi, atau proyek menarik. Yuk, kita ngobrol!
+          <p className="text-gray-700 mb-6 sm:mb-8 text-sm sm:text-base md:text-lg leading-relaxed">
+            Halo! Saya <strong>Ludang Prasetyo Nugroho</strong>, mahasiswa Teknik Komputer di UTDI Yogyakarta.  
+            Saya antusias dengan pengembangan web, IoT, dan desain UI/UX.  
+            Mari terhubung untuk proyek keren atau sekadar ngobrol santai!
           </p>
-          <div className="space-y-4 text-gray-700 text-md font-medium">
-            <div className="flex items-center gap-3">
-              <AiOutlineUser className="text-orange-600" size={22} />
+          <div className="space-y-3 sm:space-y-4 text-gray-700 text-sm sm:text-base font-medium">
+            <div className="flex items-center gap-3 animate-slide-in">
+              <AiOutlineUser className="text-orange-600" size={20} />
               Ludang Prasetyo Nugroho
             </div>
-            <div className="flex items-center gap-3">
-              <AiOutlineMail className="text-orange-600" size={22} />
+            <div className="flex items-center gap-3 animate-slide-in">
+              <AiOutlineMail className="text-orange-600" size={20} />
               ludang.prasetyo@students.utdi.ac.id
             </div>
-            <div className="flex items-center gap-3">
-              <AiOutlineMessage className="text-orange-600" size={22} />
+            <div className="flex items-center gap-3 animate-slide-in">
+              <AiOutlineMessage className="text-orange-600" size={20} />
               Sleman, Yogyakarta
             </div>
           </div>
 
-          <div className="mt-8">
-            <h3 className="font-semibold text-orange-700 mb-4 text-lg">Temui Saya di:</h3>
-            <div className="flex gap-5 flex-wrap">
+          <div className="mt-6 sm:mt-8">
+            <h3 className="font-semibold text-orange-700 mb-3 sm:mb-4 text-base sm:text-lg">Ikuti Saya:</h3>
+            <div className="flex gap-3 sm:gap-4 flex-wrap">
               {socialLinks.map((link, idx) => (
                 <a
                   key={idx}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group transform hover:scale-110 transition-transform duration-300"
+                  className="social-icon bg-white border border-orange-300 rounded-full p-2 sm:p-3 shadow-md text-orange-600 animate-glow-pulse"
                   aria-label={link.name}
                 >
-                  <div className="bg-white border border-orange-400 rounded-3xl p-3 shadow-md text-orange-700 hover:text-orange-800">
-                    {link.icon}
-                  </div>
+                  {link.icon}
                 </a>
               ))}
             </div>
           </div>
         </div>
 
-        {/* FORM */}
-        <div data-aos="fade-left" className="flex flex-col">
-          <h3 className="text-3xl font-bold text-orange-700 mb-8 tracking-wide">Kirim Pesan</h3>
-          <form onSubmit={handleSubmit} className="space-y-6">
+        {/* CONTACT FORM */}
+        <div data-aos="fade-left" data-aos-duration="800" className="flex flex-col">
+          <h3 className="section-title text-2xl sm:text-3xl font-bold text-orange-700 mb-4 sm:mb-6 tracking-tight">
+            Kirim Pesan
+          </h3>
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             <input
               type="text"
               name="name"
@@ -219,7 +314,7 @@ const ContactFooter = () => {
               value={formData.name}
               onChange={handleChange}
               disabled={isSubmitting}
-              className="w-full px-5 py-4 border rounded-3xl border-orange-400 placeholder-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              className="input-field w-full px-4 sm:px-5 py-3 sm:py-4 border border-orange-300 rounded-xl placeholder-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
             />
             <input
@@ -229,7 +324,7 @@ const ContactFooter = () => {
               value={formData.email}
               onChange={handleChange}
               disabled={isSubmitting}
-              className="w-full px-5 py-4 border rounded-3xl border-orange-400 placeholder-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              className="input-field w-full px-4 sm:px-5 py-3 sm:py-4 border border-orange-300 rounded-xl placeholder-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
             />
             <textarea
@@ -238,47 +333,35 @@ const ContactFooter = () => {
               value={formData.message}
               onChange={handleChange}
               disabled={isSubmitting}
-              className="w-full px-5 py-4 h-32 border rounded-3xl border-orange-400 placeholder-orange-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              className="input-field w-full px-4 sm:px-5 py-3 sm:py-4 h-28 sm:h-32 border border-orange-300 rounded-xl placeholder-orange-400 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
             />
             <button
               type="submit"
               disabled={isSubmitting}
-              className="
-                relative
-                inline-flex
-                items-center
-                justify-center
-                w-full
-                py-4
-                rounded-full
-                bg-gradient-to-r from-orange-500 to-orange-600
-                text-white
-                font-extrabold
-                tracking-wider
-                shadow-lg
-                transition
-                duration-300
-                ease-in-out
-                hover:from-orange-600 hover:to-orange-700
-                hover:shadow-xl
-                active:scale-95
-                focus:outline-none focus:ring-4 focus:ring-orange-300
-                disabled:opacity-60 disabled:cursor-not-allowed
-              "
+              className="submit-button w-full py-3 sm:py-4 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold tracking-wide shadow-lg hover:from-orange-600 hover:to-orange-700 hover:shadow-xl active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:opacity-50 disabled:cursor-not-allowed animate-glow-pulse"
             >
-              {isSubmitting ? "Mengirim..." : "Kirim Pesan"}
+              {isSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Mengirim...
+                </span>
+              ) : (
+                "Kirim Pesan"
+              )}
             </button>
           </form>
         </div>
 
-        {/* FORM KOMENTAR */}
-        <div data-aos="fade-up" className="flex flex-col mt-16 md:mt-0">
-          <h3 className="text-3xl font-bold text-orange-700 mb-6 tracking-wide">
+        {/* COMMENT FORM */}
+        <div data-aos="fade-up" data-aos-duration="800" className="flex flex-col mt-8 md:mt-0">
+          <h3 className="section-title text-2xl sm:text-3xl font-bold text-orange-700 mb-4 sm:mb-6 tracking-tight">
             Tulis Komentar
           </h3>
-
-          <form onSubmit={handleCommentSubmit} className="space-y-5">
+          <form onSubmit={handleCommentSubmit} className="space-y-4 sm:space-y-5">
             <input
               type="text"
               name="name"
@@ -286,7 +369,7 @@ const ContactFooter = () => {
               value={commentData.name}
               onChange={handleCommentChange}
               disabled={isCommentSubmitting}
-              className="w-full px-5 py-4 border border-orange-400 rounded-2xl placeholder-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              className="input-field w-full px-4 sm:px-5 py-3 sm:py-4 border border-orange-300 rounded-xl placeholder-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
             />
             <textarea
@@ -295,85 +378,66 @@ const ContactFooter = () => {
               value={commentData.message}
               onChange={handleCommentChange}
               disabled={isCommentSubmitting}
-              className="w-full px-5 py-4 border border-orange-400 rounded-2xl h-28 placeholder-orange-500 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500 transition"
+              className="input-field w-full px-4 sm:px-5 py-3 sm:py-4 h-24 sm:h-28 border border-orange-300 rounded-xl placeholder-orange-400 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
               required
             />
             <button
               type="submit"
               disabled={isCommentSubmitting}
-              className="
-                relative
-                inline-flex
-                items-center
-                justify-center
-                w-full
-                py-3
-                rounded-full
-                bg-gradient-to-r from-orange-500 to-orange-600
-                text-white
-                font-semibold
-                tracking-wider
-                shadow-lg
-                transition
-                duration-300
-                ease-in-out
-                hover:from-orange-600 hover:to-orange-700
-                hover:shadow-xl
-                active:scale-95
-                focus:outline-none focus:ring-4 focus:ring-orange-300
-                disabled:opacity-60 disabled:cursor-not-allowed
-              "
+              className="submit-button w-full py-3 sm:py-3.5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 text-white font-semibold tracking-wide shadow-lg hover:from-orange-600 hover:to-orange-700 hover:shadow-xl active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-400 disabled:opacity-50 disabled:cursor-not-allowed animate-glow-pulse"
             >
-              {isCommentSubmitting ? "Mengirim..." : "Kirim Komentar"}
+              {isCommentSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                  Mengirim...
+                </span>
+              ) : (
+                "Kirim Komentar"
+              )}
             </button>
           </form>
         </div>
 
-        {/* OUTPUT KOMENTAR */}
+        {/* COMMENTS SECTION */}
         <div
           data-aos="fade-up"
-          className="flex flex-col max-h-[400px] mt-16 md:mt-0 relative backdrop-blur-md bg-white/30 rounded-2xl shadow-xl ring-1 ring-orange-100 overflow-hidden"
+          data-aos-duration="800"
+          className="flex flex-col max-h-[400px] mt-8 md:mt-0 relative bg-white/20 backdrop-blur-lg rounded-xl shadow-lg ring-1 ring-orange-100 overflow-hidden"
         >
-          {/* Judul tetap di atas */}
-          <div className="sticky top-0 z-10 px-4 py-3 bg-white/40 backdrop-blur-sm border-b border-orange-200 flex items-center">
-            <span className="text-orange-600 text-2xl mr-2"></span>
-            <h3 className="text-2xl font-bold text-orange-700 tracking-wide">Komentar</h3>
+          <div className="sticky top-0 z-10 px-4 sm:px-5 py-3 bg-white/30 backdrop-blur-sm border-b border-orange-200 flex items-center">
+            <h3 className="text-xl sm:text-2xl font-bold text-orange-700 tracking-tight">Komentar</h3>
           </div>
-
-          {/* Area Komentar Scroll */}
-          <div className="flex flex-col overflow-y-auto px-4 py-4 space-y-4 custom-scroll">
+          <div className="flex flex-col overflow-y-auto px-4 sm:px-5 py-4 space-y-4 custom-scroll">
             {comments.length === 0 ? (
-              <p className="text-gray-500 italic">Belum ada komentar. Jadilah yang pertama!</p>
+              <p className="text-gray-500 text-sm sm:text-base italic">Belum ada komentar. Yuk, tambahkan komentarmu!</p>
             ) : (
               comments.map(({ id, name, message, isUser }) => (
-                <div key={id} className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-                  <div className="flex items-end space-x-2 max-w-[80%]">
-                    {/* Icon User (kiri) */}
+                <div key={id} className={`flex ${isUser ? 'justify-end' : 'justify-start'} comment-card`}>
+                  <div className="flex items-end space-x-2 sm:space-x-3 max-w-[80%] sm:max-w-[85%]">
                     {!isUser && (
-                      <div className="w-8 h-8 bg-orange-200 text-orange-700 flex items-center justify-center rounded-full shadow-inner text-sm font-bold">
+                      <div className="w-8 sm:w-10 h-8 sm:h-10 bg-orange-100 text-orange-600 flex items-center justify-center rounded-full shadow-inner text-sm sm:text-base font-bold">
                         {name?.[0]?.toUpperCase() || "A"}
                       </div>
                     )}
-
-                    {/* Bubble/Card */}
                     <div
-                      className={`px-4 py-3 rounded-2xl transition-all duration-300 ease-in-out shadow-md ${
+                      className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl shadow-md ${
                         isUser
-                          ? 'bg-orange-500/90 text-white rounded-br-none'
-                          : 'bg-white/80 text-gray-800 border border-orange-100 backdrop-blur-sm rounded-bl-none'
+                          ? 'bg-orange-500 text-white rounded-br-none'
+                          : 'bg-white/80 text-gray-800 border border-orange-200 backdrop-blur-sm rounded-bl-none'
                       }`}
                     >
-                      <p className="text-xs font-semibold mb-1 opacity-80">
+                      <p className="text-xs sm:text-sm font-semibold mb-1 opacity-80">
                         {name || (isUser ? "Saya" : "Anonim")}
                       </p>
-                      <p className="text-sm leading-snug whitespace-pre-wrap">
+                      <p className="text-sm sm:text-base leading-snug whitespace-pre-wrap">
                         {message || "Tidak ada pesan"}
                       </p>
                     </div>
-
-                    {/* Icon User (kanan) */}
                     {isUser && (
-                      <div className="w-8 h-8 bg-orange-200 text-orange-700 flex items-center justify-center rounded-full shadow-inner text-sm font-bold">
+                      <div className="w-8 sm:w-10 h-8 sm:h-10 bg-orange-100 text-orange-600 flex items-center justify-center rounded-full shadow-inner text-sm sm:text-base font-bold">
                         {name?.[0]?.toUpperCase() || "S"}
                       </div>
                     )}
@@ -383,7 +447,6 @@ const ContactFooter = () => {
             )}
           </div>
         </div>
-{/*  */}
       </div>
     </footer>
   );
