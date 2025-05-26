@@ -1,75 +1,83 @@
 {
   "projects": [
-  {
-    "id": "1",
-    "Title": "Aplikasi IoT Kolam Lele",
-    "Description": "Aplikasi Flutter untuk monitoring kolam lele dengan ESP32 dan MQTT, menampilkan data sensor secara real-time dari 3 kolam.",
-    "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/prj1.png?raw=true",
-    "Link": "https://github.com/ludangprasetyo/kolam-lele-flutter",
-    "Github": "https://github.com/ludangprasetyo/kolam-lele-flutter",
-    "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
-    "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"]
-  },
-  {
-    "id": "2",
-    "Title": "Ilustrasi 1",
-    "Description": "Gambar yang saya buat .....",
-    "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i1.png?raw=true",
-    "TechStack": ["Adobe ilustrator"],
-    "Features": ["Gambar sederhana"]
-  },
-  {
-    "id": "3",
-    "Title": "Ilustrasi 2",
-    "Description": "Gambar yang saya buat .....",
-    "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i3.png?raw=true",
-    "TechStack": ["Adobe ilustrator"],
-    "Features": ["Gambar sederhana"]
-  },
-  {
-    "id": "4",
-    "Title": "Ilustrasi 3",
-    "Description": "Gambar yang saya buat .....",
-    "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i4.png?raw=true",
-    "TechStack": ["Adobe ilustrator"],
-    "Features": ["Gambar sederhana"]
-  },
-  {
-    "id": "5",
-    "Title": "Menjalankan web di docker dengan nginx",
-    "Description": "Membuat sebuah server sederhana dengan nginx",
-    "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/t1.jpg?raw=true",
-    "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
-    "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
-    "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"]
-  },
-  {
-    "id": "6",
-    "Title": "Kumpulan modul belajar dasar HTML",
-    "Description": "Kumpulan berberapa tutorial dasar tentang html css js dan php",
-    "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w1.png?raw=true",
-    "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
-    "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
-    "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"]
-  },
-  {
-    "id": "7",
-    "Title": "Game ULAR",
-    "Description": "Game berbasis website",
-    "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w3.png?raw=true",
-    "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
-    "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
-    "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"]
-  },
-  {
-    "id": "8",
-    "Title": "Web Himatek",
-    "Description": "Website himpunan mahasiswa teknik komputer",
-    "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w4.png?raw=true",
-    "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
-    "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
-    "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"]
-  }
+    {
+      "id": "1",
+      "Title": "Aplikasi IoT Kolam Lele",
+      "Description": "Aplikasi Flutter untuk monitoring kolam lele dengan ESP32 dan MQTT, menampilkan data sensor secara real-time dari 3 kolam.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/prj1.png?raw=true",
+      "Link": "https://github.com/ludangprasetyo/kolam-lele-flutter",
+      "Github": "https://github.com/ludangprasetyo/kolam-lele-flutter",
+      "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
+      "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"],
+      "category": "Project"
+    },
+    {
+      "id": "2",
+      "Title": "Ilustrasi 1",
+      "Description": "Gambar yang saya buat .....",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i1.png?raw=true",
+      "TechStack": ["Adobe ilustrator"],
+      "Features": ["Gambar sederhana"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "3",
+      "Title": "Ilustrasi 2",
+      "Description": "Gambar yang saya buat .....",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i3.png?raw=true",
+      "TechStack": ["Adobe ilustrator"],
+      "Features": ["Gambar sederhana"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "4",
+      "Title": "Ilustrasi 3",
+      "Description": "Gambar yang saya buat .....",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i4.png?raw=true",
+      "TechStack": ["Adobe ilustrator"],
+      "Features": ["Gambar sederhana"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "5",
+      "Title": "Menjalankan web di docker dengan nginx",
+      "Description": "Membuat sebuah server sederhana dengan nginx",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/t1.jpg?raw=true",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
+      "TechStack": ["Docker", "Nginx"],
+      "Features": ["Simple server setup", "Containerized web deployment"],
+      "category": "Project"
+    },
+    {
+      "id": "6",
+      "Title": "Kumpulan modul belajar dasar HTML",
+      "Description": "Kumpulan berberapa tutorial dasar tentang html css js dan php",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w1.png?raw=true",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
+      "TechStack": ["HTML", "CSS", "JavaScript", "PHP"],
+      "Features": ["Basic web tutorials", "Beginner-friendly content"],
+      "category": "Materi"
+    },
+    {
+      "id": "7",
+      "Title": "Game ULAR",
+      "Description": "Game berbasis website",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w3.png?raw=true",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": ["Web-based snake game", "Interactive gameplay"],
+      "category": "Game"
+    },
+    {
+      "id": "8",
+      "Title": "Web Himatek",
+      "Description": "Website himpunan mahasiswa teknik komputer",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w4.png?raw=true",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": ["Student organization website", "Informational hub"],
+      "category": "Web"
+    }
   ],
   "certificates": [
     {

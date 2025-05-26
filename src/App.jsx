@@ -11,7 +11,7 @@ import ProjectDetails from "./components/ProjectDetail";
 import WelcomeScreen from "./Pages/WelcomeScreen";
 import LoginPage from "./Pages/Login";  // Import halaman Login yang baru kamu buat
 import { AnimatePresence } from 'framer-motion';
-
+import Pengalaman from "./components/Pengalaman"; // tambahkan ini
 import Dashboard from "./Pages/Dashboard"; // atau sesuaikan path jika filenya berbeda
 
 
@@ -30,6 +30,7 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
           <AnimatedBackground />
           <Home />
           <About />
+          <Pengalaman />
           <Portofolio />
           <ContactPage />
 
@@ -197,7 +198,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/project/:id" element={<ProjectPageLayout />} />
-
+          <Route path="/pengalaman" element={<Pengalaman />} /> {/* Tambahan */}
         </Routes>
       </BrowserRouter>
     </>
