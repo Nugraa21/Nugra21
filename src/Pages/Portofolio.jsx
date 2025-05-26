@@ -24,7 +24,7 @@ function TabPanel({ children, value, index, ...other }) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: { xs: 2, sm: 3, md: 5 } }}>
+        <Box sx={{ p: { xs: 2, sm: 3, md: 4, lg: 5 } }}>
           <Typography component="div">{children}</Typography>
         </Box>
       )}
@@ -87,7 +87,7 @@ export default function FullWidthTabs() {
   useEffect(() => {
     AOS.init({
       once: false,
-      duration: 1000,
+      duration: 800,
       easing: "ease-out-cubic",
       mirror: true,
     });
@@ -120,6 +120,19 @@ export default function FullWidthTabs() {
   const projectCategories = ["All", "Project", "Materi", "Web", "Game", "Ilustrasi"];
   const DEFAULT_DISPLAY_COUNT = 6;
 
+  // Filter projects based on the selected category
+  const filteredProjects = showAllProjects
+    ? projectCategoryValue === 0
+      ? projects
+      : projects.filter((p) => p.category === projectCategories[projectCategoryValue])
+    : projects
+        .filter(
+          (p) =>
+            projectCategoryValue === 0 ||
+            p.category === projectCategories[projectCategoryValue]
+        )
+        .slice(0, DEFAULT_DISPLAY_COUNT);
+
   return (
     <div
       className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-10 mt-12 rounded-3xl bg-transparent"
@@ -128,26 +141,26 @@ export default function FullWidthTabs() {
       <style>
         {`
           @keyframes slideIn {
-            0% { transform: translateY(30px); opacity: 0; }
+            0% { transform: translateY(20px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
           }
           @keyframes glowPulse {
-            0% { box-shadow: 0 0 5px rgba(251, 146, 60, 0.3); }
-            50% { box-shadow: 0 0 15px rgba(251, 146, 60, 0.6); }
-            100% { box-shadow: 0 0 5px rgba(251, 146, 60, 0.3); }
+            0% { box-shadow: 0 0 5px rgba(251, 146, 60, 0.2); }
+            50% { box-shadow: 0 0 10px rgba(251, 146, 60, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(251, 146, 60, 0.2); }
           }
           @keyframes iconBounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
+            50% { transform: translateY(-4px); }
           }
           .animate-slide-in {
-            animation: slideIn 1s ease-out-cubic forwards;
+            animation: slideIn 0.8s ease-out forwards;
           }
           .animate-glow-pulse {
             animation: glowPulse 2s ease-in-out infinite;
           }
           .tab-transition {
-            transition: all 0.3s ease;
+            transition: color 0.3s ease, transform 0.2s ease;
           }
           .icon-hover {
             transition: transform 0.2s ease;
@@ -156,10 +169,11 @@ export default function FullWidthTabs() {
             animation: iconBounce 0.4s ease;
           }
           .main-tabs, .sub-tabs {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(251, 146, 60, 0.3);
-            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 12px;
+            padding: 4px;
           }
           .sub-tabs-disabled {
             opacity: 0.5;
@@ -167,55 +181,87 @@ export default function FullWidthTabs() {
           }
           .show-all-button {
             background: linear-gradient(45deg, #F97316, #FB9235);
-            box-shadow: 0 4px 15px rgba(251, 146, 60, 0.4);
+            box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
             transition: all 0.3s ease;
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
           }
           .show-all-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(251, 146, 60, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(251, 146, 60, 0.5);
           }
-          @media (max-width: 640px) {
+          .portfolio-container {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
+            padding: 1rem 1.5rem;
+          }
+          @media (max-width: 768px) {
             .main-tabs {
               flex-direction: column;
               align-items: stretch;
+              gap: 8px;
             }
             .main-tabs .MuiTab-root {
-              padding: 10px;
-              font-size: 0.875rem;
+              padding: 8px 12px;
+              font-size: 0.85rem;
             }
             .sub-tabs .MuiTab-root {
-              padding: 8px 10px;
-              font-size: 0.75rem;
-              min-width: 70px;
+              padding: 6px 10px;
+              font-size: 0.8rem;
+              min-width: 60px;
             }
             .show-all-button {
               padding: 6px 12px;
+              font-size: 0.8rem;
+            }
+            .portfolio-container {
+              padding: 0.75rem;
+            }
+          }
+          @media (max-width: 480px) {
+            .main-tabs .MuiTab-root {
               font-size: 0.75rem;
+              padding: 6px 10px;
+            }
+            .sub-tabs .MuiTab-root {
+              font-size: 0.7rem;
+              padding: 5px 8px;
+              min-width: 50px;
+            }
+            .show-all-button {
+              padding: 5px 10px;
+              font-size: 0.7rem;
+            }
+            .portfolio-container {
+              padding: 0.5rem;
             }
           }
         `}
       </style>
       <div
-        className="text-center pb-8"
+        className="portfolio-container text-center py-6 sm:py-8"
         data-aos="fade-up"
         data-aos-duration="800"
       >
-        <h2 className="inline-block text-3xl sm:text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500 tracking-tight">
+        <h2 className="inline-block text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-amber-500 tracking-tight">
           Portfolio Showcase
         </h2>
-        <p className="text-gray-700 max-w-2xl mx-auto text-base sm:text-lg md:text-xl mt-3 font-medium">
-          Discover my projects, certifications, and technical expertise.
+        <p className="text-gray-600 max-w-xl mx-auto text-sm sm:text-base md:text-lg mt-2 sm:mt-3 font-medium">
+          Explore my projects, certifications, and technical skills.
         </p>
       </div>
 
-      <Box sx={{ width: "100%", bgcolor: "transparent" }}>
+      <Box sx={{ width: "100%", bgcolor: "transparent", mt: 3 }}>
         <AppBar
           position="static"
           elevation={0}
           sx={{
             bgcolor: "transparent",
-            borderRadius: "16px",
-            px: { xs: 2, sm: 3, md: 4 },
+            borderRadius: "12px",
+            px: { xs: 1, sm: 2, md: 3 },
             mb: 3,
           }}
         >
@@ -227,13 +273,13 @@ export default function FullWidthTabs() {
             sx={{
               "& .MuiTabs-indicator": {
                 backgroundColor: "#F97316",
-                height: 4,
-                borderRadius: "4px 4px 0 0",
+                height: 3,
+                borderRadius: "3px 3px 0 0",
               },
               "& .MuiTabs-flexContainer": {
                 flexWrap: "wrap",
                 justifyContent: "center",
-                gap: 1,
+                gap: 0.5,
               },
             }}
           >
@@ -246,21 +292,20 @@ export default function FullWidthTabs() {
                 key={tab.label}
                 icon={
                   <tab.icon
-                    className="w-5 h-5 sm:w-6 sm:h-6 mb-1.5 text-gray-800 icon-hover"
+                    className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 mb-1 text-gray-700 icon-hover"
                   />
                 }
                 label={tab.label}
                 {...a11yProps(index)}
-                className="tab-transition text-gray-900 font-bold text-sm sm:text-base md:text-lg capitalize group hover:text-orange-600 hover:bg-orange-200/20 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 rounded-xl animate-slide-in"
+                className="tab-transition text-gray-700 font-semibold text-xs sm:text-sm md:text-base capitalize hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded-lg animate-slide-in"
                 sx={{
                   "&.Mui-selected": {
                     color: "#F97316",
-                    backgroundColor: "rgba(251, 146, 60, 0.2)",
                     "& .lucide": { color: "#F97316" },
                   },
-                  minWidth: { xs: "90px", sm: "120px" },
-                  padding: { xs: "8px", sm: "10px 16px" },
-                  borderRadius: "12px",
+                  minWidth: { xs: "80px", sm: "100px", md: "120px" },
+                  padding: { xs: "6px 8px", sm: "8px 12px", md: "10px 16px" },
+                  borderRadius: "10px",
                 }}
               />
             ))}
@@ -269,7 +314,7 @@ export default function FullWidthTabs() {
 
         {/* Projects Tab */}
         <TabPanel value={value} index={0} dir={theme.direction}>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 md:gap-4 mb-5 sm:mb-6">
             {value === 0 && (
               <>
                 <AppBar
@@ -277,8 +322,8 @@ export default function FullWidthTabs() {
                   elevation={0}
                   sx={{
                     bgcolor: "transparent",
-                    borderRadius: "12px",
-                    px: { xs: 1, sm: 2 },
+                    borderRadius: "10px",
+                    px: { xs: 0.5, sm: 1, md: 2 },
                     width: "fit-content",
                   }}
                 >
@@ -292,8 +337,8 @@ export default function FullWidthTabs() {
                     sx={{
                       "& .MuiTabs-indicator": {
                         backgroundColor: "#F97316",
-                        height: 3,
-                        borderRadius: "3px 3px 0 0",
+                        height: 2,
+                        borderRadius: "2px 2px 0 0",
                       },
                       "& .MuiTabs-flexContainer": {
                         flexWrap: "wrap",
@@ -306,14 +351,13 @@ export default function FullWidthTabs() {
                       <Tab
                         key={index}
                         label={category}
-                        className="tab-transition text-gray-900 font-semibold text-sm sm:text-base capitalize hover:text-orange-600 hover:bg-orange-200/20 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded-lg animate-slide-in animate-glow-pulse"
+                        className="tab-transition text-gray-700 font-medium text-xs sm:text-sm capitalize hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded-lg animate-slide-in"
                         sx={{
                           "&.Mui-selected": {
                             color: "#F97316",
-                            backgroundColor: "rgba(251, 146, 60, 0.2)",
                           },
-                          minWidth: { xs: "70px", sm: "90px" },
-                          padding: { xs: "6px 8px", sm: "8px 12px" },
+                          minWidth: { xs: "60px", sm: "80px", md: "90px" },
+                          padding: { xs: "5px 6px", sm: "6px 8px", md: "8px 12px" },
                           borderRadius: "8px",
                         }}
                         {...a11yProps(index)}
@@ -324,30 +368,21 @@ export default function FullWidthTabs() {
                 </AppBar>
                 <button
                   onClick={() => setShowAllProjects(!showAllProjects)}
-                  className="show-all-button px-4 py-2 sm:px-5 sm:py-2.5 text-white font-semibold text-sm sm:text-base rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 transition-transform duration-300 animate-glow-pulse"
+                  className="show-all-button text-white font-semibold rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 transition-transform duration-300 animate-glow-pulse"
                   aria-label={showAllProjects ? "Sembunyikan proyek" : "Tampilkan semua proyek"}
                 >
-                  {showAllProjects ? "Sembunyikan" : `Semua (${projects.length})`}
+                  {showAllProjects ? "Sembunyikan" : `Semua (${filteredProjects.length})`}
                 </button>
               </>
             )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
-            {(showAllProjects
-              ? projects
-              : projects
-                  .filter(
-                    (p) =>
-                      projectCategoryValue === 0 ||
-                      p.category === projectCategories[projectCategoryValue]
-                  )
-                  .slice(0, DEFAULT_DISPLAY_COUNT)
-            ).map((project, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
+            {filteredProjects.map((project, i) => (
               <div
                 key={project.id}
                 data-aos="zoom-in-up"
                 data-aos-duration="800"
-                data-aos-delay={i * 150}
+                data-aos-delay={i * 100}
               >
                 <CardProject
                   Img={project.Img}
@@ -363,18 +398,18 @@ export default function FullWidthTabs() {
 
         {/* Certificates Tab */}
         <TabPanel value={value} index={1} dir={theme.direction}>
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-5 sm:mb-6">
             {value === 1 && (
               <button
                 onClick={() => setShowAllCertificates(!showAllCertificates)}
-                className="show-all-button px-4 py-2 sm:px-5 sm:py-2.5 text-white font-semibold text-sm sm:text-base rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 transition-transform duration-300 animate-glow-pulse"
+                className="show-all-button text-white font-semibold rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 transition-transform duration-300 animate-glow-pulse"
                 aria-label={showAllCertificates ? "Sembunyikan sertifikat" : "Tampilkan semua sertifikat"}
               >
                 {showAllCertificates ? "Sembunyikan" : `Semua (${certificates.length})`}
               </button>
             )}
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
             {(showAllCertificates
               ? certificates
               : certificates.slice(0, DEFAULT_DISPLAY_COUNT)
@@ -383,7 +418,7 @@ export default function FullWidthTabs() {
                 key={i}
                 data-aos="zoom-in-up"
                 data-aos-duration="800"
-                data-aos-delay={i * 150}
+                data-aos-delay={i * 100}
               >
                 <Certificate ImgSertif={certificate.Img} />
               </div>
@@ -393,7 +428,7 @@ export default function FullWidthTabs() {
 
         {/* Tech Stack Tab */}
         <TabPanel value={value} index={2} dir={theme.direction}>
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-3 md:gap-4 mb-5 sm:mb-6">
             {value === 2 && (
               <>
                 <AppBar
@@ -401,8 +436,8 @@ export default function FullWidthTabs() {
                   elevation={0}
                   sx={{
                     bgcolor: "transparent",
-                    borderRadius: "12px",
-                    px: { xs: 1, sm: 2 },
+                    borderRadius: "10px",
+                    px: { xs: 0.5, sm: 1, md: 2 },
                     width: "fit-content",
                   }}
                 >
@@ -416,8 +451,8 @@ export default function FullWidthTabs() {
                     sx={{
                       "& .MuiTabs-indicator": {
                         backgroundColor: "#F97316",
-                        height: 3,
-                        borderRadius: "3px 3px 0 0",
+                        height: 2,
+                        borderRadius: "2px 2px 0 0",
                       },
                       "& .MuiTabs-flexContainer": {
                         flexWrap: "wrap",
@@ -430,14 +465,13 @@ export default function FullWidthTabs() {
                       <Tab
                         key={index}
                         label={category}
-                        className="tab-transition text-gray-900 font-semibold text-sm sm:text-base capitalize hover:text-orange-600 hover:bg-orange-200/20 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded-lg animate-slide-in animate-glow-pulse"
+                        className="tab-transition text-gray-700 font-medium text-xs sm:text-sm capitalize hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded-lg animate-slide-in"
                         sx={{
                           "&.Mui-selected": {
                             color: "#F97316",
-                            backgroundColor: "rgba(251, 146, 60, 0.2)",
                           },
-                          minWidth: { xs: "70px", sm: "90px" },
-                          padding: { xs: "6px 8px", sm: "8px 12px" },
+                          minWidth: { xs: "60px", sm: "80px", md: "90px" },
+                          padding: { xs: "5px 6px", sm: "6px 8px", md: "8px 12px" },
                           borderRadius: "8px",
                         }}
                         {...a11yProps(index)}
@@ -448,7 +482,7 @@ export default function FullWidthTabs() {
                 </AppBar>
                 <button
                   onClick={() => setShowAllTechStacks(!showAllTechStacks)}
-                  className="show-all-button px-4 py-2 sm:px-5 sm:py-2.5 text-white font-semibold text-sm sm:text-base rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 transition-transform duration-300 animate-glow-pulse"
+                  className="show-all-button text-white font-semibold rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-400 transition-transform duration-300 animate-glow-pulse"
                   aria-label={showAllTechStacks ? "Sembunyikan tech stack" : "Tampilkan semua tech stack"}
                 >
                   {showAllTechStacks ? "Sembunyikan" : `Semua (${Object.values(techStacks).flat().length})`}
@@ -465,7 +499,7 @@ export default function FullWidthTabs() {
                 key={i}
                 data-aos="zoom-in"
                 data-aos-duration="800"
-                data-aos-delay={i * 150}
+                data-aos-delay={i * 100}
               >
                 <TechStackIcon
                   TechStackIcon={stack.icon}
