@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://nugra.my.id/</loc></url>
-  <url><loc>https://nugra.my.id/about</loc></url>
-  <url><loc>https://nugra.my.id/portfolio</loc></url>
-  <url><loc>https://nugra.my.id/contact</loc></url>
+  <url>
+    <loc>https://nugra.my.id/</loc>
+  </url>
+  <url>
+    <loc>https://nugra.my.id/about</loc>
+  </url>
+  <url>
+    <loc>https://nugra.my.id/portfolio</loc>
+  </url>
+  <url>
+    <loc>https://nugra.my.id/contact</loc>
+  </url>
 </urlset>
