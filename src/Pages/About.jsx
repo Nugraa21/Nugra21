@@ -2,6 +2,7 @@ import React, { useEffect, memo, useMemo, useState } from "react";
 import { FileText, Code2, BadgeCheck, Clock, Edit3, Layout, Cpu } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { Helmet } from "react-helmet"; // Impor react-helmet
 
 const Header = memo(() => (
   <div className="text-center mb-4 xs:mb-6 sm:mb-8 px-2 xs:px-4 sm:px-6">
@@ -194,150 +195,163 @@ const AboutPage = () => {
   }, []);
 
   return (
-    <section
-      className="min-h-screen text-gray-900 overflow-hidden px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 pt-16 xs:pt-20 sm:pt-24 pb-10 sm:pb-12"
-      id="About"
-    >
-      <div className="max-w-7xl w-full mx-auto">
-        <Header />
+    <>
+      <Helmet>
+        <title>About – Nugra.my.id</title>
+        <meta name="description" content="Tentang Ludang Prasetyo dan perjalanan profesionalnya." />
+        <meta name="keywords" content="Ludang Prasetyo, Nugra21, Portfolio, Web Developer, Tentang Saya" />
+        <meta property="og:title" content="About – Nugra.my.id" />
+        <meta property="og:description" content="Tentang Ludang Prasetyo dan perjalanan profesionalnya." />
+        <meta property="og:url" content="https://nugra.my.id/about" />
+        <meta property="og:type" content="website" />
+        <link rel="canonical" href="https://nugra.my.id/about" />
+      </Helmet>
 
-        <div className="pt-8 xs:pt-10 sm:pt-14">
-          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-12 md:gap-16 lg:gap-20 items-center">
-            {/* Nama dan deskripsi */}
-            <div className="space-y-4 xs:space-y-6 sm:space-y-8 text-center lg:text-left">
-              <h2
-                className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
-                data-aos="fade-right"
-                data-aos-duration="1000"
-              >
-                <span className="text-orange-600">Hello, I'm</span>
-                <span className="block mt-1 xs:mt-2 text-gray-900" data-aos="fade-right" data-aos-duration="1300">
-                  Ludang Prasetyo Nugroho
-                </span>
-              </h2>
-              <p
-                className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed text-justify"
-                data-aos="fade-right"
-                data-aos-duration="1500"
-              >
-                Mahasiswa Teknik Komputer di Universitas Teknologi Digital Indonesia (UTDI), dengan minat kuat dalam
-                pemrograman, desain web, editing video & foto, serta robotika.
-                <br />
-                Saya bersemangat menciptakan solusi teknologi inovatif yang memberikan manfaat nyata untuk masyarakat.
-              </p>
-              <div
-                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 xs:gap-4 sm:gap-6 mt-3 xs:mt-4"
+      <section
+        className="min-h-screen text-gray-900 overflow-hidden px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 pt-16 xs:pt-20 sm:pt-24 pb-10 sm:pb-12"
+        id="About"
+      >
+        <div className="max-w-7xl w-full mx-auto">
+          <Header />
+
+          <div className="pt-8 xs:pt-10 sm:pt-14">
+            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-12 md:gap-16 lg:gap-20 items-center">
+              {/* Nama dan deskripsi */}
+              <div className="space-y-4 xs:space-y-6 sm:space-y-8 text-center lg:text-left">
+                <h2
+                  className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
+                  data-aos="fade-right"
+                  data-aos-duration="1000"
+                >
+                  <span className="text-orange-600">Hello, I'm</span>
+                  <span className="block mt-1 xs:mt-2 text-gray-900" data-aos="fade-right" data-aos-duration="1300">
+                    Ludang Prasetyo Nugroho
+                  </span>
+                </h2>
+                <p
+                  className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed text-justify"
+                  data-aos="fade-right"
+                  data-aos-duration="1500"
+                >
+                  Mahasiswa Teknik Komputer di Universitas Teknologi Digital Indonesia (UTDI), dengan minat kuat dalam
+                  pemrograman, desain web, editing video & foto, serta robotika.
+                  <br />
+                  Saya bersemangat menciptakan solusi teknologi inovatif yang memberikan manfaat nyata untuk masyarakat.
+                </p>
+                <div
+                  className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 xs:gap-4 sm:gap-6 mt-3 xs:mt-4"
+                  data-aos="fade-up"
+                  data-aos-duration="800"
+                >
+                  <a
+                    href="#" // Ganti dengan URL CV yang valid
+                    className="w-full sm:w-auto"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                  >
+                    <button
+                      className="w-full sm:w-auto px-6 xs:px-8 py-2 xs:py-3 rounded-xl bg-gradient-to-r from-orange-500 to-yellow-400 text-white font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 xs:gap-3 shadow-lg hover:shadow-xl"
+                    >
+                      <FileText className="w-4 xs:w-5 sm:w-6 h-4 xs:h-5 sm:h-6" />
+                      Download CV
+                    </button>
+                  </a>
+                  <a href="#Portofolio" className="w-full sm:w-auto">
+                    <button
+                      className="w-full sm:w-auto px-6 xs:px-8 py-2 xs:py-3 rounded-xl border-2 border-orange-400 text-orange-600 font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 xs:gap-3 hover:bg-orange-100"
+                      data-aos="fade-up"
+                      data-aos-duration="1000"
+                    >
+                      <Code2 className="w-4 xs:w-5 sm:w-6 h-4 xs:h-5 sm:h-6" />
+                      View Projects
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              {/* ProfileImage dengan loading skeleton */}
+              <ProfileImage />
+            </div>
+
+            {/* Skill bars */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mt-12 xs:mt-16 sm:mt-20">
+              <SkillBar name="Programming" percent={85} />
+              <SkillBar name="Web Design" percent={80} />
+              <SkillBar name="Video Editing" percent={75} />
+              <SkillBar name="Robotics" percent={70} />
+              <SkillBar name="UI/UX Design" percent={75} />
+              <SkillBar name="Photography" percent={65} />
+            </div>
+
+            {/* Stats cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mt-12 xs:mt-16 sm:mt-20">
+              <StatsCard
+                icon={Code2}
+                value={totalProjects}
+                label="Total Projects"
+                description="Projects I have completed"
+                delay={100}
+              />
+              <StatsCard
+                icon={BadgeCheck}
+                value={totalCertificates}
+                label="Certificates"
+                description="Verified skill certificates"
+                delay={300}
+              />
+              <StatsCard
+                icon={Clock}
+                value={`${YearExperience}+`}
+                label="Years of Experience"
+                description="In software development"
+                delay={500}
+              />
+            </div>
+
+            {/* Skills Cards Section */}
+            <div className="mt-12 xs:mt-16 sm:mt-20">
+              <h3
+                className="text-3xl xs:text-4xl sm:text-5xl font-extrabold text-orange-600 mb-8 xs:mb-10 sm:mb-12 text-center"
                 data-aos="fade-up"
                 data-aos-duration="800"
               >
-                <a
-                  href="#" // CV
-                  className="w-full sm:w-auto"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <button
-                    className="w-full sm:w-auto px-6 xs:px-8 py-2 xs:py-3 rounded-xl bg-gradient-to-r from-orange-500 to-yellow-400 text-white font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 xs:gap-3 shadow-lg hover:shadow-xl"
-                  >
-                    <FileText className="w-4 xs:w-5 sm:w-6 h-4 xs:h-5 sm:h-6" />
-                    Download CV
-                  </button>
-                </a>
-                <a href="#Portofolio" className="w-full sm:w-auto">
-                  <button
-                    className="w-full sm:w-auto px-6 xs:px-8 py-2 xs:py-3 rounded-xl border-2 border-orange-400 text-orange-600 font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 xs:gap-3 hover:bg-orange-100"
-                    data-aos="fade-up"
-                    data-aos-duration="1000"
-                  >
-                    <Code2 className="w-4 xs:w-5 sm:w-6 h-4 xs:h-5 sm:h-6" />
-                    View Projects
-                  </button>
-                </a>
+                My Skills
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8 sm:gap-10 px-2 xs:px-4 sm:px-8">
+                <SkillCard
+                  icon={Code2}
+                  title="Programming"
+                  description="Expertise in multiple programming languages and algorithms."
+                  tools={["JavaScript", "Python", "C++", "Dart", "Java"]}
+                  delay={100}
+                />
+                <SkillCard
+                  icon={Edit3}
+                  title="Video & Photo Editing"
+                  description="Skilled in video and photo editing tools to create compelling visuals."
+                  tools={["Adobe Premiere", "Photoshop", "DaVinci Resolve", "Lightroom"]}
+                  delay={300}
+                />
+                <SkillCard
+                  icon={Layout}
+                  title="UI/UX Design"
+                  description="Designing intuitive and modern user interfaces and experiences."
+                  tools={["Figma", "Adobe XD", "Sketch", "TailwindCSS"]}
+                  delay={500}
+                />
+                <SkillCard
+                  icon={Cpu}
+                  title="IoT & Robotics"
+                  description="Experience building and programming IoT devices and robots."
+                  tools={["ESP32", "Arduino", "MQTT", "ROS"]}
+                  delay={700}
+                />
               </div>
-            </div>
-
-            {/* ProfileImage dengan loading skeleton */}
-            <ProfileImage />
-          </div>
-
-          {/* Skill bars */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mt-12 xs:mt-16 sm:mt-20">
-            <SkillBar name="Programming" percent={85} />
-            <SkillBar name="Web Design" percent={80} />
-            <SkillBar name="Video Editing" percent={75} />
-            <SkillBar name="Robotics" percent={70} />
-            <SkillBar name="UI/UX Design" percent={75} />
-            <SkillBar name="Photography" percent={65} />
-          </div>
-
-          {/* Stats cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mt-12 xs:mt-16 sm:mt-20">
-            <StatsCard
-              icon={Code2}
-              value={totalProjects}
-              label="Total Projects"
-              description="Projects I have completed"
-              delay={100}
-            />
-            <StatsCard
-              icon={BadgeCheck}
-              value={totalCertificates}
-              label="Certificates"
-              description="Verified skill certificates"
-              delay={300}
-            />
-            <StatsCard
-              icon={Clock}
-              value={`${YearExperience}+`}
-              label="Years of Experience"
-              description="In software development"
-              delay={500}
-            />
-          </div>
-
-          {/* Skills Cards Section */}
-          <div className="mt-12 xs:mt-16 sm:mt-20">
-            <h3
-              className="text-3xl xs:text-4xl sm:text-5xl font-extrabold text-orange-600 mb-8 xs:mb-10 sm:mb-12 text-center"
-              data-aos="fade-up"
-              data-aos-duration="800"
-            >
-              My Skills
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8 sm:gap-10 px-2 xs:px-4 sm:px-8">
-              <SkillCard
-                icon={Code2}
-                title="Programming"
-                description="Expertise in multiple programming languages and algorithms."
-                tools={["JavaScript", "Python", "C++", "Dart", "Java"]}
-                delay={100}
-              />
-              <SkillCard
-                icon={Edit3}
-                title="Video & Photo Editing"
-                description="Skilled in video and photo editing tools to create compelling visuals."
-                tools={["Adobe Premiere", "Photoshop", "DaVinci Resolve", "Lightroom"]}
-                delay={300}
-              />
-              <SkillCard
-                icon={Layout}
-                title="UI/UX Design"
-                description="Designing intuitive and modern user interfaces and experiences."
-                tools={["Figma", "Adobe XD", "Sketch", "TailwindCSS"]}
-                delay={500}
-              />
-              <SkillCard
-                icon={Cpu}
-                title="IoT & Robotics"
-                description="Experience building and programming IoT devices and robots."
-                tools={["ESP32", "Arduino", "MQTT", "ROS"]}
-                delay={700}
-              />
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

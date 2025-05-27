@@ -42,32 +42,40 @@
     <title>Nugra21 : Portfolio</title>
 
     <!-- Breadcrumb JSON-LD -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://nugra.my.id/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "About",
-          "item": "https://nugra.my.id/#about"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "Portfolio",
-          "item": "https://nugra.my.id/#portfolio"
-        }
-      ]
-    }
-    </script>
+  <script type="application/ld+json">
+    {`
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://nugra.my.id/"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "About",
+            "item": "https://nugra.my.id/about"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Portfolio",
+            "item": "https://nugra.my.id/portfolio"
+          },
+          {
+            "@type": "ListItem",
+            "position": 4,
+            "name": "Contact",
+            "item": "https://nugra.my.id/contact"
+          }
+        ]
+      }
+    `}
+  </script>
   </head>
   <body>
     <div id="root"></div>
