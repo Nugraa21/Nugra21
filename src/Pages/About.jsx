@@ -309,7 +309,7 @@ const AboutPage = () => {
             </div>
 
             {/* Skills Cards Section */}
-            <div className="mt-12 xs:mt-16 sm:mt-20">
+            <div id="Skils" className="mt-12 xs:mt-16 sm:mt-20">
               <h3
                 className="text-3xl xs:text-4xl sm:text-5xl font-extrabold text-orange-600 mb-8 xs:mb-10 sm:mb-12 text-center"
                 data-aos="fade-up"
