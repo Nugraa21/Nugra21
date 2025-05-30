@@ -5,7 +5,7 @@ import {
   ChevronRight, Layers,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import data from "../data.json";
+import data from "../data/data.json";
 
 const TECH_ICONS = {
   React: Code2,

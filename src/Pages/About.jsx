@@ -3,7 +3,7 @@ import { FileText, Code2, BadgeCheck, Clock, Edit3, Layout, Cpu } from "lucide-r
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Helmet } from "react-helmet";
-import { experienceData } from "../data/data-pengalaman"; // Import shared experienceData
+import { experienceData } from "../data/data"; // Import shared experienceData
 
 const Header = memo(() => (
   <div className="text-center mb-4 xs:mb-6 sm:mb-8 px-2 xs:px-4 sm:px-6">

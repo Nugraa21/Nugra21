@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Briefcase, School, Activity } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { experienceData } from "../data/data-pengalaman"; // Import shared experienceData
+import { experienceData } from "../data/data"; // Import shared experienceData
 
 // Map icon strings to actual icon components
 const iconMap = {
