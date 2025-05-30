@@ -244,7 +244,7 @@ const AboutPage = () => {
                   data-aos-duration="800"
                 >
                   <a
-                    href="#" // Ganti dengan URL CV yang valid
+                    href="Ludang-prasetyo-nugorho-resume.pdf" // Ganti dengan URL CV yang valid
                     className="w-full sm:w-auto"
                     target="_blank"
                     rel="noreferrer noopener"
