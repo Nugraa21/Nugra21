@@ -2,7 +2,8 @@ import React, { useEffect, memo, useMemo, useState } from "react";
 import { FileText, Code2, BadgeCheck, Clock, Edit3, Layout, Cpu } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Helmet } from "react-helmet"; // Impor react-helmet
+import { Helmet } from "react-helmet";
+import { experienceData } from "../data/data-pengalaman"; // Import shared experienceData
 
 const Header = memo(() => (
   <div className="text-center mb-4 xs:mb-6 sm:mb-8 px-2 xs:px-4 sm:px-6">
@@ -49,49 +50,44 @@ const ProfileImage = () => {
   if (loading) return <LoadingSkeleton />;
 
   return (
-  <div
-    className="relative w-full max-w-sm bg-white border border-orange-400 rounded-xl shadow-xl overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_15px_40px_rgba(234,88,12,0.4)] cursor-pointer mx-auto group"
-    data-aos="fade-up"
-    data-aos-duration="1000"
-    aria-label="Profile Card of Ludang Prasetyo Nugroho"
-  >
-    {/* Gambar Kotak Lebar */}
-    <div className="w-full h-52 xs:h-60 overflow-hidden bg-gray-100 relative">
-      <img
-        src="p1.jpg"
-        alt="Ludang Prasetyo Nugroho"
-        className="object-cover w-full h-full transition-opacity duration-500 ease-in-out group-hover:opacity-0"
-        loading="lazy"
-        onError={(e) => (e.currentTarget.src = '/fallback.png')}
-      />
-      <img
-        src="p2.jpg"
-        alt="Ludang Prasetyo Nugroho Hover"
-        className="object-cover w-full h-full absolute top-0 left-0 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
-        loading="lazy"
-        onError={(e) => (e.currentTarget.src = '/fallback.png')}
-      />
+    <div
+      className="relative w-full max-w-sm bg-white border border-orange-400 rounded-xl shadow-xl overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_15px_40px_rgba(234,88,12,0.4)] cursor-pointer mx-auto group"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+      aria-label="Profile Card of Ludang Prasetyo Nugroho"
+    >
+      <div className="w-full h-52 xs:h-60 overflow-hidden bg-gray-100 relative">
+        <img
+          src="p1.jpg"
+          alt="Ludang Prasetyo Nugroho"
+          className="object-cover w-full h-full transition-opacity duration-500 ease-in-out group-hover:opacity-0"
+          loading="lazy"
+          onError={(e) => (e.currentTarget.src = '/fallback.png')}
+        />
+        <img
+          src="p2.jpg"
+          alt="Ludang Prasetyo Nugroho Hover"
+          className="object-cover w-full h-full absolute top-0 left-0 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
+          loading="lazy"
+          onError={(e) => (e.currentTarget.src = '/fallback.png')}
+        />
+      </div>
+      <div className="flex flex-col items-center bg-gradient-to-br from-orange-50 to-yellow-100 px-6 py-4 xs:py-6 transition-colors duration-300 group-hover:from-orange-100 group-hover:to-yellow-200">
+        <h3 className="text-xl font-extrabold text-orange-700 text-center transition-colors duration-300 group-hover:text-orange-800 group-hover:scale-105">
+          Ludang Prasetyo Nugroho
+        </h3>
+        <p className="text-sm text-orange-600 font-semibold mt-1 text-center transition-colors duration-300 group-hover:text-orange-700">
+          Teknik Komputer - UTDI
+        </p>
+        <p className="text-xs italic text-orange-500 mt-2 text-center max-w-xs transition-colors duration-300 group-hover:text-orange-600 group-hover:scale-105">
+          "Innovating with code & creativity."
+        </p>
+      </div>
+      <div className="flex flex-col items-center text-orange-700 bg-orange-50 px-6 py-3 border-t border-orange-300 space-y-1 transition-colors duration-300 group-hover:bg-orange-100">
+        <span className="font-bold text-sm text-center transition-colors duration-300 group-hover:text-orange-800">NIM: 225510017</span>
+        <span className="font-semibold text-xs text-center transition-colors duration-300 group-hover:text-orange-800">Yogyakarta, Indonesia</span>
+      </div>
     </div>
-
-    {/* Konten Profil */}
-    <div className="flex flex-col items-center bg-gradient-to-br from-orange-50 to-yellow-100 px-6 py-4 xs:py-6 transition-colors duration-300 group-hover:from-orange-100 group-hover:to-yellow-200">
-      <h3 className="text-xl font-extrabold text-orange-700 text-center transition-colors duration-300 group-hover:text-orange-800 group-hover:scale-105">
-        Ludang Prasetyo Nugroho
-      </h3>
-      <p className="text-sm text-orange-600 font-semibold mt-1 text-center transition-colors duration-300 group-hover:text-orange-700">
-        Teknik Komputer - UTDI
-      </p>
-      <p className="text-xs italic text-orange-500 mt-2 text-center max-w-xs transition-colors duration-300 group-hover:text-orange-600 group-hover:scale-105">
-        "Innovating with code & creativity."
-      </p>
-    </div>
-
-    {/* Info Tambahan */}
-    <div className="flex flex-col items-center text-orange-700 bg-orange-50 px-6 py-3 border-t border-orange-300 space-y-1 transition-colors duration-300 group-hover:bg-orange-100">
-      <span className="font-bold text-sm text-center transition-colors duration-300 group-hover:text-orange-800">NIM: 225510017</span>
-      <span className="font-semibold text-xs text-center transition-colors duration-300 group-hover:text-orange-800">Yogyakarta, Indonesia</span>
-    </div>
-  </div>
   );
 };
 
@@ -174,17 +170,26 @@ const AboutPage = () => {
     const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
     const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
 
-    const startDate = new Date("2021-11-06");
-    const today = new Date();
-    const experience =
-      today.getFullYear() -
-      startDate.getFullYear() -
-      (today < new Date(today.getFullYear(), startDate.getMonth(), startDate.getDate()) ? 1 : 0);
+    // Calculate YearExperience from experienceData, starting from 2021
+    const currentYear = new Date().getFullYear(); // 2025
+    const minStartYear = 2021; // Enforce minimum start year to align with 5 years
+    let earliestYear = currentYear;
+    let latestYear = 0;
+
+    experienceData.forEach(({ time }) => {
+      const [startYear, endYear] = time.split(" - ").map((y) => y.trim());
+      const start = Math.max(parseInt(startYear, 10), minStartYear); // Use 2021 if earlier
+      const end = endYear === "Sekarang" ? currentYear : parseInt(endYear, 10);
+      if (start < earliestYear) earliestYear = start;
+      if (end > latestYear) latestYear = end;
+    });
+
+    const experience = latestYear - earliestYear;
 
     return {
       totalProjects: storedProjects.length || 12,
       totalCertificates: storedCertificates.length || 5,
-      YearExperience: experience || 3,
+      YearExperience: experience || 4, // Fallback to 4 if no valid data
     };
   }, []);
 
@@ -228,7 +233,6 @@ const AboutPage = () => {
 
           <div className="pt-8 xs:pt-10 sm:pt-14">
             <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-12 md:gap-16 lg:gap-20 items-center">
-              {/* Nama dan deskripsi */}
               <div className="space-y-4 xs:space-y-6 sm:space-y-8 text-center lg:text-left">
                 <h2
                   className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
@@ -256,7 +260,7 @@ const AboutPage = () => {
                   data-aos-duration="800"
                 >
                   <a
-                    href="Ludang-prasetyo-nugorho-resume.pdf" // Ganti dengan URL CV yang valid
+                    href="Ludang-prasetyo-nugorho-resume.pdf"
                     className="w-full sm:w-auto"
                     target="_blank"
                     rel="noreferrer noopener"
@@ -281,21 +285,18 @@ const AboutPage = () => {
                 </div>
               </div>
 
-              {/* ProfileImage dengan loading skeleton */}
               <ProfileImage />
             </div>
 
-            {/* Skill bars */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mt-12 xs:mt-16 sm:mt-20">
-              <SkillBar name="Programming" percent={85} />
+              <SkillBar name="Programming" percent={70} />
               <SkillBar name="Web Design" percent={80} />
-              <SkillBar name="Video Editing" percent={75} />
-              <SkillBar name="Robotics" percent={70} />
+              <SkillBar name="Video Editing" percent={80} />
+              <SkillBar name="IOT" percent={50} />
               <SkillBar name="UI/UX Design" percent={75} />
               <SkillBar name="Photography" percent={65} />
             </div>
 
-            {/* Stats cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mt-12 xs:mt-16 sm:mt-20">
               <StatsCard
                 icon={Code2}
@@ -313,14 +314,13 @@ const AboutPage = () => {
               />
               <StatsCard
                 icon={Clock}
-                value={`${YearExperience}+`}
+                value={`${YearExperience}`}
                 label="Years of Experience"
                 description="In software development"
                 delay={500}
               />
             </div>
 
-            {/* Skills Cards Section */}
             <div id="Skils" className="mt-12 xs:mt-16 sm:mt-20">
               <h3
                 className="text-3xl xs:text-4xl sm:text-5xl font-extrabold text-orange-600 mb-8 xs:mb-10 sm:mb-12 text-center"
@@ -334,28 +334,28 @@ const AboutPage = () => {
                   icon={Code2}
                   title="Programming"
                   description="Expertise in multiple programming languages and algorithms."
-                  tools={["JavaScript", "Python", "C++", "Dart", "Java"]}
+                  tools={["JavaScript", "Python", "C++", "Dart", "html", "css"]}
                   delay={100}
                 />
                 <SkillCard
                   icon={Edit3}
                   title="Video & Photo Editing"
                   description="Skilled in video and photo editing tools to create compelling visuals."
-                  tools={["Adobe Premiere", "Photoshop", "DaVinci Resolve", "Lightroom"]}
+                  tools={["Adobe Premiere", "Photoshop", "Alight Motion", "Adobe Illustrator"]}
                   delay={300}
                 />
                 <SkillCard
                   icon={Layout}
                   title="UI/UX Design"
                   description="Designing intuitive and modern user interfaces and experiences."
-                  tools={["Figma", "Adobe XD", "Sketch", "TailwindCSS"]}
+                  tools={["Figma", "Sketch", "TailwindCSS"]}
                   delay={500}
                 />
                 <SkillCard
                   icon={Cpu}
                   title="IoT & Robotics"
                   description="Experience building and programming IoT devices and robots."
-                  tools={["ESP32", "Arduino", "MQTT", "ROS"]}
+                  tools={["ESP32", "Arduino", "MQTT"]}
                   delay={700}
                 />
               </div>

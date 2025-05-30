@@ -13,7 +13,7 @@ import { Code, Award, Boxes } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Helmet } from "react-helmet"; // Impor react-helmet
-import data from "../data.json";
+import data from "../data/data.json";
 
 function TabPanel({ children, value, index, ...other }) {
   return (
