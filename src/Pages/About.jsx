@@ -50,39 +50,46 @@ const ProfileImage = () => {
 
   return (
   <div
-    className="relative w-full max-w-sm bg-white border border-orange-400 rounded-xl shadow-xl overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl cursor-pointer mx-auto"
+    className="relative w-full max-w-sm bg-white border border-orange-400 rounded-xl shadow-xl overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_15px_40px_rgba(234,88,12,0.4)] cursor-pointer mx-auto group"
     data-aos="fade-up"
     data-aos-duration="1000"
     aria-label="Profile Card of Ludang Prasetyo Nugroho"
   >
     {/* Gambar Kotak Lebar */}
-    <div className="w-full h-52 xs:h-60 overflow-hidden bg-gray-100">
+    <div className="w-full h-52 xs:h-60 overflow-hidden bg-gray-100 relative">
       <img
         src="p1.jpg"
         alt="Ludang Prasetyo Nugroho"
-        className="object-cover w-full h-full"
+        className="object-cover w-full h-full transition-opacity duration-500 ease-in-out group-hover:opacity-0"
+        loading="lazy"
+        onError={(e) => (e.currentTarget.src = '/fallback.png')}
+      />
+      <img
+        src="p2.jpg"
+        alt="Ludang Prasetyo Nugroho Hover"
+        className="object-cover w-full h-full absolute top-0 left-0 transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100"
         loading="lazy"
         onError={(e) => (e.currentTarget.src = '/fallback.png')}
       />
     </div>
 
     {/* Konten Profil */}
-    <div className="flex flex-col items-center bg-gradient-to-br from-orange-50 to-yellow-100 px-6 py-4 xs:py-6">
-      <h3 className="text-xl font-extrabold text-orange-700 text-center">
+    <div className="flex flex-col items-center bg-gradient-to-br from-orange-50 to-yellow-100 px-6 py-4 xs:py-6 transition-colors duration-300 group-hover:from-orange-100 group-hover:to-yellow-200">
+      <h3 className="text-xl font-extrabold text-orange-700 text-center transition-colors duration-300 group-hover:text-orange-800 group-hover:scale-105">
         Ludang Prasetyo Nugroho
       </h3>
-      <p className="text-sm text-orange-600 font-semibold mt-1 text-center">
+      <p className="text-sm text-orange-600 font-semibold mt-1 text-center transition-colors duration-300 group-hover:text-orange-700">
         Teknik Komputer - UTDI
       </p>
-      <p className="text-xs italic text-orange-500 mt-2 text-center max-w-xs">
+      <p className="text-xs italic text-orange-500 mt-2 text-center max-w-xs transition-colors duration-300 group-hover:text-orange-600 group-hover:scale-105">
         "Innovating with code & creativity."
       </p>
     </div>
 
     {/* Info Tambahan */}
-    <div className="flex flex-col items-center text-orange-700 bg-orange-50 px-6 py-3 border-t border-orange-300 space-y-1">
-      <span className="font-bold text-sm text-center">NIM: 225510017</span>
-      <span className="font-semibold text-xs text-center">Yogyakarta, Indonesia</span>
+    <div className="flex flex-col items-center text-orange-700 bg-orange-50 px-6 py-3 border-t border-orange-300 space-y-1 transition-colors duration-300 group-hover:bg-orange-100">
+      <span className="font-bold text-sm text-center transition-colors duration-300 group-hover:text-orange-800">NIM: 225510017</span>
+      <span className="font-semibold text-xs text-center transition-colors duration-300 group-hover:text-orange-800">Yogyakarta, Indonesia</span>
     </div>
   </div>
   );

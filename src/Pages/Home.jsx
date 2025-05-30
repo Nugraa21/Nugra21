@@ -222,26 +222,35 @@ const Home = () => {
         </div>
 
         {/* Kanan */}
-        <div
-          className="flex justify-center items-center w-full lg:w-1/2"
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-          data-aos="zoom-in"
-          data-aos-delay="500"
-        >
-          <div className="relative group cursor-pointer">
-            <div className="absolute -inset-1 bg-gradient-to-tr from-orange-300 via-yellow-200 to-yellow-100 rounded-full blur-3xl opacity-50 group-hover:opacity-90 transition duration-700"></div>
-            <img
-              src="profile.jpg"
-              alt="Ludang Prasetyo"
-              className={`w-48 h-48 xs:w-56 xs:h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 object-cover rounded-full shadow-2xl border-8 border-orange-200 transition-transform duration-500 ease-in-out ${
-                isHovering ? "scale-105 rotate-2" : "scale-100"
-              }`}
-              loading="lazy"
-              draggable={false}
-            />
-          </div>
-        </div>
+<div
+  className="flex justify-center items-center w-full lg:w-1/2"
+  onMouseEnter={() => setIsHovering(true)}
+  onMouseLeave={() => setIsHovering(false)}
+  data-aos="zoom-in"
+  data-aos-delay="500"
+>
+  <div className="relative group cursor-pointer">
+    <div className="absolute -inset-1 bg-gradient-to-tr from-orange-300 via-yellow-200 to-yellow-100 rounded-full blur-3xl opacity-50 group-hover:opacity-90 transition duration-700"></div>
+    <div className="relative">
+      <img
+        src="profile.jpg"
+        alt="Ludang Prasetyo"
+        className={`w-48 h-48 xs:w-56 xs:h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 object-cover rounded-full shadow-2xl border-8 border-orange-200 transition-all duration-500 ease-in-out ${
+          isHovering ? "scale-105 rotate-2 shadow-[0_0_20px_rgba(234,88,12,0.5)]" : "scale-100"
+        }`}
+        loading="lazy"
+        draggable={false}
+      />
+      <div
+        className={`absolute inset-0 rounded-full overflow-hidden transition-opacity duration-500 ${
+          isHovering ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-sparkle"></div>
+      </div>
+    </div>
+  </div>
+</div>
       </div>
 
       {/* Tech Icons */}
