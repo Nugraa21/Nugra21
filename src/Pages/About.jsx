@@ -170,26 +170,13 @@ const AboutPage = () => {
     const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
     const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
 
-    // Calculate YearExperience from experienceData, starting from 2021
-    const currentYear = new Date().getFullYear(); // 2025
-    const minStartYear = 2021; // Enforce minimum start year to align with 5 years
-    let earliestYear = currentYear;
-    let latestYear = 0;
-
-    experienceData.forEach(({ time }) => {
-      const [startYear, endYear] = time.split(" - ").map((y) => y.trim());
-      const start = Math.max(parseInt(startYear, 10), minStartYear); // Use 2021 if earlier
-      const end = endYear === "Sekarang" ? currentYear : parseInt(endYear, 10);
-      if (start < earliestYear) earliestYear = start;
-      if (end > latestYear) latestYear = end;
-    });
-
-    const experience = latestYear - earliestYear;
+    // Calculate YearExperience as the number of entries in experienceData
+    const experience = experienceData.length;
 
     return {
-      totalProjects: storedProjects.length || 12,
-      totalCertificates: storedCertificates.length || 5,
-      YearExperience: experience || 4, // Fallback to 4 if no valid data
+      totalProjects: storedProjects.length || 0,
+      totalCertificates: storedCertificates.length || 0,
+      YearExperience: experience || 0, // Fallback to 0 if no valid data
     };
   }, []);
 
