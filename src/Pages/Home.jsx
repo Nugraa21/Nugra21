@@ -232,7 +232,7 @@ const Home = () => {
           <div className="relative group cursor-pointer">
             <div className="absolute -inset-1 bg-gradient-to-tr from-orange-300 via-yellow-200 to-yellow-100 rounded-full blur-3xl opacity-50 group-hover:opacity-90 transition duration-700"></div>
             <img
-              src="Nugra.png"
+              src="profile.jpg"
               alt="Ludang Prasetyo"
               className={`w-48 h-48 xs:w-56 xs:h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 object-cover rounded-full shadow-2xl border-8 border-orange-200 transition-transform duration-500 ease-in-out ${
                 isHovering ? "scale-105 rotate-2" : "scale-100"

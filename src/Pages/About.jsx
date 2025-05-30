@@ -49,37 +49,42 @@ const ProfileImage = () => {
   if (loading) return <LoadingSkeleton />;
 
   return (
-    <div
-      className="relative w-full max-w-[280px] xs:max-w-xs bg-white border border-orange-400 rounded-xl shadow-xl overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl cursor-pointer mx-auto"
-      data-aos="fade-up"
-      data-aos-duration="1000"
-      aria-label="Profile Card of Ludang Prasetyo Nugroho"
-    >
-      <div className="flex flex-col items-center bg-gradient-to-br from-orange-200 to-yellow-100 py-6 xs:py-8 px-4 xs:px-6">
-        <div className="w-24 xs:w-28 h-24 xs:h-28 rounded-full overflow-hidden border-4 border-white shadow-lg">
-          <img
-            src="/Nugra.png"
-            alt="Ludang Prasetyo Nugroho"
-            className="object-cover w-full h-full"
-            loading="lazy"
-            onError={(e) => (e.currentTarget.src = "/fallback.png")}
-          />
-        </div>
-        <h3 className="mt-3 xs:mt-4 text-lg xs:text-xl font-extrabold text-orange-700 text-center">
-          Ludang Prasetyo Nugroho
-        </h3>
-        <p className="text-sm xs:text-md text-orange-600 font-semibold mt-1 text-center">
-          Teknik Komputer - UTDI
-        </p>
-        <p className="text-xs xs:text-sm italic text-orange-500 mt-1 xs:mt-2 text-center max-w-[200px] xs:max-w-[220px]">
-          "Innovating with code & creativity."
-        </p>
-      </div>
-      <div className="flex flex-col items-center justify-center text-orange-700 bg-orange-50 px-4 xs:px-6 py-2 xs:py-3 border-t border-orange-300 space-y-0.5 xs:space-y-1">
-        <span className="font-bold text-xs xs:text-sm text-center">NIM: 225510017</span>
-        <span className="font-semibold text-[10px] xs:text-xs text-center">--</span>
-      </div>
+  <div
+    className="relative w-full max-w-sm bg-white border border-orange-400 rounded-xl shadow-xl overflow-hidden transition-transform duration-300 hover:scale-[1.03] hover:shadow-2xl cursor-pointer mx-auto"
+    data-aos="fade-up"
+    data-aos-duration="1000"
+    aria-label="Profile Card of Ludang Prasetyo Nugroho"
+  >
+    {/* Gambar Kotak Lebar */}
+    <div className="w-full h-52 xs:h-60 overflow-hidden bg-gray-100">
+      <img
+        src="p1.jpg"
+        alt="Ludang Prasetyo Nugroho"
+        className="object-cover w-full h-full"
+        loading="lazy"
+        onError={(e) => (e.currentTarget.src = '/fallback.png')}
+      />
     </div>
+
+    {/* Konten Profil */}
+    <div className="flex flex-col items-center bg-gradient-to-br from-orange-50 to-yellow-100 px-6 py-4 xs:py-6">
+      <h3 className="text-xl font-extrabold text-orange-700 text-center">
+        Ludang Prasetyo Nugroho
+      </h3>
+      <p className="text-sm text-orange-600 font-semibold mt-1 text-center">
+        Teknik Komputer - UTDI
+      </p>
+      <p className="text-xs italic text-orange-500 mt-2 text-center max-w-xs">
+        "Innovating with code & creativity."
+      </p>
+    </div>
+
+    {/* Info Tambahan */}
+    <div className="flex flex-col items-center text-orange-700 bg-orange-50 px-6 py-3 border-t border-orange-300 space-y-1">
+      <span className="font-bold text-sm text-center">NIM: 225510017</span>
+      <span className="font-semibold text-xs text-center">Yogyakarta, Indonesia</span>
+    </div>
+  </div>
   );
 };
 
