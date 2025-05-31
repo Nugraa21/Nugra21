@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, memo } from "react";
+import React, { useState, useEffect, useCallback, memo, Suspense } from "react";
 import { Github, Linkedin, Mail, Instagram } from "lucide-react";
 import {
   SiReact,
@@ -22,6 +22,23 @@ import {
 } from "react-icons/si";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Lanyard from '../components/Lanyard/Lanyard';
+
+// Error Boundary Component
+class ErrorBoundary extends React.Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return <div className="text-orange-600 text-center">Error loading Lanyard: {this.state.error?.message}</div>;
+    }
+    return this.props.children;
+  }
+}
 
 // Komponen kecil
 const MainTitle = memo(() => (
@@ -184,8 +201,18 @@ const Home = () => {
       className="min-h-screen text-orange-800 flex flex-col items-center justify-center px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 pt-20 sm:pt-24 pb-12 sm:pb-16 overflow-x-hidden"
       id="Home"
     >
-      <div className="max-w-7xl w-full flex flex-col-reverse lg:flex-row items-center justify-between gap-6 xs:gap-8 sm:gap-12 lg:gap-16">
-        {/* Kiri */}
+      {/* Lanyard Component (Outside the main container) */}
+      <div className="lanyard-container">
+        <ErrorBoundary>
+          <Suspense fallback={<div className="text-orange-600 text-center">Loading Lanyard...</div>}>
+            <Lanyard position={[0, 0, 15]} gravity={[0, -40, 0]} />
+          </Suspense>
+        </ErrorBoundary>
+      </div>
+
+      {/* Main Content Container */}
+      <div className="max-w-7xl w-full flex flex-col items-center lg:items-start gap-6 xs:gap-8 sm:gap-12 lg:gap-16 mt-[320px] xs:mt-[370px] sm:mt-[420px] md:mt-[470px] lg:mt-0">
+        {/* Text Content */}
         <div className="flex flex-col space-y-6 xs:space-y-8 w-full lg:w-1/2">
           <MainTitle />
           <div
@@ -194,7 +221,7 @@ const Home = () => {
             data-aos-delay="800"
           >
             <span>{text}</span>
-            <span className="w-[3px] h-6 xs:h-7 bg-orange-500 ml-2 animate-blink rounded"></span>
+            <span className="w-[3px] h-6 xs:h-7 bg-orange-600 ml-2 animate-blink rounded"></span>
           </div>
           <p
             className="text-sm xs:text-base sm:text-lg text-orange-600 leading-relaxed font-light max-w-md"
@@ -220,37 +247,6 @@ const Home = () => {
             ))}
           </div>
         </div>
-
-        {/* Kanan */}
-<div
-  className="flex justify-center items-center w-full lg:w-1/2"
-  onMouseEnter={() => setIsHovering(true)}
-  onMouseLeave={() => setIsHovering(false)}
-  data-aos="zoom-in"
-  data-aos-delay="500"
->
-  <div className="relative group cursor-pointer">
-    <div className="absolute -inset-1 bg-gradient-to-tr from-orange-300 via-yellow-200 to-yellow-100 rounded-full blur-3xl opacity-50 group-hover:opacity-90 transition duration-700"></div>
-    <div className="relative">
-      <img
-        src="profile.jpg"
-        alt="Ludang Prasetyo"
-        className={`w-48 h-48 xs:w-56 xs:h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 object-cover rounded-full shadow-2xl border-8 border-orange-200 transition-all duration-500 ease-in-out ${
-          isHovering ? "scale-105 rotate-2 shadow-[0_0_20px_rgba(234,88,12,0.5)]" : "scale-100"
-        }`}
-        loading="lazy"
-        draggable={false}
-      />
-      <div
-        className={`absolute inset-0 rounded-full overflow-hidden transition-opacity duration-500 ${
-          isHovering ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-sparkle"></div>
-      </div>
-    </div>
-  </div>
-</div>
       </div>
 
       {/* Tech Icons */}

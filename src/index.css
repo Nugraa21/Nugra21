@@ -176,3 +176,70 @@ body {
 }
 /*  */
 
+/* .lanyard-wrapper {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(1);
+  transform-origin: center;
+} */
+.lanyard-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  top: -100px;
+
+}
+
+/* Extra small screens (xs: ≥360px) */
+@media (min-width: 360px) {
+  .lanyard-container {
+  position: relative;
+    height: 300px;
+    top: -20;
+  }
+}
+
+/* Small screens (sm: ≥640px) */
+@media (min-width: 640px) {
+  .lanyard-container {
+  position: absolute;
+    height: 350px;
+    top: -10rem;
+  }
+}
+
+/* Medium screens (md: ≥768px) */
+@media (min-width: 768px) {
+  .lanyard-container {
+  position: absolute;
+    height: 400px;
+    top: -10rem;
+  }
+}
+
+/* Large screens (lg: ≥1024px) */
+@media (min-width: 1024px) {
+  .lanyard-container {
+  position: absolute;
+    width: 50%;
+    height: 450px;
+    top: -10rem; /* Adjusted to 20px (lower than 40px for a slightly higher start) */
+    right: 2rem; /* Adjusted to 2rem (32px) for a closer right alignment */
+  }
+}
+
+/* Extra large screens (xl: ≥1280px) */
+@media (min-width: 1280px) {
+  .lanyard-container {
+  position: absolute;
+    height: 500px;
+    top: -100px;
+    right: 2rem;
+  }
+}
