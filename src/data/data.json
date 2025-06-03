@@ -34,8 +34,7 @@
       "Title": "Cara menggunakan Docker dan Nginx",
       "Description": "Dokumentasi tutorial sederhana tentang cara deployment website ke dalam container Docker menggunakan Nginx sebagai reverse proxy.",
       "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/t1.jpg?raw=true",
-      "Github": "https://github.com/Nugraa21/Belajar-HTML.git",
-      "Link": "https://nugraa21.github.io/Belajar-HTML/",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=tsD_WfxlDftmKC8u",
       "TechStack": ["HTML", "CSS", "JavaScript", "PHP"],
       "Features": ["Basic web tutorials","Cara penggunaan CSS & JS", "Pengertian dasar HTML"],
       "category": "Materi"
@@ -83,6 +82,17 @@
       "TechStack": ["HTML", "CSS", "JavaScript"],
       "Features": ["Student organization website", "Informational hub"],
       "category": "Web"
+    },
+    {
+      "id": "9",
+      "Title": "Web HIMADIGI Sederhana",
+      "Description": "Website himpunan mahasiswa Bisnis Digital (Web yang saya buat untuk Tugas teman saya) organisasi di kembangkan dengan HTML , CSS dan JS sederhana yang saya buat untuk Tugas PWC.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w2.png?raw=true",
+      "Link": "https://nugraa21.github.io/HIMATEK/",
+      "Github": "https://github.com/Nugraa21/HIMATEK.git",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": ["Student organization website", "Informational hub"],
+      "category": "Materi"
     }
 
   ],
