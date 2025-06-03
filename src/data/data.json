@@ -4,9 +4,8 @@
       "id": "1",
       "Title": "Aplikasi IoT Kolam Lele",
       "Description": "Aplikasi Flutter untuk monitoring kolam lele dengan ESP32 dan MQTT, menampilkan data sensor secara real-time dari 3 kolam.",
-      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/prj1.png?raw=true",
-      "Link": "https://github.com/ludangprasetyo/kolam-lele-flutter",
-      "Github": "https://github.com/ludangprasetyo/kolam-lele-flutter",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/apk1.jpg?raw=true",
+      "Github": "https://github.com/Nugraa21/iot_kolam_ikan.git",
       "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
       "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"],
       "category": "Project"
