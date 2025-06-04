@@ -216,7 +216,7 @@
       "Description": "Materi tentang konsep dan implementasi Task Manager pada sistem operasi, termasuk pengelolaan proses, pengaturan prioritas, dan monitoring sumber daya sistem secara real-time.",
       "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/m4.png?raw=true",
       "Link": "./PDF/task.pdf",
-      "TechStack": ["Sistem Operasi", "Manajemen Proses", "Pemrograman C"],
+      "TechStack": ["Sistem Operasi", "Manajemen Proses"],
       "Features": [
         "Pengelolaan proses dan thread",
         "Pengaturan prioritas proses",
@@ -225,6 +225,22 @@
       ],
       "category": "Materi"
     },
+    {
+      "id": "18",
+      "Title": "PPT Pendiri Tokopedia & Kisah Suksesnya",
+      "Description": "Materi presentasi yang membahas profil pendiri Tokopedia, perjalanan bisnis, dan kisah sukses Tokopedia sebagai salah satu startup e-commerce terbesar di Indonesia.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/m3.png?raw=true",
+      "Link": "./PDF/ppt_tokopedia.pdf",
+      "TechStack": ["Presentasi", "Bisnis", "Startup"],
+      "Features": [
+        "Profil pendiri Tokopedia",
+        "Perjalanan dan strategi bisnis",
+        "Kisah sukses dan pelajaran berharga",
+        "Analisis dampak Tokopedia di Indonesia"
+      ],
+      "category": "Materi"
+    },
+
 
 
 
