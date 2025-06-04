@@ -84,10 +84,9 @@
       "id": "20",
       "Title": "Face Attendance App - Absensi Berbasis Pengenalan Wajah",
       "Description": "Aplikasi web untuk mencatat kehadiran secara otomatis menggunakan teknologi pengenalan wajah. Dikembangkan dengan Python dan Flask, serta menyimpan data kehadiran dan pengguna dalam file JSON.",
-      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/face_attendance.png?raw=true",
-      "Link": "https://github.com/Nugraa21/Intelligent-Facial-Recognition-Attendance---Monitoring.git",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/camera11.png?raw=true",
       "Github": "https://github.com/Nugraa21/Intelligent-Facial-Recognition-Attendance---Monitoring.git",
-      "TechStack": ["Python", "Flask", "OpenCV", "Bootstrap 5", "JSON"],
+      "TechStack": ["Python", "Flask", "OpenCV", "Bootstrap 5"],
       "Features": [
         "Pencatatan kehadiran otomatis dengan face recognition",
         "Tambah pengguna (nama dan foto) secara manual",
