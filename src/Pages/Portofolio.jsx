@@ -63,7 +63,7 @@ const techStacks = {
     { icon: "nodejs.svg", language: "Node JS" }
   ],
   Tools: [
-    { icon: "material-icon-theme--docker.svg", language: "Docker" },
+    // { icon: "material-icon-theme--docker.svg", language: "Docker" },
     { icon: "logos--github-icon.svg", language: "GitHub" },
     { icon: "vercel.svg", language: "Vercel" },
     { icon: "devicon--firebase.svg", language: "Firebase" }
