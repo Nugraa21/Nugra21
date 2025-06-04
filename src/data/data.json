@@ -49,9 +49,9 @@
       "id": "11",
       "Title": "Portfolio Web v1",
       "Description": "Versi pertama dari website portofolio pribadi yang dibuat menggunakan HTML, CSS, dan JavaScript murni. Website ini menampilkan informasi dasar tentang diri saya dan proyek-proyek awal, dengan desain sederhana dan fungsionalitas dasar sebagai pengenalan terhadap pengembangan web.",
-      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/webv1.png?raw=true",
-      "Link": "https://nugraa21.github.io/Portfolio-Web/",
-      "Github": "https://github.com/Nugraa21/Portfolio-Web.git",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/portfolioawal.png?raw=true",
+      "Link": "https://nugraa21.github.io/My_dashboard",
+      "Github": "https://github.com/Nugraa21/My_dashboard.git",
       "TechStack": ["HTML", "CSS", "JavaScript"],
       "Features": [
         "Portofolio pribadi versi awal",
