@@ -52,18 +52,17 @@ const techStacks = {
     { icon: "html.svg", language: "HTML" },
     { icon: "css.svg", language: "CSS" },
     { icon: "javascript.svg", language: "JavaScript" },
-    { icon: "devicon--latex.svg", language: "LaTeX" }
+    { icon: "devicon--latex.svg", language: "LaTeX" },
     { icon: "material-icon-theme--python.svg", language: "Python" },
     { icon: "reactjs.svg", language: "ReactJS" },
     { icon: "logos--vue.svg", language: "Vue" },
-    { icon: "devicon--php.svg", language: "PHP" },
+    { icon: "devicon--php.svg", language: "PHP" }
   ],
   Programs: [
     { icon: "devicon--flutter.svg", language: "Flutter" },
     { icon: "nodejs.svg", language: "Node JS" }
   ],
   Tools: [
-    // { icon: "material-icon-theme--docker.svg", language: "Docker" },
     { icon: "logos--github-icon.svg", language: "GitHub" },
     { icon: "vercel.svg", language: "Vercel" },
     { icon: "devicon--firebase.svg", language: "Firebase" }
