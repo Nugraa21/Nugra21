@@ -62,6 +62,34 @@
       "category": "Web"
     },
     {
+      "id": "13",
+      "Title": "Encryptify - Enkripsi File Password",
+      "Description": "Encryptify adalah aplikasi desktop berbasis Python yang menggunakan Tkinter sebagai antarmuka grafisnya. Aplikasi ini memungkinkan pengguna mengamankan file dengan enkripsi berbasis password. Fitur utama meliputi enkripsi dan dekripsi file yang mudah digunakan serta menjaga keamanan data dengan efektif.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/pjy.png?raw=true",
+      "Github": "https://github.com/Nugraa21/Encryptify---Password-Based-File-Encryption-with-Python---Tkinter.git",
+      "TechStack": ["Python", "Tkinter", "Cryptography"],
+      "Features": [
+        "Enkripsi dan dekripsi file berbasis password",
+        "Antarmuka sederhana menggunakan Tkinter",
+        "Keamanan data terjaga"
+      ],
+      "category": "Project"
+    },
+    {
+      "id": "14",
+      "Title": "Steganografi-dengan-Flask ",
+      "Description": "Proyek ini bertujuan untuk membuat aplikasi web menggunakan Flask yang dapat melakukan steganografi gambar, yaitu menyisipkan pesan teks ke dalam gambar tanpa mengubah secara signifikan tampilan gambar tersebut. Pengguna dapat mengupload gambar dan memasukkan pesan untuk disembunyikan, serta membaca kembali pesan tersembunyi tersebut dengan mengupload gambar yang sudah disisipkan pesan.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/pjy.png?raw=true",
+      "Github": "https://github.com/Nugraa21/Encryptify---Password-Based-File-Encryption-with-Python---Tkinter.git",
+      "TechStack": ["Python", "Tkinter", "Cryptography"],
+      "Features": [
+        "Enkripsi dan dekripsi file berbasis password",
+        "Antarmuka sederhana menggunakan Tkinter",
+        "Keamanan data terjaga"
+      ],
+      "category": "Project"
+    },
+    {
       "id": "4",
       "Title": "Cara menggunakan Docker dan Nginx",
       "Description": "Dokumentasi tutorial sederhana tentang cara deployment website ke dalam container Docker menggunakan Nginx sebagai reverse proxy.",
@@ -116,7 +144,7 @@
     },
     {
       "id": "8",
-      "Title": "Web HIMADIGI Sederhana",
+      "Title": "Web HIMADIGI v2 Sederhana",
       "Description": "Website himpunan mahasiswa Bisnis Digital (Web yang saya buat untuk Tugas teman saya) organisasi di kembangkan dengan HTML , CSS dan JS sederhana yang saya buat untuk Tugas PWC.",
       "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w2.png?raw=true",
       "Link": "https://nugraa21.github.io/HIMATEK/",
@@ -140,7 +168,26 @@
         "Visualisasi proses enkripsi untuk pemahaman lebih mudah"
       ],
       "category": "Materi"
+    },
+    {
+      "id": "12",
+      "Title": "Web HIMADIGI v1 Sederhana",
+      "Description": "Website himpunan mahasiswa Bisnis Digital (Web yang saya buat untuk Tugas teman saya) organisasi di kembangkan dengan HTML , CSS dan JS sederhana yang saya buat untuk Tugas PWC.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/w5.png?raw=true",
+      "Link": "https://nugraa21.github.io/My_dashboard",
+      "Github": "https://github.com/Nugraa21/My_dashboard.git",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": [
+        "Portofolio pribadi versi awal",
+        "Dibuat tanpa framework (pure HTML/CSS/JS)",
+        "Desain sederhana dan ringan",
+        "Menampilkan biodata dan daftar proyek"
+      ],
+      "category": "Web"
     }
+
+
+
 
   ],
   "certificates": [
