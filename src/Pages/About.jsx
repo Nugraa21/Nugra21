@@ -174,7 +174,7 @@ const AboutPage = () => {
     const experience = experienceData.length;
 
     return {
-      totalProjects: storedProjects.length || 0,
+      totalProjects: storedProjects.length || 1,
       totalCertificates: storedCertificates.length || 0,
       YearExperience: experience || 0, // Fallback to 0 if no valid data
     };
