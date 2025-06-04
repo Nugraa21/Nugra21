@@ -86,7 +86,7 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
                 className="relative inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 sm:px-5 py-1.5 xs:py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg font-semibold text-xs xs:text-sm hover:from-orange-600 hover:to-yellow-500 transition-all duration-300 shadow-md hover:shadow-lg active:scale-95 w-full xs:w-auto z-10"
                 aria-label="Live Demo"
               >
-                <span>Live Demo</span>
+                <span>Kunjungi</span>
                 <ExternalLink className="w-4 h-4 xs:w-4.5 xs:h-4.5 sm:w-5 sm:h-5" />
               </a>
             ) : (

@@ -21,6 +21,22 @@
       "category": "Project"
     },
     {
+      "id": "10",
+      "Title": "Portfolio Web v2",
+      "Description": "Portfolio web versi kedua yang dibangun menggunakan React dan JSX. Website ini berfungsi sebagai media perkenalan diri serta menampilkan informasi terkait organisasi mahasiswa. Dirancang dengan antarmuka sederhana dan responsif, project ini menunjukkan kemampuan dalam pengembangan front-end dengan pendekatan komponen modern.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/webinti.png?raw=true",
+      "Link": "https://nugra.my.id",
+      "Github": "https://github.com/Nugraa21/HIMATEK.git",
+      "TechStack": ["HTML", "CSS", "JavaScript", "React"],
+      "Features": [
+        "Website portofolio dengan React & JSX",
+        "Tampilan responsif dan clean UI",
+        "Informasi tentang organisasi mahasiswa",
+        "Menampilkan data dan deskripsi pribadi"
+      ],
+      "category": "Web"
+    },
+    {
       "id": "3",
       "Title": "Ilustrasi Ice",
       "Description": "Karya manis bertema es krim yang saya ilustrasikan dengan Adobe Illustrator.",
@@ -30,13 +46,34 @@
       "category": "Ilustrasi"
     },
     {
+      "id": "11",
+      "Title": "Portfolio Web v1",
+      "Description": "Versi pertama dari website portofolio pribadi yang dibuat menggunakan HTML, CSS, dan JavaScript murni. Website ini menampilkan informasi dasar tentang diri saya dan proyek-proyek awal, dengan desain sederhana dan fungsionalitas dasar sebagai pengenalan terhadap pengembangan web.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/webv1.png?raw=true",
+      "Link": "https://nugraa21.github.io/Portfolio-Web/",
+      "Github": "https://github.com/Nugraa21/Portfolio-Web.git",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": [
+        "Portofolio pribadi versi awal",
+        "Dibuat tanpa framework (pure HTML/CSS/JS)",
+        "Desain sederhana dan ringan",
+        "Menampilkan biodata dan daftar proyek"
+      ],
+      "category": "Web"
+    },
+    {
       "id": "4",
       "Title": "Cara menggunakan Docker dan Nginx",
       "Description": "Dokumentasi tutorial sederhana tentang cara deployment website ke dalam container Docker menggunakan Nginx sebagai reverse proxy.",
       "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/t1.jpg?raw=true",
       "Link": "https://youtu.be/--IZaVqQkyk?si=tsD_WfxlDftmKC8u",
       "TechStack": ["HTML", "CSS", "JavaScript", "PHP"],
-      "Features": ["Basic web tutorials","Cara penggunaan CSS & JS", "Pengertian dasar HTML"],
+        "Features": [
+        "Tutorial deploy website menggunakan Docker",
+        "Penggunaan Nginx sebagai reverse proxy",
+        "Pengenalan dasar Docker dan containerization",
+        "Cocok untuk pemula di DevOps dan Web Hosting"
+      ],
       "category": "Materi"
     },
     {
@@ -47,7 +84,12 @@
       "Github": "https://github.com/Nugraa21/Belajar-HTML.git",
       "Link": "https://nugraa21.github.io/Belajar-HTML/",
       "TechStack": ["HTML", "CSS", "JavaScript", "PHP"],
-      "Features": ["Basic web tutorials","Cara penggunaan CSS & JS", "Pengertian dasar HTML"],
+        "Features": [
+        "Modul belajar HTML, CSS, JavaScript, dan PHP",
+        "Materi praktikum dasar pemrograman web",
+        "Struktur file dan project yang mudah dipahami",
+        "Didesain untuk pemula dan pembelajaran mandiri"
+      ],
       "category": "Materi"
     },
     {
@@ -85,13 +127,18 @@
     },
     {
       "id": "9",
-      "Title": "Web HIMADIGI Sederhana",
-      "Description": "Website himpunan mahasiswa Bisnis Digital (Web yang saya buat untuk Tugas teman saya) organisasi di kembangkan dengan HTML , CSS dan JS sederhana yang saya buat untuk Tugas PWC.",
-      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w2.png?raw=true",
-      "Link": "https://nugraa21.github.io/HIMATEK/",
-      "Github": "https://github.com/Nugraa21/HIMATEK.git",
+      "Title": "Apa itu RC4 ",
+      "Description": "RC4 adalah salah satu algoritma stream cipher yang terkenal karena kesederhanaan dan kecepatannya dalam proses enkripsi dan dekripsi data. Algoritma ini terdiri dari dua tahap utama, yaitu Key-Scheduling Algorithm (KSA) yang berfungsi untuk menginisialisasi array kunci berdasarkan input key, dan Pseudo-Random Generation Algorithm (PRGA) yang menghasilkan byte pseudo-acak untuk digunakan dalam proses enkripsi atau dekripsi. Pada materi ini, dijelaskan konsep dasar RC4 beserta implementasinya menggunakan HTML, CSS, dan JavaScript untuk memberikan gambaran praktis kepada pengguna.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/m2.png?raw=true",
+      "Link": "https://youtu.be/ExipGvhvIWU?si=pGoRU3BCXSg4mJXF",
+      "Github": "https://github.com/Nugraa21/Metode-ENKRIPSI-RC4.git",
       "TechStack": ["HTML", "CSS", "JavaScript"],
-      "Features": ["Student organization website", "Informational hub"],
+      "Features": [
+        "Implementasi enkripsi dan dekripsi dengan algoritma RC4",
+        "Penjelasan tahap Key-Scheduling Algorithm (KSA) dan Pseudo-Random Generation Algorithm (PRGA)",
+        "Contoh kode interaktif menggunakan HTML, CSS, dan JavaScript",
+        "Visualisasi proses enkripsi untuk pemahaman lebih mudah"
+      ],
       "category": "Materi"
     }
 

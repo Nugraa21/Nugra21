@@ -150,7 +150,7 @@ const ProjectDetails = () => {
                 aria-label="Live Demo"
               >
                 <ExternalLink className="w-4 xs:w-4.5 sm:w-5 h-4 xs:h-4.5 sm:h-5" />
-                Live Demo
+                Kunjungi
               </a>
               <a
                 href={project.Github}
