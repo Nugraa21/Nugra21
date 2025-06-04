@@ -247,7 +247,7 @@ const AboutPage = () => {
                   data-aos-duration="800"
                 >
                   <a
-                    href="Ludang-prasetyo-nugorho-resume.pdf"
+                    href="Ludang prasetyo nugorho-resume.pdf"
                     className="w-full sm:w-auto"
                     target="_blank"
                     rel="noreferrer noopener"
