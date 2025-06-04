@@ -240,18 +240,34 @@
       ],
       "category": "Materi"
     },
+    {
+      "id": "19",
+      "Title": "PPT LATEX (IT IL)",
+      "Description": "Materi presentasi yang membahas profil pendiri Tokopedia, perjalanan bisnis, dan kisah sukses Tokopedia sebagai salah satu startup e-commerce terbesar di Indonesia.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/m3.png?raw=true",
+      "Link": "./PDF/ppt_tokopedia.pdf",
+      "Github": "https://github.com/Nugraa21/PPT-ITIL-LaTeX.git",
+      "TechStack": ["Presentasi", "Bisnis", "Startup"],
+      "Features": [
+        "Profil pendiri Tokopedia",
+        "Perjalanan dan strategi bisnis",
+        "Kisah sukses dan pelajaran berharga",
+        "Analisis dampak Tokopedia di Indonesia"
+      ],
+      "category": "Materi"
+    },
 
 
 
 
     {
       "id": "1000",
-      "Title": "Judul",
+      "Title": "TEST DATA",
       "Description": "",
       "Img": "----",
       "Link": "----",
       "Github": "----",
-      "TechStack": ["-", "-", "JavaScript"],
+      "TechStack": ["-", "-"],
       "Features": [
         "--",
         "--"
