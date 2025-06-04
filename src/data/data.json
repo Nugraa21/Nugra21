@@ -37,15 +37,6 @@
       "category": "Web"
     },
     {
-      "id": "3",
-      "Title": "Ilustrasi Ice",
-      "Description": "Karya manis bertema es krim yang saya ilustrasikan dengan Adobe Illustrator.",
-      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i1.png?raw=true",
-      "Link": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i1.png?raw=true",
-      "TechStack": ["Adobe Illustrator"],
-      "category": "Ilustrasi"
-    },
-    {
       "id": "11",
       "Title": "Portfolio Web v1",
       "Description": "Versi pertama dari website portofolio pribadi yang dibuat menggunakan HTML, CSS, dan JavaScript murni. Website ini menampilkan informasi dasar tentang diri saya dan proyek-proyek awal, dengan desain sederhana dan fungsionalitas dasar sebagai pengenalan terhadap pengembangan web.",
@@ -77,17 +68,26 @@
     },
     {
       "id": "14",
-      "Title": "Steganografi-dengan-Flask ",
-      "Description": "Proyek ini bertujuan untuk membuat aplikasi web menggunakan Flask yang dapat melakukan steganografi gambar, yaitu menyisipkan pesan teks ke dalam gambar tanpa mengubah secara signifikan tampilan gambar tersebut. Pengguna dapat mengupload gambar dan memasukkan pesan untuk disembunyikan, serta membaca kembali pesan tersembunyi tersebut dengan mengupload gambar yang sudah disisipkan pesan.",
-      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/pjy.png?raw=true",
-      "Github": "https://github.com/Nugraa21/Encryptify---Password-Based-File-Encryption-with-Python---Tkinter.git",
-      "TechStack": ["Python", "Tkinter", "Cryptography"],
+      "Title": "Steganografi Gambar dengan Flask",
+      "Description": "Aplikasi web berbasis Flask untuk menyisipkan pesan teks ke dalam gambar (steganografi) tanpa mengubah tampilan gambar secara signifikan. Pengguna dapat mengunggah gambar, menyembunyikan pesan, dan membaca pesan tersembunyi dari gambar yang sudah diupload.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/stga.png?raw=true",
+      "Github": "https://github.com/Nugraa21/Steganografi-dengan-Flask.git",
+      "TechStack": ["Python", "Flask", "Steganografi"],
       "Features": [
-        "Enkripsi dan dekripsi file berbasis password",
-        "Antarmuka sederhana menggunakan Tkinter",
-        "Keamanan data terjaga"
+        "Menyisipkan pesan teks ke dalam gambar",
+        "Membaca pesan tersembunyi dari gambar",
+        "Antarmuka web sederhana dan mudah digunakan"
       ],
       "category": "Project"
+    },
+    {
+      "id": "3",
+      "Title": "Ilustrasi Ice",
+      "Description": "Karya manis bertema es krim yang saya ilustrasikan dengan Adobe Illustrator.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i1.png?raw=true",
+      "Link": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i1.png?raw=true",
+      "TechStack": ["Adobe Illustrator"],
+      "category": "Ilustrasi"
     },
     {
       "id": "4",
@@ -184,11 +184,64 @@
         "Menampilkan biodata dan daftar proyek"
       ],
       "category": "Web"
+    },
+    {
+      "id": "15",
+      "Title": "Ilustrasi Jeruk",
+      "Description": "Karya sepotong jeruk lemon yang sangat masam yang saya ilustrasikan dengan Adobe Illustrator.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i3.png?raw=true",
+      "Link": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i3.png?raw=true",
+      "TechStack": ["Adobe Illustrator"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "16",
+      "Title": "Autentikasi Email dengan PHPMailer",
+      "Description": "Proyek ini menggunakan library PHPMailer untuk mengirim email autentikasi seperti OTP, pemberitahuan, dan lain-lain. Sistem ini dibuat dengan PHP, menggunakan database MySQL dan server Apache. Dengan PHPMailer, pengiriman email dapat berjalan dengan mudah dan aman untuk aplikasi autentikasi sederhana.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/m1.png?raw=true",
+      "Link": "./PDF/Otentikasi.pdf",
+      "Github": "https://github.com/Nugraa21/Autentikasi-OTP-lewaat-email-dengan-PHP.git",
+      "TechStack": ["PHP", "MySQL", "Apache", "PHPMailer"],
+      "Features": [
+        "Pengiriman email autentikasi (OTP, pemberitahuan)",
+        "Integrasi dengan database MySQL",
+        "Mudah digunakan dan dikembangkan",
+        "Penggunaan library PHPMailer untuk pengiriman email yang andal"
+      ],
+      "category": "Project"
+    },
+    {
+      "id": "17",
+      "Title": "Task Manager dalam Sistem Operasi",
+      "Description": "Materi tentang konsep dan implementasi Task Manager pada sistem operasi, termasuk pengelolaan proses, pengaturan prioritas, dan monitoring sumber daya sistem secara real-time.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/m4.png?raw=true",
+      "Link": "./PDF/task.pdf",
+      "TechStack": ["Sistem Operasi", "Manajemen Proses", "Pemrograman C"],
+      "Features": [
+        "Pengelolaan proses dan thread",
+        "Pengaturan prioritas proses",
+        "Monitoring penggunaan CPU dan memori",
+        "Implementasi sederhana Task Manager"
+      ],
+      "category": "Materi"
+    },
+
+
+
+    {
+      "id": "1000",
+      "Title": "Judul",
+      "Description": "",
+      "Img": "----",
+      "Link": "----",
+      "Github": "----",
+      "TechStack": ["-", "-", "JavaScript"],
+      "Features": [
+        "--",
+        "--"
+      ],
+      "category":"Project"
     }
-
-
-
-
   ],
   "certificates": [
     {
