@@ -121,6 +121,22 @@
       "category": "Materi"
     },
     {
+      "id": "19",
+      "Title": "PPT ITIL Menggunakan LaTeX",
+      "Description": "Proyek pembuatan presentasi mengenai ITIL (Information Technology Infrastructure Library) menggunakan LaTeX. Materi membahas dasar-dasar ITIL dan disusun dalam format presentasi profesional dengan bantuan template LaTeX Beamer.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/PPTLTX.png?raw=true",
+      "Link": "https://github.com/Nugraa21/PPT-ITIL-LaTeX.git",
+      "Github": "https://github.com/Nugraa21/PPT-ITIL-LaTeX.git",
+      "TechStack": ["LaTeX", "Beamer", "Overlive"],
+      "Features": [
+        "Presentasi profesional dengan LaTeX Beamer",
+        "Pembahasan konsep ITIL (Information Technology Infrastructure Library)",
+        "Struktur slide yang sistematis dan informatif",
+        "Source code presentasi tersedia di GitHub"
+      ],
+      "category": "Project"
+    },
+    {
       "id": "6",
       "Title": "Game ULAR",
       "Description": "Game web interaktif berbasis JavaScript yang mereplikasi permainan ular klasik sebagai proyek eksplorasi front-end.",
@@ -231,22 +247,6 @@
       "Description": "Materi presentasi yang membahas profil pendiri Tokopedia, perjalanan bisnis, dan kisah sukses Tokopedia sebagai salah satu startup e-commerce terbesar di Indonesia.",
       "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/m3.png?raw=true",
       "Link": "./PDF/TOKPET.pdf",
-      "TechStack": ["Presentasi", "Bisnis", "Startup"],
-      "Features": [
-        "Profil pendiri Tokopedia",
-        "Perjalanan dan strategi bisnis",
-        "Kisah sukses dan pelajaran berharga",
-        "Analisis dampak Tokopedia di Indonesia"
-      ],
-      "category": "Materi"
-    },
-    {
-      "id": "19",
-      "Title": "PPT LATEX (IT IL)",
-      "Description": "Materi presentasi yang membahas profil pendiri Tokopedia, perjalanan bisnis, dan kisah sukses Tokopedia sebagai salah satu startup e-commerce terbesar di Indonesia.",
-      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/m3.png?raw=true",
-      "Link": "./PDF/ppt_tokopedia.pdf",
-      "Github": "https://github.com/Nugraa21/PPT-ITIL-LaTeX.git",
       "TechStack": ["Presentasi", "Bisnis", "Startup"],
       "Features": [
         "Profil pendiri Tokopedia",
