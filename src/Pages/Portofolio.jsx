@@ -48,15 +48,15 @@ function a11yProps(index) {
 
 const techStacks = {
   Code: [
-    { icon: "devicon--php.svg", language: "PHP" },
     { icon: "material-icon-theme--dart.svg", language: "Dart" },
     { icon: "html.svg", language: "HTML" },
     { icon: "css.svg", language: "CSS" },
     { icon: "javascript.svg", language: "JavaScript" },
+    { icon: "devicon--latex.svg", language: "LaTeX" }
     { icon: "material-icon-theme--python.svg", language: "Python" },
     { icon: "reactjs.svg", language: "ReactJS" },
     { icon: "logos--vue.svg", language: "Vue" },
-    { icon: "devicon--latex.svg", language: "LaTeX" }
+    { icon: "devicon--php.svg", language: "PHP" },
   ],
   Programs: [
     { icon: "devicon--flutter.svg", language: "Flutter" },
