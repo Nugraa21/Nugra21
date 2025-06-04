@@ -26,7 +26,6 @@
       "Description": "Portfolio web versi kedua yang dibangun menggunakan React dan JSX. Website ini berfungsi sebagai media perkenalan diri serta menampilkan informasi terkait organisasi mahasiswa. Dirancang dengan antarmuka sederhana dan responsif, project ini menunjukkan kemampuan dalam pengembangan front-end dengan pendekatan komponen modern.",
       "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/webinti.png?raw=true",
       "Link": "https://nugra.my.id",
-      "Github": "https://github.com/Nugraa21/HIMATEK.git",
       "TechStack": ["HTML", "CSS", "JavaScript", "React"],
       "Features": [
         "Website portofolio dengan React & JSX",
