@@ -48,31 +48,32 @@ function a11yProps(index) {
 
 const techStacks = {
   Code: [
+    { icon: "devicon--php.svg", language: "PHP" },
+    { icon: "material-icon-theme--dart.svg", language: "Dart" },
     { icon: "html.svg", language: "HTML" },
     { icon: "css.svg", language: "CSS" },
     { icon: "javascript.svg", language: "JavaScript" },
+    { icon: "material-icon-theme--python.svg", language: "Python" },
     { icon: "reactjs.svg", language: "ReactJS" },
     { icon: "logos--vue.svg", language: "Vue" },
-    { icon: "material-icon-theme--python.svg", language: "Python" },
-    { icon: "material-icon-theme--dart.svg", language: "Dart" },
-    { icon: "devicon--php.svg", language: "PHP" },
+    { icon: "devicon--latex.svg", language: "LaTeX" }
   ],
   Programs: [
-    { icon: "nodejs.svg", language: "Node JS" },
     { icon: "devicon--flutter.svg", language: "Flutter" },
+    { icon: "nodejs.svg", language: "Node JS" }
   ],
   Tools: [
+    { icon: "material-icon-theme--docker.svg", language: "Docker" },
     { icon: "logos--github-icon.svg", language: "GitHub" },
     { icon: "vercel.svg", language: "Vercel" },
-    { icon: "material-icon-theme--docker.svg", language: "Docker" },
+    { icon: "devicon--firebase.svg", language: "Firebase" }
   ],
   Software: [
-    { icon: "devicon--firebase.svg", language: "Firebase" },
-    { icon: "devicon--latex.svg", language: "LaTeX" },
     { icon: "logos--adobe-illustrator.svg", language: "Adobe Illustrator" },
-    { icon: "logos--adobe-premiere.svg", language: "Adobe Premier Pro" },
-  ],
+    { icon: "logos--adobe-premiere.svg", language: "Adobe Premiere Pro" }
+  ]
 };
+
 
 export default function FullWidthTabs() {
   const theme = useTheme();
