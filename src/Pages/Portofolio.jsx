@@ -12,7 +12,7 @@ import Certificate from "../components/Certificate";
 import { Code, Award, Boxes } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { Helmet } from "react-helmet"; // Impor react-helmet
+import { Helmet } from "react-helmet";
 import data from "../data/data.json";
 
 function TabPanel({ children, value, index, ...other }) {
@@ -56,23 +56,22 @@ const techStacks = {
     { icon: "material-icon-theme--python.svg", language: "Python" },
     { icon: "reactjs.svg", language: "ReactJS" },
     { icon: "logos--vue.svg", language: "Vue" },
-    { icon: "devicon--php.svg", language: "PHP" }
+    { icon: "devicon--php.svg", language: "PHP" },
   ],
   Programs: [
     { icon: "devicon--flutter.svg", language: "Flutter" },
-    { icon: "nodejs.svg", language: "Node JS" }
+    { icon: "nodejs.svg", language: "Node JS" },
   ],
   Tools: [
     { icon: "logos--github-icon.svg", language: "GitHub" },
     { icon: "vercel.svg", language: "Vercel" },
-    { icon: "devicon--firebase.svg", language: "Firebase" }
+    { icon: "devicon--firebase.svg", language: "Firebase" },
   ],
   Software: [
     { icon: "logos--adobe-illustrator.svg", language: "Adobe Illustrator" },
-    { icon: "logos--adobe-premiere.svg", language: "Adobe Premiere Pro" }
-  ]
+    { icon: "logos--adobe-premiere.svg", language: "Adobe Premiere Pro" },
+  ],
 };
-
 
 export default function FullWidthTabs() {
   const theme = useTheme();
@@ -138,10 +137,19 @@ export default function FullWidthTabs() {
     <>
       <Helmet>
         <title>Portfolio – Nugra.my.id</title>
-        <meta name="description" content="Jelajahi proyek, sertifikasi, dan keahlian teknis Ludang Prasetyo Nugroho." />
-        <meta name="keywords" content="Ludang Prasetyo, Nugra21, Portfolio, Proyek, Sertifikasi, Tech Stack, Web Developer" />
+        <meta
+          name="description"
+          content="Jelajahi proyek, sertifikasi, dan keahlian teknis Ludang Prasetyo Nugroho."
+        />
+        <meta
+          name="keywords"
+          content="Ludang Prasetyo, Nugra21, Portfolio, Proyek, Sertifikasi, Tech Stack, Web Developer"
+        />
         <meta property="og:title" content="Portfolio – Nugra.my.id" />
-        <meta property="og:description" content="Jelajahi proyek, sertifikasi, dan keahlian teknis Ludang Prasetyo Nugroho." />
+        <meta
+          property="og:description"
+          content="Jelajahi proyek, sertifikasi, dan keahlian teknis Ludang Prasetyo Nugroho."
+        />
         <meta property="og:url" content="https://nugra.my.id/portfolio" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="https://nugra.my.id/portfolio" />
@@ -167,7 +175,7 @@ export default function FullWidthTabs() {
               50% { transform: translateY(-4px); }
             }
             .animate-slide-in {
-              animation: slideIn 0.8s	sigmasoft ease-out forwards;
+              animation: slideIn 0.8s ease-out forwards;
             }
             .animate-glow-pulse {
               animation: glowPulse 2s ease-in-out infinite;
@@ -433,7 +441,13 @@ export default function FullWidthTabs() {
                   data-aos-duration="800"
                   data-aos-delay={i * 100}
                 >
-                  <Certificate ImgSertif={certificate.Img} />
+                  <Certificate
+                    ImgSertif={certificate.Img}
+                    title={certificate.title}
+                    description={certificate.description}
+                    issuer={certificate.issuer}
+                    date={certificate.date}
+                  />
                 </div>
               ))}
             </div>

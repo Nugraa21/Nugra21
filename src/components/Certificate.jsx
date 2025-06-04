@@ -1,197 +1,286 @@
-import React, { useState } from "react"
-import { Modal, IconButton, Box, Fade, Backdrop, Zoom, Typography } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
-import FullscreenIcon from "@mui/icons-material/Fullscreen"
+import React, { useState } from "react";
+import { Modal, IconButton, Box, Typography, Card, CardContent, Backdrop } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
 
-const Certificate = ({ ImgSertif }) => {
-	const [open, setOpen] = useState(false)
+const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
+  const [open, setOpen] = useState(false);
 
-	const handleOpen = () => {
-		setOpen(true)
-	}
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
-	const handleClose = () => {
-		setOpen(false)
-	}
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-	return (
-		<Box component="div" sx={{ width: "100%" }}>
-			{/* Thumbnail Container */}
-			<Box
-				className=""
-				sx={{
-					position: "relative",
-					overflow: "hidden",
-					borderRadius: 2,
-					boxShadow: "0 8px 16px rgba(0,0,0,0.1)",
-					transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-					"&:hover": {
-						transform: "translateY(-5px)",
-						boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
-						"& .overlay": {
-							opacity: 1,
-						},
-						"& .hover-content": {
-							transform: "translate(-50%, -50%)",
-							opacity: 1,
-						},
-						"& .certificate-image": {
-							filter: "contrast(1.05) brightness(1) saturate(1.1)",
-						},
-					},
-				}}>
-				{/* Certificate Image with Initial Filter */}
-				<Box
-					sx={{
-						position: "relative",
-						"&::before": {
-							content: '""',
-							position: "absolute",
-							top: 0,
-							left: 0,
-							right: 0,
-							bottom: 0,
-							backgroundColor: "rgba(0, 0, 0, 0.1)",
-							zIndex: 1,
-						},
-					}}>
-					<img
-						className="certificate-image"
-						src={ImgSertif}
-						alt="Certificate"
-						style={{
-							width: "100%",
-							height: "auto",
-							display: "block",
-							objectFit: "cover",
-							filter: "contrast(1.10) brightness(0.9) saturate(1.1)",
-							transition: "filter 0.3s ease",
-						}}
-						onClick={handleOpen}
-					/>
-				</Box>
+  return (
+    <Box component="div" sx={{ width: "100%", maxWidth: 400, mx: "auto" }}>
+      {/* Thumbnail Container */}
+      <Card
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+          borderRadius: 2,
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            transform: "translateY(-3px)",
+            boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+            "& .overlay": {
+              opacity: 1,
+            },
+            "& .hover-content": {
+              transform: "translate(-50%, -50%)",
+              opacity: 1,
+            },
+            "& .certificate-image": {
+              filter: "contrast(1.05) brightness(1) saturate(1.1)",
+            },
+          },
+          bgcolor: "background.paper",
+        }}
+      >
+        {/* Certificate Image with Initial Filter */}
+        <Box
+          sx={{
+            position: "relative",
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              zIndex: 1,
+            },
+          }}
+        >
+          <img
+            className="certificate-image"
+            src={ImgSertif}
+            alt={title || "Certificate"}
+            style={{
+              width: "100%",
+              height: "auto",
+              display: "block",
+              objectFit: "cover",
+              filter: "contrast(1.10) brightness(0.95) saturate(1.1)",
+              transition: "filter 0.3s ease",
+            }}
+            onClick={handleOpen}
+            onError={(e) => {
+              console.error(`Failed to load image: ${ImgSertif}`);
+              e.target.src = "https://via.placeholder.com/400x300?text=Image+Not+Found";
+            }}
+          />
+        </Box>
 
-				{/* Hover Overlay */}
-				<Box
-					className="overlay"
-					sx={{
-						position: "absolute",
-						top: 0,
-						left: 0,
-						right: 0,
-						bottom: 0,
-						opacity: 0,
-						transition: "all 0.3s ease",
-						cursor: "pointer",
-						zIndex: 2,
-					}}
-					onClick={handleOpen}>
-					{/* Hover Content */}
-					<Box
-						className="hover-content"
-						sx={{
-							position: "absolute",
-							top: "50%",
-							left: "50%",
-							transform: "translate(-50%, -60%)",
-							opacity: 0,
-							transition: "all 0.4s ease",
-							textAlign: "center",
-							width: "100%",
-							color: "white",
-						}}>
-						<FullscreenIcon
-							sx={{
-								fontSize: 40,
-								mb: 1,
-								filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))",
-							}}
-						/>
-						<Typography
-							variant="h6"
-							sx={{
-								fontWeight: 600,
-								textShadow: "0 2px 4px rgba(0,0,0,0.3)",
-							}}>
-							View Certificate
-						</Typography>
-					</Box>
-				</Box>
-			</Box>
+        {/* Hover Overlay */}
+        <Box
+          className="overlay"
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            opacity: 0,
+            transition: "opacity 0.3s ease",
+            cursor: "pointer",
+            zIndex: 2,
+            backgroundColor: "rgba(0,0,0,0.5)",
+          }}
+          onClick={handleOpen}
+        >
+          {/* Hover Content */}
+          <Box
+            className="hover-content"
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              opacity: 0,
+              transition: "all 0.3s ease",
+              textAlign: "center",
+              width: "100%",
+              color: "white",
+            }}
+          >
+            <FullscreenIcon
+              sx={{
+                fontSize: { xs: 28, sm: 36 },
+                mb: 1,
+              }}
+            />
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                fontSize: { xs: "0.9rem", sm: "1.1rem" },
+              }}
+            >
+              View Certificate
+            </Typography>
+          </Box>
+        </Box>
 
-			{/* Modal */}
-			<Modal
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description"
-				BackdropComponent={Backdrop}
-				BackdropProps={{
-					timeout: 300,
-					sx: {
-						backgroundColor: "rgba(0, 0, 0, 0.9)",
-						backdropFilter: "blur(5px)",
-					},
-				}}
-				sx={{
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					margin: 0,
-					padding: 0,
-					"& .MuiBackdrop-root": {
-						backgroundColor: "rgba(0, 0, 0, 0.9)",
-					},
-				}}>
-				<Box
-					sx={{
-						position: "relative",
-						width: "auto",
-						maxWidth: "90vw",
-						maxHeight: "90vh",
-						m: 0,
-						p: 0,
-						outline: "none",
-						"&:focus": {
-							outline: "none",
-						},
-					}}>
-					{/* Close Button */}
-					<IconButton
-						onClick={handleClose}
-						sx={{
-							position: "absolute",
-							right: 16,
-							top: 16,
-							color: "white",
-							bgcolor: "rgba(0,0,0,0.6)",
-							zIndex: 1,
-							padding: 1,
-							"&:hover": {
-								bgcolor: "rgba(0,0,0,0.8)",
-								transform: "scale(1.1)",
-							},
-						}}
-						size="large">
-						<CloseIcon sx={{ fontSize: 24 }} />
-					</IconButton>
+        {/* Certificate Information */}
+        <CardContent
+          sx={{
+            p: { xs: 1.5, sm: 2 },
+            bgcolor: "background.paper",
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 600,
+              mb: 0.5,
+              fontSize: { xs: "1rem", sm: "1.1rem" },
+            }}
+          >
+            {title || "Certificate"}
+          </Typography>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              mb: 0.5,
+              fontSize: { xs: "0.8rem", sm: "0.85rem" },
+              lineHeight: 1.4,
+            }}
+          >
+            {description || "No description available"}
+          </Typography>
+          <Typography
+            variant="caption"
+            color="text.secondary"
+            sx={{ fontSize: { xs: "0.7rem", sm: "0.75rem" } }}
+          >
+            Issuer: {issuer || "Unknown"} | Date: {date || "Unknown"}
+          </Typography>
+        </CardContent>
+      </Card>
 
-					{/* Modal Image */}
-					<img
-						src={ImgSertif}
-						alt="Certificate Full View"
-						style={{
-							display: "block",
-							maxWidth: "100%",
-							maxHeight: "90vh",
-							margin: "0 auto",
-							objectFit: "contain",
-						}}
-					/>
-				</Box>
-			</Modal>
-		</Box>
-	)
-}
+      {/* Modal */}
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 300,
+          sx: {
+            backgroundColor: "rgba(0,0,0,0.8)",
+            backdropFilter: "blur(5px)",
+          },
+        }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          p: { xs: 1, sm: 2 },
+        }}
+      >
+        <Box
+          sx={{
+            position: "relative",
+            width: { xs: "90vw", sm: "80vw", md: "70vw", lg: "60vw" },
+            maxWidth: 800,
+            maxHeight: "90vh",
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            overflowY: "auto",
+            p: { xs: 1.5, sm: 2, md: 3 },
+          }}
+        >
+          {/* Close Button */}
+          <IconButton
+            onClick={handleClose}
+            aria-label="Close certificate modal"
+            sx={{
+              position: "absolute",
+              right: { xs: 8, sm: 12 },
+              top: { xs: 8, sm: 12 },
+              color: "text.primary",
+              bgcolor: "rgba(0,0,0,0.1)",
+              p: { xs: 0.5, sm: 0.75 },
+              "&:hover": {
+                bgcolor: "rgba(0,0,0,0.2)",
+              },
+            }}
+          >
+            <CloseIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />
+          </IconButton>
 
-export default Certificate
+          {/* Certificate Image */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              mb: { xs: 1.5, sm: 2 },
+              maxHeight: { xs: "50vh", sm: "55vh", md: "60vh" },
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src={ImgSertif}
+              alt={title || "Certificate Full View"}
+              style={{
+                width: "100%",
+                height: "auto",
+                maxHeight: "100%",
+                objectFit: "contain",
+              }}
+              onError={(e) => {
+                console.error(`Failed to load modal image: ${ImgSertif}`);
+                e.target.src = "https://via.placeholder.com/600x400?text=Image+Not+Found";
+              }}
+            />
+          </Box>
+
+          {/* Certificate Details */}
+          <Box sx={{ textAlign: "center" }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 600,
+                mb: 1,
+                fontSize: { xs: "1.1rem", sm: "1.25rem", md: "1.5rem" },
+              }}
+            >
+              {title || "Certificate"}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                mb: 1,
+                fontSize: { xs: "0.8rem", sm: "0.9rem" },
+                lineHeight: 1.4,
+              }}
+            >
+              {description || "No description available"}
+            </Typography>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{
+                fontSize: { xs: "0.7rem", sm: "0.75rem" },
+              }}
+            >
+              Issuer: {issuer || "Unknown"} | Date: {date || "Unknown"}
+            </Typography>
+          </Box>
+        </Box>
+      </Modal>
+    </Box>
+  );
+};
+
+export default Certificate;

@@ -291,14 +291,19 @@
     }
   ],
   "certificates": [
-    {
-      "Img": "./CTF/dicoding1.png"
-    },
-    {
-      "Img": "./CTF/tofel1.png"
-    },
-    {
-      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/src/images/tcf/1.jpg?raw=true"
-    }
+  {
+    "Img": "./CTF/dicoding1.png",
+    "title": "Learn Cloud Basics and Gen AI on AWS",
+    "description": "Credential for foundational knowledge in cloud computing and generative AI using AWS.",
+    "issuer": "Amazon Web Services",
+    "date": "June 2025"
+  },
+  {
+    "Img": "./CTF/tofel1.png",
+    "title": "TOEFL Daily",
+    "description": "Certification demonstrating proficiency in English for academic and professional contexts.",
+    "issuer": "Daily",
+    "date": "Oct 2024"
+  }
   ]
 }
