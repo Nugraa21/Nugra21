@@ -299,6 +299,13 @@
     "date": "June 2025"
   },
   {
+    "Img": "./CTF/dicoding2.png",
+    "title": "Beginner Back-End Development with JavaScript",
+    "description": "Certificate demonstrating foundational knowledge in back-end development using JavaScript, covering basic concepts and practical implementation.",
+    "issuer": "Dicoding Indonesia",
+    "date": "June 2025"
+  },
+  {
     "Img": "./CTF/tofel1.png",
     "title": "TOEFL Daily",
     "description": "Certification demonstrating proficiency in English for academic and professional contexts.",
