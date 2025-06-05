@@ -211,7 +211,7 @@ export default function FullWidthTabs() {
           `}
         </style>
 
-        <div className="glass-bg text-center py-6" data-aos="fadeIn">
+        <div id="Portofolio" className="glass-bg text-center py-6" data-aos="fadeIn">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-400">
             Portfolio
           </h2>
