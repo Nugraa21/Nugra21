@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ExternalLink, ArrowRight } from "lucide-react";
 import Swal from "sweetalert2";
 
 const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
   const handleLiveDemo = (e) => {
-    e.stopPropagation(); // Mencegah propagasi klik ke kartu
+    e.stopPropagation();
     if (!ProjectLink) {
       e.preventDefault();
       Swal.fire({
@@ -27,7 +29,7 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
   };
 
   const handleDetails = (e) => {
-    e.stopPropagation(); // Mencegah propagasi klik ke kartu
+    e.stopPropagation();
     if (!id) {
       e.preventDefault();
       Swal.fire({
@@ -54,14 +56,22 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
         {/* Overlay Effect */}
         <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none" />
 
-        {/* Image Section */}
+        {/* Image Section with Loading Effect */}
         <div className="relative overflow-hidden">
+          {!isImageLoaded && (
+            <div className="w-full h-40 xs:h-44 sm:h-48 bg-gray-200 animate-pulse" />
+          )}
           <img
             src={Img}
             alt={Title}
-            className="w-full h-40 xs:h-44 sm:h-48 object-cover transform transition-transform duration-500 group-hover:scale-105"
+            className={`w-full h-40 xs:h-44 sm:h-48 object-cover transform transition-all duration-500 group-hover:scale-105 ${isImageLoaded ? "opacity-100" : "opacity-0"}`}
             loading="lazy"
-            onError={(e) => (e.currentTarget.src = "/fallback.png")}
+            onLoad={() => setIsImageLoaded(true)}
+            onError={(e) => {
+              console.error("Image failed to load, using fallback:", Img);
+              e.currentTarget.src = "/fallback.png";
+              setIsImageLoaded(true);
+            }}
           />
           <div className="absolute inset-0 bg-orange-600/10 group-hover:bg-orange-600/20 transition-all duration-500 pointer-events-none" />
         </div>
@@ -124,6 +134,13 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
         }
         .group:hover .shadow-xl {
           box-shadow: 0 8px 16px rgba(251, 146, 60, 0.2);
+        }
+        .animate-pulse {
+          animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
         }
       `}</style>
     </div>
