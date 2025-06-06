@@ -25,7 +25,7 @@ function TabPanel({ children, value, index, ...other }) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }}>
+        <Box sx={{ p: { xs: 1, sm: 2, md: 4 } }}>
           <Typography component="div">{children}</Typography>
         </Box>
       )}
@@ -113,6 +113,7 @@ export default function FullWidthTabs() {
   };
 
   const projectCategories = ["All", "Project", "Materi", "Web", "Game", "Ilustrasi"];
+  const techStackCategories = ["Code", "Programs", "Tools", "Software"];
   const DEFAULT_DISPLAY_COUNT = 6;
 
   const filteredProjects = showAllProjects
@@ -194,18 +195,49 @@ export default function FullWidthTabs() {
               opacity: 0.6;
               pointer-events: none;
             }
-            @media (max-width: 640px) {
-              .main-tabs .MuiTab-root {
-                font-size: 0.8rem;
-                padding: 6px 10px;
+            .dropdown {
+              appearance: none;
+              background: rgba(255, 255, 255, 0.1);
+              border: 1px solid rgba(255, 255, 255, 0.2);
+              border-radius: 8px;
+              padding: 8px 12px;
+              color: #F97316;
+              font-weight: 500;
+              width: 100%;
+              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F97316' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+              background-repeat: no-repeat;
+              background-position: right 12px center;
+              transition: all 0.3s ease;
+            }
+            .dropdown:focus {
+              outline: none;
+              border-color: #F97316;
+              box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+            }
+            @media (min-width: 768px) {
+              .dropdown-container {
+                display: none;
               }
-              .sub-tabs .MuiTab-root {
-                font-size: 0.75rem;
-                padding: 5px 8px;
+            }
+            @media (max-width: 767px) {
+              .tabs-container {
+                display: none;
+              }
+              .dropdown-container {
+                display: block;
               }
               .show-all-btn {
                 padding: 6px 12px;
                 font-size: 0.8rem;
+              }
+              .grid {
+                grid-template-columns: 1fr !important;
+              }
+            }
+            @media (max-width: 576px) {
+              .show-all-btn {
+                padding: 5px 10px;
+                font-size: 0.75rem;
               }
             }
           `}
@@ -221,90 +253,130 @@ export default function FullWidthTabs() {
         </div>
 
         <Box sx={{ width: "100%", mt: 4 }}>
-          <AppBar
-            position="static"
-            elevation={0}
-            sx={{ bgcolor: "transparent", borderRadius: "12px" }}
-          >
-            <Tabs
-              value={value}
-              onChange={handleChange}
-              variant="fullWidth"
-              className="main-tabs"
-              sx={{
-                "& .MuiTabs-indicator": {
-                  backgroundColor: "#F97316",
-                  height: 2,
-                  borderRadius: "2px",
-                },
-              }}
+          {/* Desktop Tabs */}
+          <div className="tabs-container">
+            <AppBar
+              position="static"
+              elevation={0}
+              sx={{ bgcolor: "transparent", borderRadius: "12px" }}
             >
-              {[
-                { label: "Projects", icon: Code },
-                { label: "Certificates", icon: Award },
-                { label: "Tech Stack", icon: Boxes },
-              ].map((tab, index) => (
-                <Tab
-                  key={tab.label}
-                  icon={
-                    <tab.icon
-                      className="w-5 h-5 mb-1 text-gray-600 tab-transition"
-                    />
-                  }
-                  label={tab.label}
-                  {...a11yProps(index)}
-                  className="tab-transition text-gray-600 font-medium text-sm sm:text-base capitalize"
-                  sx={{
-                    "&.Mui-selected": {
-                      color: "#F97316",
-                      "& .lucide": { color: "#F97316" },
-                    },
-                    padding: { xs: "8px 10px", sm: "10px 12px" },
-                  }}
-                />
-              ))}
-            </Tabs>
-          </AppBar>
+              <Tabs
+                value={value}
+                onChange={handleChange}
+                variant="fullWidth"
+                className="main-tabs"
+                sx={{
+                  "& .MuiTabs-indicator": {
+                    backgroundColor: "#F97316",
+                    height: 2,
+                    borderRadius: "2px",
+                  },
+                }}
+              >
+                {[
+                  { label: "Projects", icon: Code },
+                  { label: "Certificates", icon: Award },
+                  { label: "Tech Stack", icon: Boxes },
+                ].map((tab, index) => (
+                  <Tab
+                    key={tab.label}
+                    icon={
+                      <tab.icon
+                        className="w-5 h-5 mb-1 text-gray-600 tab-transition"
+                      />
+                    }
+                    label={tab.label}
+                    {...a11yProps(index)}
+                    className="tab-transition text-gray-600 font-medium text-sm sm:text-base capitalize"
+                    sx={{
+                      "&.Mui-selected": {
+                        color: "#F97316",
+                        "& .lucide": { color: "#F97316" },
+                      },
+                      padding: { xs: "8px 10px", sm: "10px 12px" },
+                    }}
+                  />
+                ))}
+              </Tabs>
+            </AppBar>
+          </div>
+
+          {/* Mobile Dropdown */}
+          <div className="dropdown-container mb-4">
+            <select
+              value={value}
+              onChange={(e) => handleChange(e, parseInt(e.target.value))}
+              className="dropdown"
+              aria-label="Select Portfolio Section"
+            >
+              <option value={0}>Projects</option>
+              <option value={1}>Certificates</option>
+              <option value={2}>Tech Stack</option>
+            </select>
+          </div>
 
           {/* Projects Tab */}
           <TabPanel value={value} index={0} dir={theme.direction}>
-            <div className="flex justify-center gap-3 mb-6">
+            <div className="flex justify-center gap-3 mb-6 flex-col md:flex-row items-center">
               {value === 0 && (
                 <>
-                  <AppBar
-                    position="static"
-                    elevation={0}
-                    sx={{ bgcolor: "transparent", width: "fit-content" }}
-                  >
-                    <Tabs
+                  {/* Desktop Sub-Tabs */}
+                  <div className="tabs-container">
+                    <AppBar
+                      position="static"
+                      elevation={0}
+                      sx={{ bgcolor: "transparent", width: "fit-content" }}
+                    >
+                      <Tabs
+                        value={projectCategoryValue}
+                        onChange={handleProjectCategoryChange}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        allowScrollButtonsMobile
+                        className={`sub-tabs ${showAllProjects ? "sub-tabs-disabled" : ""}`}
+                        sx={{
+                          "& .MuiTabs-indicator": {
+                            backgroundColor: "#F97316",
+                            height: 2,
+                          },
+                        }}
+                      >
+                        {projectCategories.map((category, index) => (
+                          <Tab
+                            key={index}
+                            label={category}
+                            className="tab-transition text-gray-600 font-medium text-xs sm:text-sm capitalize"
+                            sx={{
+                              "&.Mui-selected": { color: "#F97316" },
+                              padding: { xs: "6px 8px", sm: "8px 12px" },
+                            }}
+                            {...a11yProps(index)}
+                            disabled={showAllProjects}
+                          />
+                        ))}
+                      </Tabs>
+                    </AppBar>
+                  </div>
+
+                  {/* Mobile Sub-Dropdown */}
+                  <div className="dropdown-container w-full md:w-auto">
+                    <select
                       value={projectCategoryValue}
-                      onChange={handleProjectCategoryChange}
-                      variant="scrollable"
-                      scrollButtons="auto"
-                      allowScrollButtonsMobile
-                      className={`sub-tabs ${showAllProjects ? "sub-tabs-disabled" : ""}`}
-                      sx={{
-                        "& .MuiTabs-indicator": {
-                          backgroundColor: "#F97316",
-                          height: 2,
-                        },
-                      }}
+                      onChange={(e) =>
+                        handleProjectCategoryChange(e, parseInt(e.target.value))
+                      }
+                      className="dropdown"
+                      disabled={showAllProjects}
+                      aria-label="Select Project Category"
                     >
                       {projectCategories.map((category, index) => (
-                        <Tab
-                          key={index}
-                          label={category}
-                          className="tab-transition text-gray-600 font-medium text-xs sm:text-sm capitalize"
-                          sx={{
-                            "&.Mui-selected": { color: "#F97316" },
-                            padding: { xs: "6px 8px", sm: "8px 12px" },
-                          }}
-                          {...a11yProps(index)}
-                          disabled={showAllProjects}
-                        />
+                        <option key={index} value={index}>
+                          {category}
+                        </option>
                       ))}
-                    </Tabs>
-                  </AppBar>
+                    </select>
+                  </div>
+
                   <button
                     onClick={() => setShowAllProjects(!showAllProjects)}
                     className="show-all-btn"
@@ -315,7 +387,7 @@ export default function FullWidthTabs() {
                 </>
               )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filteredProjects.map((project, i) => (
                 <div key={project.id} data-aos="fade-up" data-aos-delay={i * 100}>
                   <CardProject
@@ -343,7 +415,7 @@ export default function FullWidthTabs() {
                 </button>
               )}
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {(showAllCertificates
                 ? certificates
                 : certificates.slice(0, DEFAULT_DISPLAY_COUNT)
@@ -363,43 +435,66 @@ export default function FullWidthTabs() {
 
           {/* Tech Stack Tab */}
           <TabPanel value={value} index={2} dir={theme.direction}>
-            <div className="flex justify-center gap-3 mb-6">
+            <div className="flex justify-center gap-3 mb-6 flex-col md:flex-row items-center">
               {value === 2 && (
                 <>
-                  <AppBar
-                    position="static"
-                    elevation={0}
-                    sx={{ bgcolor: "transparent", width: "fit-content" }}
-                  >
-                    <Tabs
-                      value={techStackValue}
-                      onChange={handleTechStackChange}
-                      variant="scrollable"
-                      scrollButtons="auto"
-                      allowScrollButtonsMobile
-                      className={`sub-tabs ${showAllTechStacks ? "sub-tabs-disabled" : ""}`}
-                      sx={{
-                        "& .MuiTabs-indicator": {
-                          backgroundColor: "#F97316",
-                          height: 2,
-                        },
-                      }}
+                  {/* Desktop Sub-Tabs */}
+                  <div className="tabs-container">
+                    <AppBar
+                      position="static"
+                      elevation={0}
+                      sx={{ bgcolor: "transparent", width: "fit-content" }}
                     >
-                      {["Code", "Programs", "Tools", "Software"].map((category, index) => (
-                        <Tab
-                          key={index}
-                          label={category}
-                          className="tab-transition text-gray-600 font-medium text-xs sm:text-sm capitalize"
-                          sx={{
-                            "&.Mui-selected": { color: "#F97316" },
-                            padding: { xs: "6px 8px", sm: "8px 12px" },
-                          }}
-                          {...a11yProps(index)}
-                          disabled={showAllTechStacks}
-                        />
+                      <Tabs
+                        value={techStackValue}
+                        onChange={handleTechStackChange}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        allowScrollButtonsMobile
+                        className={`sub-tabs ${showAllTechStacks ? "sub-tabs-disabled" : ""}`}
+                        sx={{
+                          "& .MuiTabs-indicator": {
+                            backgroundColor: "#F97316",
+                            height: 2,
+                          },
+                        }}
+                      >
+                        {techStackCategories.map((category, index) => (
+                          <Tab
+                            key={index}
+                            label={category}
+                            className="tab-transition text-gray-600 font-medium text-xs sm:text-sm capitalize"
+                            sx={{
+                              "&.Mui-selected": { color: "#F97316" },
+                              padding: { xs: "6px 8px", sm: "8px 12px" },
+                            }}
+                            {...a11yProps(index)}
+                            disabled={showAllTechStacks}
+                          />
+                        ))}
+                      </Tabs>
+                    </AppBar>
+                  </div>
+
+                  {/* Mobile Sub-Dropdown */}
+                  <div className="dropdown-container w-full md:w-auto">
+                    <select
+                      value={techStackValue}
+                      onChange={(e) =>
+                        handleTechStackChange(e, parseInt(e.target.value))
+                      }
+                      className="dropdown"
+                      disabled={showAllTechStacks}
+                      aria-label="Select Tech Stack Category"
+                    >
+                      {techStackCategories.map((category, index) => (
+                        <option key={index} value={index}>
+                          {category}
+                        </option>
                       ))}
-                    </Tabs>
-                  </AppBar>
+                    </select>
+                  </div>
+
                   <button
                     onClick={() => setShowAllTechStacks(!showAllTechStacks)}
                     className="show-all-btn"
@@ -410,7 +505,7 @@ export default function FullWidthTabs() {
                 </>
               )}
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {(showAllTechStacks
                 ? Object.values(techStacks).flat()
                 : techStacks[Object.keys(techStacks)[techStackValue]]

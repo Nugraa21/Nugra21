@@ -236,29 +236,29 @@ const Dashboard = () => {
           .card-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
           }
           .card {
             background-color: ${settings.theme === "dark" ? "#2a2a2a" : "#fff"};
-            border-radius: 8px;
-            padding: 16px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-radius: 6px;
+            padding: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             border: 1px solid ${settings.theme === "dark" ? "#444" : "#ddd"};
           }
           .card-header {
             font-weight: bold;
-            font-size: 1rem;
-            margin-bottom: 8px;
+            font-size: 0.95rem;
+            margin-bottom: 6px;
             color: ${settings.theme === "dark" ? "#fff" : "#333"};
           }
           .card-content {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: ${settings.theme === "dark" ? "#ccc" : "#555"};
           }
           .card-actions {
             display: flex;
-            gap: 8px;
-            margin-top: 12px;
+            gap: 6px;
+            margin-top: 10px;
           }
           @media (min-width: 769px) {
             .card-container {
@@ -275,7 +275,7 @@ const Dashboard = () => {
             }
             .action-buttons {
               flex-direction: column;
-              gap: 8px;
+              gap: 6px;
             }
             .navbar {
               flex-direction: column;
@@ -289,33 +289,18 @@ const Dashboard = () => {
             }
             .modal-content {
               width: 90%;
-              padding: 16px;
+              padding: 14px;
+            }
+            .settings-container, .info-container {
+              padding: 14px;
             }
           }
           @media (max-width: 576px) {
             .card {
-              padding: 12px;
-            }
-            .card-header {
-              font-size: 0.9rem;
-            }
-            .card-content {
-              font-size: 0.85rem;
-            }
-            .modal-content {
-              padding: 12px;
-            }
-            .form-input, .form-textarea {
-              font-size: 0.85rem;
-              padding: 8px;
-            }
-          }
-          @media (max-width: 360px) {
-            .card {
               padding: 10px;
             }
             .card-header {
-              font-size: 0.85rem;
+              font-size: 0.9rem;
             }
             .card-content {
               font-size: 0.8rem;
@@ -327,20 +312,48 @@ const Dashboard = () => {
               font-size: 0.8rem;
               padding: 6px;
             }
+            .settings-container, .info-container {
+              padding: 10px;
+            }
+            .button-group {
+              flex-direction: column;
+              gap: 6px;
+            }
+          }
+          @media (max-width: 360px) {
+            .card {
+              padding: 8px;
+            }
+            .card-header {
+              font-size: 0.85rem;
+            }
+            .card-content {
+              font-size: 0.75rem;
+            }
+            .modal-content {
+              padding: 8px;
+            }
+            .form-input, .form-textarea {
+              font-size: 0.75rem;
+              padding: 5px;
+            }
+            .settings-container, .info-container {
+              padding: 8px;
+            }
           }
         `}</style>
 
         <header className="navbar" style={styles.navbar}>
           <div style={styles.navbarBrand}>
             <button onClick={handleLogout} style={styles.logoutButton}>
-              <FaSignOutAlt size={14} /> {settings.language === "id" ? "Logout" : "Sign Out"}
+              <FaSignOutAlt size={12} /> {settings.language === "id" ? "Logout" : "Sign Out"}
             </button>
             <h2 style={styles.logo}>Dashboard</h2>
             <button
               onClick={() => setNavbarOpen(!navbarOpen)}
               style={styles.toggleButton}
             >
-              {navbarOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+              {navbarOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
             </button>
           </div>
           <nav className="navbar-nav" style={{ ...styles.nav, display: navbarOpen ? "flex" : "none" }}>
@@ -348,25 +361,25 @@ const Dashboard = () => {
               onClick={() => { setActiveTab("contacts"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "contacts" ? styles.navItemActive : styles.navItem}
             >
-              <FaTable size={14} /> {settings.language === "id" ? "Data Kontak" : "Contacts"}
+              <FaTable size={12} /> {settings.language === "id" ? "Data Kontak" : "Contacts"}
             </button>
             <button
               onClick={() => { setActiveTab("comments"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "comments" ? styles.navItemActive : styles.navItem}
             >
-              <FaComments size={14} /> {settings.language === "id" ? "Komentar" : "Comments"}
+              <FaComments size={12} /> {settings.language === "id" ? "Komentar" : "Comments"}
             </button>
             <button
               onClick={() => { setActiveTab("settings"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "settings" ? styles.navItemActive : styles.navItem}
             >
-              <FaCog size={14} /> {settings.language === "id" ? "Pengaturan" : "Settings"}
+              <FaCog size={12} /> {settings.language === "id" ? "Pengaturan" : "Settings"}
             </button>
             <button
               onClick={() => { setActiveTab("info"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "info" ? styles.navItemActive : styles.navItem}
             >
-              <FaInfoCircle size={14} /> {settings.language === "id" ? "Informasi" : "Info"}
+              <FaInfoCircle size={12} /> {settings.language === "id" ? "Informasi" : "Info"}
             </button>
           </nav>
         </header>
@@ -398,11 +411,11 @@ const Dashboard = () => {
                     onClick={() => openCommentForm()}
                     style={styles.addButton}
                   >
-                    <FaPlus size={14} /> {settings.language === "id" ? "Tambah Komentar" : "Add Comment"}
+                    <FaPlus size={12} /> {settings.language === "id" ? "Tambah Komentar" : "Add Comment"}
                   </button>
                 )}
                 <button onClick={exportData} style={styles.submitButton}>
-                  <FaFileExport size={14} /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
+                  <FaFileExport size={12} /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
                 </button>
               </div>
             )}
@@ -445,7 +458,7 @@ const Dashboard = () => {
                               title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
                               disabled={!contact.id}
                             >
-                              <FaTrash size={12} />
+                              <FaTrash size={10} />
                             </button>
                           </td>
                         </tr>
@@ -469,7 +482,7 @@ const Dashboard = () => {
                           title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
                           disabled={!contact.id}
                         >
-                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                          <FaTrash size={10} /> {settings.language === "id" ? "Hapus" : "Delete"}
                         </button>
                       </div>
                     </div>
@@ -509,7 +522,7 @@ const Dashboard = () => {
                               style={styles.editButton}
                               title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
                             >
-                              <FaEdit size={12} />
+                              <FaEdit size={10} />
                             </button>
                             <button
                               onClick={() => handleDelete(comment.id)}
@@ -517,7 +530,7 @@ const Dashboard = () => {
                               title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
                               disabled={!comment.id}
                             >
-                              <FaTrash size={12} />
+                              <FaTrash size={10} />
                             </button>
                           </td>
                         </tr>
@@ -539,7 +552,7 @@ const Dashboard = () => {
                           style={styles.editButton}
                           title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
                         >
-                          <FaEdit size={12} /> {settings.language === "id" ? "Edit" : "Edit"}
+                          <FaEdit size={10} /> {settings.language === "id" ? "Edit" : "Edit"}
                         </button>
                         <button
                           onClick={() => handleDelete(comment.id)}
@@ -547,7 +560,7 @@ const Dashboard = () => {
                           title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
                           disabled={!comment.id}
                         >
-                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                          <FaTrash size={10} /> {settings.language === "id" ? "Hapus" : "Delete"}
                         </button>
                       </div>
                     </div>
@@ -556,11 +569,11 @@ const Dashboard = () => {
               </>
             )
           ) : activeTab === "settings" ? (
-            <div style={styles.settingsContainer}>
+            <div className="settings-container" style={styles.settingsContainer}>
               <h3 style={styles.settingsTitle}>{settings.language === "id" ? "Pengaturan Dashboard" : "Dashboard Settings"}</h3>
               <div style={styles.formGroup}>
                 <label style={styles.formLabel}>{settings.language === "id" ? "Tema:" : "Theme:"}</label>
-                <div style={styles.buttonGroup}>
+                <div className="button-group" style={styles.buttonGroup}>
                   <button
                     onClick={() => handleThemeChange("light")}
                     style={settings.theme === "light" ? styles.submitButton : styles.cancelButton}
@@ -577,7 +590,7 @@ const Dashboard = () => {
               </div>
               <div style={styles.formGroup}>
                 <label style={styles.formLabel}>{settings.language === "id" ? "Bahasa:" : "Language:"}</label>
-                <div style={styles.buttonGroup}>
+                <div className="button-group" style={styles.buttonGroup}>
                   <button
                     onClick={() => handleLanguageChange("id")}
                     style={settings.language === "id" ? styles.submitButton : styles.cancelButton}
@@ -594,7 +607,7 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <div style={styles.infoContainer}>
+            <div className="info-container" style={styles.infoContainer}>
               <h3 style={styles.settingsTitle}>{settings.language === "id" ? "Tentang Dashboard" : "About Dashboard"}</h3>
               <p style={styles.infoText}>
                 {settings.language === "id" ? 
@@ -682,11 +695,11 @@ const styles = {
   navbar: {
     backgroundColor: "#ff6600",
     color: "#fff",
-    padding: "8px 16px",
+    padding: "6px 12px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     position: "sticky",
     top: 0,
     zIndex: 1000,
@@ -694,51 +707,51 @@ const styles = {
   navbarBrand: {
     display: "flex",
     alignItems: "center",
-    gap: "8px",
+    gap: "6px",
   },
   logo: {
     margin: 0,
     fontWeight: "bold",
-    fontSize: "1.5rem",
+    fontSize: "1.4rem",
   },
   toggleButton: {
     backgroundColor: "transparent",
     border: "none",
     color: "#fff",
-    padding: "6px",
+    padding: "4px",
     cursor: "pointer",
-    fontSize: "1.2rem",
+    fontSize: "1.1rem",
     display: "block",
   },
   nav: {
     display: "flex",
-    gap: "6px",
+    gap: "4px",
     flexWrap: "wrap",
   },
   navItem: {
     backgroundColor: "transparent",
     border: "none",
     color: "#fff",
-    padding: "8px 12px",
-    fontSize: "0.9rem",
+    padding: "6px 10px",
+    fontSize: "0.85rem",
     cursor: "pointer",
-    borderRadius: "4px",
+    borderRadius: "3px",
     display: "flex",
     alignItems: "center",
-    gap: "6px",
+    gap: "4px",
     transition: "background-color 0.2s, transform 0.2s",
   },
   navItemActive: {
     backgroundColor: "#e65c00",
     border: "none",
     color: "#fff",
-    padding: "8px 12px",
-    fontSize: "0.9rem",
+    padding: "6px 10px",
+    fontSize: "0.85rem",
     cursor: "pointer",
-    borderRadius: "4px",
+    borderRadius: "3px",
     display: "flex",
     alignItems: "center",
-    gap: "6px",
+    gap: "4px",
     fontWeight: "bold",
     transition: "background-color 0.2s, transform 0.2s",
   },
@@ -746,73 +759,73 @@ const styles = {
     backgroundColor: "#cc3300",
     border: "none",
     color: "#fff",
-    padding: "8px 12px",
+    padding: "6px 10px",
     cursor: "pointer",
-    borderRadius: "4px",
+    borderRadius: "3px",
     display: "flex",
     alignItems: "center",
-    gap: "6px",
-    fontSize: "0.9rem",
+    gap: "4px",
+    fontSize: "0.85rem",
     transition: "background-color 0.2s, transform 0.2s",
   },
   mainContent: {
     flexGrow: 1,
-    padding: "24px",
+    padding: "20px",
   },
   headerRow: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: "16px",
+    marginBottom: "14px",
     flexWrap: "wrap",
-    gap: "8px",
+    gap: "6px",
   },
   title: {
     margin: 0,
-    fontSize: "1.8rem",
+    fontSize: "1.6rem",
     fontWeight: "bold",
   },
   actionButtons: {
     display: "flex",
-    gap: "8px",
+    gap: "6px",
     flexWrap: "wrap",
   },
   searchInput: {
-    padding: "8px 12px",
-    fontSize: "0.9rem",
-    borderRadius: "4px",
+    padding: "6px 10px",
+    fontSize: "0.85rem",
+    borderRadius: "3px",
     border: "1px solid #bbb",
     backgroundColor: "#fff",
-    width: "200px",
+    width: "180px",
   },
   addButton: {
     backgroundColor: "#ff6600",
     border: "none",
     color: "#fff",
-    padding: "8px 12px",
-    borderRadius: "4px",
+    padding: "6px 10px",
+    borderRadius: "3px",
     cursor: "pointer",
-    fontSize: "0.9rem",
+    fontSize: "0.85rem",
     display: "flex",
     alignItems: "center",
-    gap: "6px",
+    gap: "4px",
     transition: "background-color 0.2s, transform 0.2s",
   },
   submitButton: {
     backgroundColor: "#ff6600",
     border: "none",
     color: "#fff",
-    padding: "8px 12px",
-    borderRadius: "4px",
+    padding: "6px 10px",
+    borderRadius: "3px",
     cursor: "pointer",
-    fontSize: "0.9rem",
+    fontSize: "0.85rem",
     display: "flex",
     alignItems: "center",
-    gap: "6px",
+    gap: "4px",
     transition: "background-color 0.2s, transform 0.2s",
   },
   statusText: {
-    fontSize: "1rem",
+    fontSize: "0.95rem",
     fontStyle: "italic",
     color: "#666",
   },
@@ -820,23 +833,23 @@ const styles = {
     width: "100%",
     borderCollapse: "collapse",
     backgroundColor: "#fff",
-    borderRadius: "6px",
+    borderRadius: "5px",
     overflow: "hidden",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
   },
   th: {
     borderBottom: "2px solid #ff6600",
-    padding: "10px 12px",
+    padding: "8px 10px",
     textAlign: "left",
     backgroundColor: "#ffe6cc",
     fontWeight: "bold",
-    fontSize: "0.9rem",
+    fontSize: "0.85rem",
   },
   td: {
-    padding: "10px 12px",
+    padding: "8px 10px",
     verticalAlign: "top",
     borderBottom: "1px solid #ddd",
-    fontSize: "0.85rem",
+    fontSize: "0.8rem",
   },
   trEven: {
     backgroundColor: "#fff",
@@ -848,20 +861,20 @@ const styles = {
     backgroundColor: "#cc3300",
     border: "none",
     color: "#fff",
-    padding: "6px 10px",
-    borderRadius: "4px",
+    padding: "5px 8px",
+    borderRadius: "3px",
     cursor: "pointer",
-    fontSize: "0.8rem",
+    fontSize: "0.75rem",
     transition: "background-color 0.2s, transform 0.2s",
   },
   editButton: {
     backgroundColor: "#555",
     border: "none",
     color: "#fff",
-    padding: "6px 10px",
-    borderRadius: "4px",
+    padding: "5px 8px",
+    borderRadius: "3px",
     cursor: "pointer",
-    fontSize: "0.8rem",
+    fontSize: "0.75rem",
     transition: "background-color 0.2s, transform 0.2s",
   },
   modalOverlay: {
@@ -878,90 +891,90 @@ const styles = {
   },
   modalContent: {
     backgroundColor: "#fff",
-    borderRadius: "8px",
-    padding: "20px",
+    borderRadius: "6px",
+    padding: "16px",
     width: "100%",
-    maxWidth: "450px",
-    boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
+    maxWidth: "400px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
   },
   modalTitle: {
-    fontSize: "1.2rem",
-    marginBottom: "12px",
+    fontSize: "1.1rem",
+    marginBottom: "10px",
   },
   formGroup: {
-    marginBottom: "12px",
+    marginBottom: "10px",
     display: "flex",
     flexDirection: "column",
-    gap: "6px",
+    gap: "5px",
   },
   formLabel: {
     fontWeight: "bold",
-    fontSize: "0.9rem",
+    fontSize: "0.85rem",
   },
   formInput: {
-    padding: "10px",
-    fontSize: "0.9rem",
-    borderRadius: "4px",
+    padding: "8px",
+    fontSize: "0.85rem",
+    borderRadius: "3px",
     border: "1px solid #ccc",
     backgroundColor: "#fff",
   },
   formTextarea: {
-    padding: "10px",
-    fontSize: "0.9rem",
-    borderRadius: "4px",
+    padding: "8px",
+    fontSize: "0.85rem",
+    borderRadius: "3px",
     border: "1px solid #ccc",
     resize: "vertical",
     backgroundColor: "#fff",
-    minHeight: "80px",
+    minHeight: "70px",
   },
   modalActions: {
-    marginTop: "12px",
+    marginTop: "10px",
     textAlign: "right",
     display: "flex",
-    gap: "8px",
+    gap: "6px",
     justifyContent: "flex-end",
   },
   cancelButton: {
     backgroundColor: "#ccc",
     color: "#333",
     border: "none",
-    padding: "8px 16px",
-    borderRadius: "4px",
+    padding: "6px 12px",
+    borderRadius: "3px",
     cursor: "pointer",
-    fontSize: "0.9rem",
+    fontSize: "0.85rem",
     transition: "background-color 0.2s, transform 0.2s",
   },
   settingsContainer: {
     backgroundColor: "#fff",
-    padding: "16px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-    maxWidth: "500px",
+    padding: "12px",
+    borderRadius: "6px",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    maxWidth: "450px",
   },
   settingsTitle: {
-    fontSize: "1.2rem",
-    marginBottom: "12px",
+    fontSize: "1.1rem",
+    marginBottom: "10px",
   },
   infoContainer: {
     backgroundColor: "#fff",
-    padding: "16px",
-    borderRadius: "8px",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-    maxWidth: "500px",
+    padding: "12px",
+    borderRadius: "6px",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    maxWidth: "450px",
   },
   infoText: {
-    marginBottom: "8px",
-    fontSize: "0.9rem",
+    marginBottom: "6px",
+    fontSize: "0.85rem",
   },
   infoSubtitle: {
-    fontSize: "1rem",
-    marginBottom: "8px",
+    fontSize: "0.95rem",
+    marginBottom: "6px",
   },
   infoList: {
     listStyleType: "disc",
-    paddingLeft: "16px",
-    marginBottom: "12px",
-    fontSize: "0.9rem",
+    paddingLeft: "14px",
+    marginBottom: "10px",
+    fontSize: "0.85rem",
   },
   supportLink: {
     color: "#ff6600",
@@ -969,15 +982,15 @@ const styles = {
   },
   error: {
     color: "#d32f2f",
-    marginBottom: "12px",
-    padding: "8px",
+    marginBottom: "10px",
+    padding: "6px",
     backgroundColor: "#ffe6e6",
-    borderRadius: "4px",
-    fontSize: "0.9rem",
+    borderRadius: "3px",
+    fontSize: "0.85rem",
   },
   buttonGroup: {
     display: "flex",
-    gap: "8px",
+    gap: "6px",
     flexWrap: "wrap",
   },
 };
