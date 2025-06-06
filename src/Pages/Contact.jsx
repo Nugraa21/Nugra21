@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   AiOutlineUser,
@@ -8,23 +9,28 @@ import {
   AiFillLinkedin,
   AiFillYoutube,
 } from "react-icons/ai";
+import { FaThumbtack } from "react-icons/fa";
 import Swal from "sweetalert2";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Helmet } from "react-helmet";
 import {
   db,
+  storage,
   collection,
   addDoc,
   serverTimestamp,
   onSnapshot,
   query,
   orderBy,
+  ref,
+  uploadBytes,
+  getDownloadURL,
 } from "../firebase";
 
 const ContactFooter = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [commentData, setCommentData] = useState({ name: "", message: "" });
+  const [commentData, setCommentData] = useState({ name: "", message: "", profileImage: null });
   const [comments, setComments] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
@@ -49,7 +55,7 @@ const ContactFooter = () => {
         setComments(commentList);
       },
       (error) => {
-        console.error("Error fetching comments:", error);
+        console.error("Error fetching comments:", error.message);
         Swal.fire({
           title: "Gagal!",
           text: "Gagal memuat komentar: " + error.message,
@@ -85,9 +91,21 @@ const ContactFooter = () => {
   };
 
   const handleCommentChange = (e) => {
-    const { name, value } = e.target;
-    setCommentData((prev) => ({ ...prev, [name]: value }));
-    setFormErrors((prev) => ({ ...prev, [name]: null }));
+    const { name, value, files } = e.target;
+    if (name === "profileImage") {
+      if (files[0]) {
+        if (files[0].size > 2 * 1024 * 1024) { // Turunkan batas ke 2MB
+          setFormErrors((prev) => ({ ...prev, profileImage: "Gambar maksimum 2MB" }));
+          return;
+        }
+        console.log("Gambar dipilih:", files[0].name, files[0].size / 1024, "KB");
+        setCommentData((prev) => ({ ...prev, profileImage: files[0] }));
+        setFormErrors((prev) => ({ ...prev, profileImage: null }));
+      }
+    } else {
+      setCommentData((prev) => ({ ...prev, [name]: value }));
+      setFormErrors((prev) => ({ ...prev, [name]: null }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -122,10 +140,10 @@ const ContactFooter = () => {
 
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      console.error("Error submitting contact:", error);
+      console.error("Error submitting contact:", error.message);
       Swal.fire({
         title: "Gagal!",
-        text: error.message,
+        text: "Gagal mengirim pesan: " + error.message,
         icon: "error",
         confirmButtonColor: "#f97316",
       });
@@ -143,12 +161,33 @@ const ContactFooter = () => {
     }
 
     setIsCommentSubmitting(true);
+    Swal.fire({
+      title: "Mengirim Komentar...",
+      html: "Harap tunggu, sedang mengunggah data...",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     try {
+      let profileImageUrl = null;
+      if (commentData.profileImage) {
+        console.log("Mengunggah gambar:", commentData.profileImage.name, commentData.profileImage.size / 1024, "KB");
+        const imageRef = ref(storage, `profileImages/${Date.now()}_${commentData.profileImage.name}`);
+        const uploadResult = await uploadBytes(imageRef, commentData.profileImage);
+        profileImageUrl = await getDownloadURL(uploadResult.ref);
+        console.log("Gambar berhasil diunggah:", profileImageUrl);
+      }
+
       await addDoc(collection(db, "comments"), {
-        ...commentData,
+        name: commentData.name,
+        message: commentData.message,
+        profileImage: profileImageUrl,
+        isPinned: false,
         createdAt: serverTimestamp(),
       });
 
+      console.log("Komentar berhasil disimpan ke Firestore");
       Swal.fire({
         title: "Berhasil!",
         text: "Komentar kamu sudah terkirim!",
@@ -157,12 +196,16 @@ const ContactFooter = () => {
         timer: 2000,
       });
 
-      setCommentData({ name: "", message: "" });
+      setCommentData({ name: "", message: "", profileImage: null });
+      // Reset input file
+      if (document.querySelector('input[name="profileImage"]')) {
+        document.querySelector('input[name="profileImage"]').value = "";
+      }
     } catch (error) {
-      console.error("Error submitting comment:", error);
+      console.error("Error submitting comment:", error.message);
       Swal.fire({
         title: "Gagal!",
-        text: "Gagal mengirim komentar: " + error.message,
+        text: `Gagal mengirim komentar: ${error.message}`,
         icon: "error",
         confirmButtonColor: "#f97316",
       });
@@ -177,6 +220,9 @@ const ContactFooter = () => {
     { icon: <AiFillLinkedin size={24} />, name: "LinkedIn", href: "https://www.linkedin.com/in/ludang-prasetyo-4773b6361/" },
     { icon: <AiFillYoutube size={24} />, name: "YouTube", href: "https://youtube.com/@nugra21" },
   ];
+
+  const pinnedComment = comments.find((comment) => comment.isPinned);
+  const regularComments = comments.filter((comment) => !comment.isPinned);
 
   return (
     <>
@@ -306,6 +352,31 @@ const ContactFooter = () => {
           .comment-card:hover {
             transform: translateY(-2px);
           }
+          .pinned-comment {
+            border: 2px solid #F97316;
+            background: #FFF7ED;
+            border-radius: 1rem;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+          }
+          .avatar-img {
+            object-fit: cover;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            border: 2px solid #F3E8D6;
+          }
+          .file-input {
+            border: 2px dashed #F97316;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background: #FFF7ED;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          }
+          .file-input:hover {
+            background: #FFE4C4;
+          }
           @media (max-width: 768px) {
             .input-field {
               padding: 0.75rem 1rem;
@@ -326,6 +397,10 @@ const ContactFooter = () => {
             }
             .comment-card {
               max-width: 90%;
+            }
+            .avatar-img {
+              width: 2rem;
+              height: 2rem;
             }
           }
           @media (max-width: 480px) {
@@ -348,6 +423,10 @@ const ContactFooter = () => {
             }
             .comment-card {
               max-width: 95%;
+            }
+            .avatar-img {
+              width: 1.75rem;
+              height: 1.75rem;
             }
           }
         `}</style>
@@ -504,6 +583,19 @@ const ContactFooter = () => {
                 <label className="input-label">Komentar Anda</label>
                 {formErrors.message && <span id="comment-message-error" className="error-text">{formErrors.message}</span>}
               </div>
+              <div className="input-container">
+                <input
+                  type="file"
+                  name="profileImage"
+                  accept="image/*"
+                  onChange={handleCommentChange}
+                  disabled={isCommentSubmitting}
+                  className="file-input w-full text-sm text-gray-600"
+                  aria-describedby="profile-image-error"
+                />
+                <span className="text-xs text-gray-500 mt-1 ml-3">Unggah gambar profil (maks 2MB)</span>
+                {formErrors.profileImage && <span id="profile-image-error" className="error-text">{formErrors.profileImage}</span>}
+              </div>
               <button
                 type="submit"
                 disabled={isCommentSubmitting}
@@ -530,22 +622,50 @@ const ContactFooter = () => {
             data-aos-delay="400"
             className="flex flex-col max-h-[450px] mt-10 lg:mt-0 bg-white/30 backdrop-blur-lg rounded-xl shadow-xl ring-1 ring-orange-200 overflow-hidden"
           >
-            <div className="sticky top-0 z-10 px-5 py-3 bg-orange-50/80 backdrop-blur-sm border-b border-orange-200">
-              <h3 className="text-xl sm:text-2xl font-bold text-orange-600 tracking-tight">Komentar</h3>
+            <div className="sticky top-0 z-10 px-5 py-3 bg-orange-50/80 backdrop-blur-sm border-b border-orange-200 flex items-center justify-between">
+              <h3 className="text-xl sm:text-2xl font-bold text-orange-600 tracking-tight">
+                Komentar ({comments.length} orang)
+              </h3>
             </div>
             <div className="flex flex-col overflow-y-auto px-5 py-4 space-y-4 custom-scroll">
-              {comments.length === 0 ? (
+              {pinnedComment && (
+                <div className="pinned-comment">
+                  <div className="flex justify-start comment-card">
+                    <div className="flex items-start space-x-3 max-w-[85%]">
+                      <img
+                        src={pinnedComment.profileImage || "/fallback-avatar.png"}
+                        alt={pinnedComment.name || "Anonim"}
+                        className="avatar-img"
+                        onError={(e) => (e.target.src = "/fallback-avatar.png")}
+                      />
+                      <div className="px-4 py-3 rounded-2xl shadow-md bg-white text-gray-800 border border-orange-200 rounded-bl-none">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-xs font-semibold opacity-80">{pinnedComment.name || "Anonim"}</p>
+                          <FaThumbtack className="text-orange-600" size={14} />
+                        </div>
+                        <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
+                          {pinnedComment.message || "Tidak ada pesan"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {comments.length === 0 && !pinnedComment ? (
                 <p className="text-gray-500 text-sm sm:text-base italic text-center">
                   Belum ada komentar. Jadilah yang pertama!
                 </p>
               ) : (
-                comments.map(({ id, name, message, isUser }) => (
+                regularComments.map(({ id, name, message, profileImage, isUser }) => (
                   <div key={id} className={`flex ${isUser ? "justify-end" : "justify-start"} comment-card`}>
                     <div className="flex items-start space-x-3 max-w-[85%]">
                       {!isUser && (
-                        <div className="w-10 h-10 bg-orange-100 text-orange-600 flex items-center justify-center rounded-full shadow-md text-base font-bold">
-                          {name?.[0]?.toUpperCase() || "A"}
-                        </div>
+                        <img
+                          src={profileImage || "/fallback-avatar.png"}
+                          alt={name || "Anonim"}
+                          className="avatar-img"
+                          onError={(e) => (e.target.src = "/fallback-avatar.png")}
+                        />
                       )}
                       <div
                         className={`px-4 py-3 rounded-2xl shadow-md ${
@@ -562,9 +682,12 @@ const ContactFooter = () => {
                         </p>
                       </div>
                       {isUser && (
-                        <div className="w-10 h-10 bg-orange-100 text-orange-600 flex items-center justify-center rounded-full shadow-md text-base font-bold">
-                          {name?.[0]?.toUpperCase() || "S"}
-                        </div>
+                        <img
+                          src={profileImage || "/fallback-avatar.png"}
+                          alt={name || "Saya"}
+                          className="avatar-img"
+                          onError={(e) => (e.target.src = "/fallback-avatar.png")}
+                        />
                       )}
                     </div>
                   </div>
