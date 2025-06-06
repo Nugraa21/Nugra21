@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate:sitemap": "node scripts/generate-sitemap.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.27.1",
@@ -45,6 +46,7 @@
     "react-intersection-observer": "^9.13.1",
     "react-router-dom": "^6.30.1",
     "shadcn-ui": "^0.2.3",
+    "sitemap": "^8.0.0",
     "spline": "^0.0.0",
     "styled-components": "^6.1.13",
     "sweetalert2": "^11.6.13",
