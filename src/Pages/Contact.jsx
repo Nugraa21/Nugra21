@@ -216,7 +216,7 @@ const ContactFooter = () => {
         profileEmoji: commentData.profileEmoji,
         isPinned: false,
         createdAt: serverTimestamp(),
-  });
+      });
 
       Swal.fire({
         title: "Berhasil!",
@@ -240,28 +240,42 @@ const ContactFooter = () => {
     }
   };
 
-  const handlePinComment = async (commentId) => {
+  const handlePinComment = async (commentId, isPinned) => {
     try {
-      // Unpin komentar lain
-      const pinnedComment = comments.find((comment) => comment.isPinned);
-      if (pinnedComment) {
-        await updateDoc(doc(db, "comments", pinnedComment.id), {
+      if (isPinned) {
+        // Unpin komentar
+        await updateDoc(doc(db, "comments", commentId), {
           isPinned: false,
         });
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Komentar telah dilepas dari pin!",
+          icon: "success",
+          confirmButtonColor: "#f97316",
+          timer: 1500,
+        });
+      } else {
+        // Unpin komentar lain
+        const pinnedComment = comments.find((comment) => comment.isPinned);
+        if (pinnedComment) {
+          await updateDoc(doc(db, "comments", pinnedComment.id), {
+            isPinned: false,
+          });
+        }
+
+        // Pin komentar yang dipilih
+        await updateDoc(doc(db, "comments", commentId), {
+          isPinned: true,
+        });
+
+        Swal.fire({
+          title: "Berhasil!",
+          text: "Komentar telah dipin!",
+          icon: "success",
+          confirmButtonColor: "#f97316",
+          timer: 1500,
+        });
       }
-
-      // Pin komentar yang dipilih
-      await updateDoc(doc(db, "comments", commentId), {
-        isPinned: true,
-      });
-
-      Swal.fire({
-        title: "Berhasil!",
-        text: "Komentar telah dipin!",
-        icon: "success",
-        confirmButtonColor: "#f97316",
-        timer: 1500,
-      });
     } catch (error) {
       console.error("Error pinning comment:", error.message);
       Swal.fire({
@@ -282,6 +296,7 @@ const ContactFooter = () => {
 
   const pinnedComment = comments.find((comment) => comment.isPinned);
   const regularComments = comments.filter((comment) => !comment.isPinned);
+  const isAnyPinned = !!pinnedComment;
 
   return (
     <>
@@ -404,11 +419,17 @@ const ContactFooter = () => {
             border: 4px solid transparent;
             border-top-color: #F97316;
           }
-          .comment-card {
+          .comment-section {
+            max-height: 450px;
+            overflow-y: auto;
+            position: relative;
+          }
+          .comment-card-container {
             transition: all 0.3s ease;
             max-width: 85%;
+            overflow: hidden;
           }
-          .comment-card:hover {
+          .comment-card-container:hover {
             transform: translateY(-2px);
           }
           .pinned-comment {
@@ -450,14 +471,55 @@ const ContactFooter = () => {
             font-size: 0.75rem;
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
           }
           .pin-button:hover {
             background: #E65A00;
+          }
+          .pin-button:disabled {
+            background: #D1D5DB;
+            cursor: not-allowed;
+            opacity: 0.6;
+          }
+          .pin-button:hover .pin-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+          }
+          .pin-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translate(-50%, 8px);
+            background: #F97316;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.65rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.3s ease;
+            margin-bottom: 8px;
+          }
+          .pin-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid transparent;
+            border-top-color: #F97316;
           }
           .timestamp {
             font-size: 0.65rem;
             color: #6B7280;
             margin-top: 0.25rem;
+          }
+          .comment-content {
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            max-width: 100%;
+            overflow: hidden;
           }
           @media (max-width: 768px) {
             .input-field {
@@ -477,7 +539,10 @@ const ContactFooter = () => {
             .social-icon {
               padding: 0.5rem;
             }
-            .comment-card {
+            .comment-section {
+              max-height: 400px;
+            }
+            .comment-card-container {
               max-width: 90%;
             }
             .emoji-avatar {
@@ -491,6 +556,22 @@ const ContactFooter = () => {
             }
             .timestamp {
               font-size: 0.6rem;
+            }
+            .comment-content {
+              font-size: 0.9rem;
+            }
+            .emoji-select {
+              font-size: 0.9rem;
+              padding: 0.4rem;
+            }
+            .input-field {
+              padding: 0.75rem 1rem;
+            }
+            .error-text {
+              font-size: 0.7rem;
+            }
+            .tooltip, .pin-tooltip {
+              font-size: 0.7rem;
             }
           }
           @media (max-width: 480px) {
@@ -511,7 +592,10 @@ const ContactFooter = () => {
             .social-icon {
               padding: 0.4rem;
             }
-            .comment-card {
+            .comment-section {
+              max-height: 350px;
+            }
+            .comment-card-container {
               max-width: 95%;
             }
             .emoji-avatar {
@@ -525,6 +609,22 @@ const ContactFooter = () => {
             }
             .timestamp {
               font-size: 0.55rem;
+            }
+            .comment-content {
+              font-size: 0.85rem;
+            }
+            .emoji-select {
+              font-size: 0.85rem;
+              padding: 0.35rem;
+            }
+            .input-field {
+              padding: 0.6rem 0.8rem;
+            }
+            .error-text {
+              font-size: 0.65rem;
+            }
+            .tooltip, .pin-tooltip {
+              font-size: 0.65rem;
             }
           }
         `}</style>
@@ -701,13 +801,13 @@ const ContactFooter = () => {
               <button
                 type="submit"
                 disabled={isCommentSubmitting}
-                className="w-full py-3.5 rounded-lg bg-orange-500 text-white font-semibold text-base tracking-wide shadow-lg hover:bg-orange-600 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300/50 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
+                className="w-full py-2.5 rounded-lg text-white bg-orange-600 hover:bg-orange-700 font-semibold text-sm sm:text-base tracking-wide shadow-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300/50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isCommentSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
                     <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
                     Mengirim...
                   </span>
@@ -721,33 +821,44 @@ const ContactFooter = () => {
           {/* COMMENTS SECTION */}
           <div
             data-aos="fade-up"
-            data-aos-delay="400"
-            className="flex flex-col max-h-[450px] mt-10 lg:mt-0 bg-white/30 backdrop-blur-lg rounded-xl shadow-xl ring-1 ring-orange-200 overflow-hidden"
+            data-aos-delay="200"
+            className="comment-section flex flex-col mt-12 lg:mt-4 bg-white/80 rounded-xl shadow-xl ring-1 ring-gray-200"
           >
-            <div className="sticky top-0 z-10 px-5 py-3 bg-orange-50/80 backdrop-blur-sm border-b border-orange-200 flex items-center justify-between">
-              <h3 className="text-xl sm:text-2xl font-bold text-orange-600 tracking-tight">
-                Komentar ({comments.length} orang)
+            <div className="sticky top-0 z-10 px-4 py-2 bg-orange-50 border-b border-gray-200 flex items-center justify-between">
+              <h3 className="text-lg sm:text-xl font-bold text-orange-600 tracking-tight">
+                Komentar ({comments.length})
               </h3>
             </div>
-            <div className="flex flex-col overflow-y-auto px-5 py-4 space-y-4 custom-scroll">
+            <div className="flex flex-col px-4 py-2 space-y-4 custom-scroll">
               {pinnedComment && (
                 <div className="pinned-comment">
-                  <div className="flex justify-start comment-card">
-                    <div className="flex items-start space-x-3 max-w-[85%]">
+                  <div className="flex justify-start comment-card-container">
+                    <div className="flex items-start space-x-2 max-w-sm sm:max-w-md">
                       <span className="emoji-avatar">{pinnedComment.profileEmoji || "😊"}</span>
-                      <div className="px-4 py-3 rounded-2xl shadow-md bg-white text-gray-800 border border-orange-200 rounded-bl-none">
+                      <div className="px-3 py-2 rounded-lg shadow-md bg-white text-gray-700 border border-orange-500 rounded-tl-none">
                         <div className="flex items-center gap-2 mb-1">
-                          <p className="text-xs font-semibold opacity-80">{pinnedComment.name || "Anonim"}</p>
-                          <FaThumbtack className="text-orange-600" size={14} />
+                          <span className="text-xs font-semibold opacity-60">{pinnedComment.name || "Anon"}</span>
+                          <FaThumbtack className="text-orange-500" size={12} />
+                          <button
+                            type="button"
+                            onClick={() => handlePinComment(pinnedComment.id, true)}
+                            className="px-2 py-0.5 bg-gray-200 text-gray-700 rounded text-xs hover:bg-gray-300"
+                            aria-label="Unpin Comment"
+                          >
+                            Unpin
+                          </button>
                         </div>
-                        <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
-                          {pinnedComment.message || "Tidak ada pesan"}
+                        <p className="text-xs sm:text-sm leading-normal comment-content">
+                          {pinnedComment.message || "No message"}
                         </p>
                         <p className="timestamp">
-                          {pinnedComment.createdAt?.toDate().toLocaleString("id-ID", {
-                            dateStyle: "short",
-                            timeStyle: "short",
-                          }) || "Waktu tidak tersedia"}
+                          {pinnedComment.createdAt?.toLocaleString("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }) || "Unknown"}
                         </p>
                       </div>
                     </div>
@@ -755,50 +866,69 @@ const ContactFooter = () => {
                 </div>
               )}
               {comments.length === 0 && !pinnedComment ? (
-                <p className="text-gray-500 text-sm sm:text-base italic text-center">
-                  Belum ada komentar. Jadilah yang pertama!
+                <p className="text-sm text-center text-gray-500 italic py-4">
+                  No comments yet. Be the first!
                 </p>
               ) : (
-                regularComments.map(({ id, name, message, profileEmoji, isUser }, index) => (
-                  <div key={id} className={`flex ${isUser ? "justify-end" : "justify-start"} comment-card`}>
-                    <div className="flex items-start space-x-3 max-w-[85%]">
-                      {!isUser && (
-                        <span className="emoji-avatar">{profileEmoji || "😊"}</span>
+                regularComments.map((comment, index) => (
+                  <div
+                    key={comment.id}
+                    className={`flex ${
+                      comment.isUser ? "justify-end" : "justify-start"
+                    } comment-card-container`}
+                  >
+                    <div className="flex items-start space-x-2 max-w-sm sm:max-w-md">
+                      {!comment.isUser && (
+                        <span className="emoji-avatar">{comment.profileEmoji || "😊"}</span>
                       )}
                       <div
-                        className={`px-4 py-3 rounded-2xl shadow-md ${
-                          isUser
-                            ? "bg-orange-500 text-white rounded-br-none"
-                            : `text-gray-800 border border-orange-200 rounded-bl-none`
+                        className={`px-3 py-2 rounded-lg shadow-sm ${
+                          comment.isUser
+                            ? "bg-orange-100 text-gray-800 border-orange-300 rounded-tr-none"
+                            : `text-gray-700 border-gray-200 rounded-tl-none`
                         }`}
-                        style={{ backgroundColor: isUser ? undefined : commentColors[index % commentColors.length] }}
+                        style={{
+                          backgroundColor: comment.isUser
+                            ? undefined
+                            : commentColors[index % commentColors.length],
+                          border: "1px solid",
+                        }}
                       >
                         <div className="flex items-center gap-2 mb-1">
-                          <p className="text-xs font-semibold opacity-80">
-                            {name || (isUser ? "Saya" : "Anonim")}
-                          </p>
-                          {!isUser && (
+                          <span className="text-xs font-semibold opacity-60">
+                            {comment.name || (comment.isUser ? "You" : "Anon") }}
+                          </span>
+                          {!comment.isUser && (
                             <button
-                              onClick={() => handlePinComment(id)}
-                              className="pin-button"
-                              aria-label="Pin Komentar"
+                              type="button"
+                              onClick={() => handlePinComment(comment.id, false) }
+                              disabled={isAnyPinned}
+                              className={`px-2 py-0.5 text-xs rounded ${
+                                isAnyPinned
+                                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                                  : "bg-orange-200 text-orange-700 hover:bg-orange-300"
+                              }`}
+                              aria-label="Pin Comment"
                             >
                               Pin
                             </button>
                           )}
                         </div>
-                        <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
-                          {message || "Tidak ada pesan"}
+                        <p className="text-xs sm:text-sm leading-normal comment-content">
+                          {comment.message || "No message"}
                         </p>
                         <p className="timestamp">
-                          {comments.find((c) => c.id === id)?.createdAt?.toDate().toLocaleString("id-ID", {
-                            dateStyle: "short",
-                            timeStyle: "short",
-                          }) || "Waktu tidak tersedia"}
+                          {comment.createdAt?.toLocaleString("en-US", {
+                            month: "short",
+                            day: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }) || "Unknown"}
                         </p>
                       </div>
-                      {isUser && (
-                        <span className="emoji-avatar">{profileEmoji || "😊"}</span>
+                      {comment.isUser && (
+                        <span className="emoji-avatar">{comment.profileEmoji || "😊"}</span>
                       )}
                     </div>
                   </div>
