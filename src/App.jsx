@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import "./index.css";
 import Home from "./Pages/Home.jsx";
-import About from "./Pages/About.jsx"; // Assuming this is the AboutPage
+import About from "./Pages/About.jsx";
 import AnimatedBackground from "./components/Background.jsx";
 import Navbar from "./components/Navbar.jsx";
 import Portofolio from "./Pages/Portofolio.jsx"; 
@@ -13,7 +13,7 @@ import LoginPage from "./Pages/Login.jsx";
 import Pengalaman from "./components/Pengalaman.jsx";
 import Dashboard from "./Pages/Dashboard.jsx";
 import { AnimatePresence } from 'framer-motion';
-import NotFound from "./NotFound.jsx"; // Ensure this is .jsx
+import NotFound from "./NotFound.jsx";
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   return (
@@ -57,28 +57,19 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
                 </h3>
                 <ul className="space-y-1 xs:space-y-2">
                   <li>
-                    <a
-                      href="/"
-                      className="hover:text-orange-500 transition-colors truncate block"
-                    >
+                    <Link to="/" className="hover:text-orange-500 transition-colors truncate block">
                       | Node.js
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="/about"
-                      className="hover:text-orange-500 transition-colors truncate block"
-                    >
+                    <Link to="/about" className="hover:text-orange-500 transition-colors truncate block">
                       | IoT dengan MQTT
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="/contact"
-                      className="hover:text-orange-500 transition-colors truncate block"
-                    >
+                    <Link to="/contact" className="hover:text-orange-500 transition-colors truncate block">
                       | Python (ML / Enkripsi)
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </div>
@@ -204,12 +195,10 @@ function App() {
       <CustomCursor />
       <BrowserRouter>
         <Routes>
-          {/* Landing Page with all sections */}
           <Route
             path="/"
             element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />}
           />
-          {/* Individual page routes */}
           <Route path="/about" element={<About />} />
           <Route path="/portfolio" element={<Portofolio />} />
           <Route path="/contact" element={<ContactPage />} />
@@ -217,7 +206,6 @@ function App() {
           <Route path="/project/:id" element={<ProjectPageLayout />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          {/* Catch-all route for 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
