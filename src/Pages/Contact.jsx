@@ -21,8 +21,9 @@ import {
   onSnapshot,
   query,
   orderBy,
-  updateDoc,
   doc,
+  updateDoc,
+  update,
 } from "../firebase";
 
 const ContactFooter = () => {
@@ -91,7 +92,7 @@ const ContactFooter = () => {
   useEffect(() => {
     AOS.init({
       once: false,
-      duration: 1000,
+      duration: 800,
       easing: "ease-out-cubic",
       mirror: true,
     });
@@ -313,34 +314,37 @@ const ContactFooter = () => {
 
       <footer
         id="contact"
-        className="bg-gradient-to-b from-orange-50 to-white mt-16 sm:mt-20 px-4 sm:px-6 md:px-8 lg:px-12 py-12 sm:py-16 rounded-t-[2rem] shadow-2xl"
+        className="bg-gradient-to-b from-orange-50 to-white mt-12 sm:mt-16 px-4 sm:px-6 md:px-8 lg:px-12 py-10 sm:py-12 rounded-t-[1.5rem] shadow-2xl"
       >
         <style jsx>{`
+          * {
+            box-sizing: border-box;
+          }
           @keyframes slideIn {
-            0% { transform: translateY(30px); opacity: 0; }
+            0% { transform: translateY(20px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
           }
           @keyframes pulseGlow {
             0% { box-shadow: 0 0 0 rgba(251, 146, 60, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(251, 146, 60, 0.5); }
+            50% { box-shadow: 0 0 15px rgba(251, 146, 60, 0.5); }
             100% { box-shadow: 0 0 0 rgba(251, 146, 60, 0.3); }
           }
           .animate-slide-in {
-            animation: slideIn 0.8s ease-out forwards;
+            animation: slideIn 0.6s ease-out forwards;
           }
           .animate-pulse-glow {
             animation: pulseGlow 2s ease-in-out infinite;
           }
           .custom-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
           }
           .custom-scroll::-webkit-scrollbar-track {
             background: rgba(251, 146, 60, 0.1);
-            border-radius: 10px;
+            border-radius: 8px;
           }
           .custom-scroll::-webkit-scrollbar-thumb {
             background: #F97316;
-            border-radius: 10px;
+            border-radius: 8px;
           }
           .input-container {
             position: relative;
@@ -348,13 +352,13 @@ const ContactFooter = () => {
           }
           .input-field {
             width: 100%;
-            padding: 1rem 1.25rem;
-            padding-top: 1.75rem;
+            padding: 0.8rem 1rem;
+            padding-top: 1.5rem;
             border: 2px solid #F3E8D6;
-            border-radius: 0.75rem;
+            border-radius: 0.5rem;
             background: rgba(255, 255, 255, 0.95);
             color: #1F2937;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
           }
           .input-field:focus {
@@ -364,31 +368,31 @@ const ContactFooter = () => {
           }
           .input-label {
             position: absolute;
-            left: 1.25rem;
-            top: 1.25rem;
+            left: 1rem;
+            top: 1.2rem;
             color: #F97316;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             pointer-events: none;
           }
           .input-field:focus ~ .input-label,
           .input-field:not(:placeholder-shown) ~ .input-label {
-            top: 0.5rem;
-            font-size: 0.75rem;
+            top: 0.4rem;
+            font-size: 0.7rem;
             color: #F97316;
           }
           .error-text {
             color: #EF4444;
-            font-size: 0.75rem;
-            margin-top: 0.25rem;
-            margin-left: 1.25rem;
+            font-size: 0.7rem;
+            margin-top: 0.2rem;
+            margin-left: 1rem;
           }
           .social-icon {
             transition: all 0.3s ease;
             position: relative;
           }
           .social-icon:hover {
-            transform: translateY(-4px);
+            transform: translateY(-3px);
             color: #F97316;
           }
           .social-icon:hover .tooltip {
@@ -399,16 +403,16 @@ const ContactFooter = () => {
             position: absolute;
             bottom: 100%;
             left: 50%;
-            transform: translate(-50%, 8px);
+            transform: translate(-50%, 6px);
             background: #F97316;
             color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.2rem;
+            font-size: 0.7rem;
             white-space: nowrap;
             opacity: 0;
             transition: all 0.3s ease;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
           }
           .tooltip::after {
             content: '';
@@ -416,33 +420,27 @@ const ContactFooter = () => {
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            border: 4px solid transparent;
+            border: 3px solid transparent;
             border-top-color: #F97316;
           }
-          .comment-section {
-            max-height: 450px;
-            overflow-y: auto;
-            position: relative;
-          }
-          .comment-card-container {
+          .comment-card {
             transition: all 0.3s ease;
-            max-width: 85%;
-            overflow: hidden;
+            max-width: 100%;
           }
-          .comment-card-container:hover {
+          .comment-card:hover {
             transform: translateY(-2px);
           }
           .pinned-comment {
             border: 2px solid #F97316;
             background: #FFF7ED;
-            border-radius: 1rem;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
+            border-radius: 0.8rem;
+            padding: 0.4rem;
+            margin-bottom: 0.8rem;
           }
           .emoji-avatar {
-            font-size: 1.5rem;
-            width: 2.5rem;
-            height: 2.5rem;
+            font-size: 1.4rem;
+            width: 2.2rem;
+            height: 2.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -452,13 +450,13 @@ const ContactFooter = () => {
           }
           .emoji-select {
             border: 2px solid #F3E8D6;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
+            padding: 0.4rem;
+            border-radius: 0.4rem;
             background: #FFF7ED;
             cursor: pointer;
             transition: all 0.3s ease;
             width: 100%;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
           }
           .emoji-select:hover {
             background: #FFE4C4;
@@ -466,9 +464,9 @@ const ContactFooter = () => {
           .pin-button {
             background: #F97316;
             color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.2rem;
+            font-size: 0.7rem;
             transition: all 0.3s ease;
             cursor: pointer;
             position: relative;
@@ -489,16 +487,16 @@ const ContactFooter = () => {
             position: absolute;
             bottom: 100%;
             left: 50%;
-            transform: translate(-50%, 8px);
+            transform: translate(-50%, 6px);
             background: #F97316;
             color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.65rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.2rem;
+            font-size: 0.6rem;
             white-space: nowrap;
             opacity: 0;
             transition: all 0.3s ease;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
           }
           .pin-tooltip::after {
             content: '';
@@ -506,13 +504,13 @@ const ContactFooter = () => {
             top: 100%;
             left: 50%;
             transform: translateX(-50%);
-            border: 4px solid transparent;
+            border: 3px solid transparent;
             border-top-color: #F97316;
           }
           .timestamp {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: #6B7280;
-            margin-top: 0.25rem;
+            margin-top: 0.2rem;
           }
           .comment-content {
             white-space: pre-wrap;
@@ -521,26 +519,53 @@ const ContactFooter = () => {
             max-width: 100%;
             overflow: hidden;
           }
-          @media (max-width: 768px) {
+          .comment-card-container {
+            max-width: 85%;
+            overflow: hidden;
+          }
+          .comments-section {
+            max-height: 400px;
+            min-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 0.5rem;
+          }
+          @media (max-width: 1024px) {
             .input-field {
-              padding: 0.75rem 1rem;
-              padding-top: 1.5rem;
-              font-size: 0.9rem;
+              padding: 0.7rem 0.9rem;
+              padding-top: 1.4rem;
+              font-size: 0.85rem;
             }
             .input-label {
-              font-size: 0.9rem;
+              font-size: 0.85rem;
+              top: 1.1rem;
+            }
+            .input-field:focus ~ .input-label,
+            .input-field:not(:placeholder-shown) ~ .input-label {
+              top: 0.35rem;
+              font-size: 0.65rem;
+            }
+            .comments-section {
+              max-height: 350px;
+            }
+          }
+          @media (max-width: 768px) {
+            .input-field {
+              padding: 0.6rem 0.8rem;
+              padding-top: 1.3rem;
+              font-size: 0.8rem;
+            }
+            .input-label {
+              font-size: 0.8rem;
               top: 1rem;
             }
             .input-field:focus ~ .input-label,
             .input-field:not(:placeholder-shown) ~ .input-label {
-              top: 0.4rem;
-              font-size: 0.7rem;
+              top: 0.3rem;
+              font-size: 0.6rem;
             }
             .social-icon {
-              padding: 0.5rem;
-            }
-            .comment-section {
-              max-height: 400px;
+              padding: 0.4rem;
             }
             .comment-card-container {
               max-width: 90%;
@@ -548,60 +573,7 @@ const ContactFooter = () => {
             .emoji-avatar {
               width: 2rem;
               height: 2rem;
-              font-size: 1.25rem;
-            }
-            .pin-button {
-              font-size: 0.7rem;
-              padding: 0.2rem 0.4rem;
-            }
-            .timestamp {
-              font-size: 0.6rem;
-            }
-            .comment-content {
-              font-size: 0.9rem;
-            }
-            .emoji-select {
-              font-size: 0.9rem;
-              padding: 0.4rem;
-            }
-            .input-field {
-              padding: 0.75rem 1rem;
-            }
-            .error-text {
-              font-size: 0.7rem;
-            }
-            .tooltip, .pin-tooltip {
-              font-size: 0.7rem;
-            }
-          }
-          @media (max-width: 480px) {
-            .input-field {
-              padding: 0.6rem 0.8rem;
-              padding-top: 1.25rem;
-              font-size: 0.85rem;
-            }
-            .input-label {
-              font-size: 0.85rem;
-              top: 0.9rem;
-            }
-            .input-field:focus ~ .input-label,
-            .input-field:not(:placeholder-shown) ~ .input-label {
-              top: 0.3rem;
-              font-size: 0.65rem;
-            }
-            .social-icon {
-              padding: 0.4rem;
-            }
-            .comment-section {
-              max-height: 350px;
-            }
-            .comment-card-container {
-              max-width: 95%;
-            }
-            .emoji-avatar {
-              width: 1.75rem;
-              height: 1.75rem;
-              font-size: 1rem;
+              font-size: 1.2rem;
             }
             .pin-button {
               font-size: 0.65rem;
@@ -613,57 +585,138 @@ const ContactFooter = () => {
             .comment-content {
               font-size: 0.85rem;
             }
+            .comments-section {
+              max-height: 300px;
+              min-height: 150px;
+            }
+          }
+          @media (max-width: 576px) {
+            .input-field {
+              padding: 0.5rem 0.7rem;
+              padding-top: 1.2rem;
+              font-size: 0.75rem;
+            }
+            .input-label {
+              font-size: 0.75rem;
+              top: 0.9rem;
+            }
+            .input-field:focus ~ .input-label,
+            .input-field:not(:placeholder-shown) ~ .input-label {
+              top: 0.25rem;
+              font-size: 0.55rem;
+            }
             .emoji-select {
-              font-size: 0.85rem;
+              padding: 0.3rem;
+              font-size: 0.8rem;
+            }
+            .social-icon {
               padding: 0.35rem;
             }
+            .comment-card-container {
+              max-width: 92%;
+            }
+            .emoji-avatar {
+              width: 1.8rem;
+              height: 1.8rem;
+              font-size: 1.1rem;
+            }
+            .pin-button {
+              font-size: 0.6rem;
+              padding: 0.1rem 0.3rem;
+            }
+            .timestamp {
+              font-size: 0.5rem;
+            }
+            .comment-content {
+              font-size: 0.8rem;
+            }
+            .comments-section {
+              max-height: 250px;
+              min-height: 120px;
+            }
+          }
+          @media (max-width: 360px) {
             .input-field {
-              padding: 0.6rem 0.8rem;
+              padding: 0.4rem 0.6rem;
+              padding-top: 1rem;
+              font-size: 0.7rem;
             }
-            .error-text {
-              font-size: 0.65rem;
+            .input-label {
+              font-size: 0.7rem;
+              top: 0.8rem;
             }
-            .tooltip, .pin-tooltip {
-              font-size: 0.65rem;
+            .input-field:focus ~ .input-label,
+            .input-field:not(:placeholder-shown) ~ .input-label {
+              top: 0.2rem;
+              font-size: 0.5rem;
+            }
+            .emoji-select {
+              padding: 0.25rem;
+              font-size: 0.75rem;
+            }
+            .social-icon {
+              padding: 0.3rem;
+            }
+            .comment-card-container {
+              max-width: 95%;
+            }
+            .emoji-avatar {
+              width: 1.5rem;
+              height: 1.5rem;
+              font-size: 1rem;
+            }
+            .pin-button {
+              font-size: 0.55rem;
+              padding: 0.1rem 0.25rem;
+            }
+            .timestamp {
+              font-size: 0.45rem;
+            }
+            .comment-content {
+              font-size: 0.75rem;
+            }
+            .comments-section {
+              max-height: 200px;
+              min-height: 100px;
             }
           }
         `}</style>
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
           {/* ABOUT SECTION */}
-          <div data-aos="fade-up" data-aos-delay="100" className="flex flex-col space-y-6">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-orange-600 tracking-tight">
+          <div data-aos="fade-up" data-aos-delay="100" className="flex flex-col space-y-5">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-orange-600 tracking-tight">
               Hubungi Saya
             </h2>
-            <p className="text-gray-600 text-sm sm:text-base lg:text-lg leading-relaxed">
+            <p className="text-gray-600 text-xs sm:text-sm lg:text-base leading-relaxed">
               Halo! Saya <span className="font-bold text-orange-600">Ludang Prasetyo Nugroho</span>, mahasiswa Teknik Komputer di UTDI Yogyakarta. Saya bersemangat tentang pengembangan web, IoT, dan desain UI/UX. Ayo terhubung untuk proyek seru atau sekadar ngobrol!
             </p>
-            <div className="space-y-4 text-gray-600 text-sm sm:text-base font-medium">
-              <div className="flex items-center gap-3 animate-slide-in">
-                <AiOutlineUser className="text-orange-600" size={20} />
+            <div className="space-y-3 text-gray-600 text-xs sm:text-sm font-medium">
+              <div className="flex items-center gap-2 animate-slide-in">
+                <AiOutlineUser className="text-orange-600" size={18} />
                 Ludang Prasetyo Nugroho
               </div>
-              <div className="flex items-center gap-3 animate-slide-in">
-                <AiOutlineMail className="text-orange-600" size={20} />
+              <div className="flex items-center gap-2 animate-slide-in">
+                <AiOutlineMail className="text-orange-600" size={18} />
                 <a href="mailto:ludang.prasetyo@students.utdi.ac.id" className="hover:text-orange-600 transition-colors">
                   ludang.prasetyo@students.utdi.ac.id
                 </a>
               </div>
-              <div className="flex items-center gap-3 animate-slide-in">
-                <AiOutlineMessage className="text-orange-600" size={20} />
+              <div className="flex items-center gap-2 animate-slide-in">
+                <AiOutlineMessage className="text-orange-600" size={18} />
                 Sleman, Yogyakarta
               </div>
             </div>
-            <div className="pt-4">
-              <h3 className="font-semibold text-orange-600 text-lg sm:text-xl mb-4">Ikuti Saya</h3>
-              <div className="flex gap-3 flex-wrap">
+            <div className="pt-3">
+              <h3 className="font-semibold text-orange-600 text-sm sm:text-base mb-3">Ikuti Saya</h3>
+              <div className="flex gap-2 flex-wrap">
                 {socialLinks.map((link, idx) => (
                   <a
                     key={idx}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="social-icon bg-white border border-orange-200 rounded-full p-2.5 shadow-md text-gray-600 hover:bg-orange-50"
+                    className="social-icon bg-white border border-orange-200 rounded-full p-2 shadow-md text-gray-600 hover:bg-orange-50"
                     aria-label={link.name}
                   >
                     {link.icon}
@@ -676,10 +729,10 @@ const ContactFooter = () => {
 
           {/* CONTACT FORM */}
           <div data-aos="fade-up" data-aos-delay="200" className="flex flex-col">
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-orange-600 mb-6 tracking-tight">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-600 mb-5 tracking-tight">
               Kirim Pesan
             </h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div className="input-container">
                 <input
                   type="text"
@@ -717,8 +770,8 @@ const ContactFooter = () => {
                   value={formData.message}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="input-field h-32"
-                  rows="5"
+                  className="input-field h-28 sm:h-32"
+                  rows="4"
                   required
                   aria-describedby="message-error"
                 />
@@ -728,11 +781,11 @@ const ContactFooter = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 rounded-lg bg-orange-500 text-white font-semibold text-base tracking-wide shadow-lg hover:bg-orange-600 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300/50 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
+                className="w-full py-3 rounded-lg bg-orange-500 text-white font-semibold text-sm sm:text-base tracking-wide shadow-lg hover:bg-orange-600 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300/50 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
               >
                 {isSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
@@ -746,11 +799,11 @@ const ContactFooter = () => {
           </div>
 
           {/* COMMENT FORM */}
-          <div data-aos="fade-up" data-aos-delay="300" className="flex flex-col mt-10 lg:mt-0">
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-orange-600 mb-6 tracking-tight">
+          <div data-aos="fade-up" data-aos-delay="300" className="flex flex-col mt-8 lg:mt-0">
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-orange-600 mb-5 tracking-tight">
               Tulis Komentar
             </h3>
-            <form onSubmit={handleCommentSubmit} className="space-y-4">
+            <form onSubmit={handleCommentSubmit} className="space-y-3">
               <div className="input-container">
                 <input
                   type="text"
@@ -773,8 +826,8 @@ const ContactFooter = () => {
                   value={commentData.message}
                   onChange={handleCommentChange}
                   disabled={isCommentSubmitting}
-                  className="input-field h-28"
-                  rows="4"
+                  className="input-field h-20 sm:h-24"
+                  rows="3"
                   required
                   aria-describedby="comment-message-error"
                 />
@@ -796,18 +849,18 @@ const ContactFooter = () => {
                     </option>
                   ))}
                 </select>
-                <span className="text-xs text-gray-500 mt-1 ml-3">Pilih emoji untuk profil</span>
+                <span className="text-xs text-gray-500 mt-1 ml-2">Pilih emoji untuk profil</span>
               </div>
               <button
                 type="submit"
                 disabled={isCommentSubmitting}
-                className="w-full py-2.5 rounded-lg text-white bg-orange-600 hover:bg-orange-700 font-semibold text-sm sm:text-base tracking-wide shadow-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 rounded-lg bg-orange-500 text-white font-semibold text-sm sm:text-base tracking-wide shadow-lg hover:bg-orange-600 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-300/50 disabled:opacity-50 disabled:cursor-not-allowed animate-pulse-glow"
               >
                 {isCommentSubmitting ? (
                   <span className="flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                    <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                     </svg>
                     Mengirim...
                   </span>
@@ -821,44 +874,41 @@ const ContactFooter = () => {
           {/* COMMENTS SECTION */}
           <div
             data-aos="fade-up"
-            data-aos-delay="200"
-            className="comment-section flex flex-col mt-12 lg:mt-4 bg-white/80 rounded-xl shadow-xl ring-1 ring-gray-200"
+            data-aos-delay="400"
+            className="flex flex-col mt-8 lg:mt-0 bg-white/30 backdrop-blur-lg rounded-xl shadow-xl ring-1 ring-orange-200"
           >
-            <div className="sticky top-0 z-10 px-4 py-2 bg-orange-50 border-b border-gray-200 flex items-center justify-between">
+            <div className="sticky top-0 z-10 px-4 py-2 bg-orange-50/80 backdrop-blur-sm border-b border-orange-200 flex items-center justify-between">
               <h3 className="text-lg sm:text-xl font-bold text-orange-600 tracking-tight">
-                Komentar ({comments.length})
+                Komentar ({comments.length} orang)
               </h3>
             </div>
-            <div className="flex flex-col px-4 py-2 space-y-4 custom-scroll">
+            <div className="flex flex-col comments-section px-4 py-3 space-y-3 custom-scroll">
               {pinnedComment && (
                 <div className="pinned-comment">
                   <div className="flex justify-start comment-card-container">
-                    <div className="flex items-start space-x-2 max-w-sm sm:max-w-md">
+                    <div className="flex items-start space-x-2 max-w-[85%]">
                       <span className="emoji-avatar">{pinnedComment.profileEmoji || "😊"}</span>
-                      <div className="px-3 py-2 rounded-lg shadow-md bg-white text-gray-700 border border-orange-500 rounded-tl-none">
+                      <div className="px-3 py-2 rounded-2xl shadow-md bg-white text-gray-800 border border-orange-200 rounded-bl-none">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-semibold opacity-60">{pinnedComment.name || "Anon"}</span>
-                          <FaThumbtack className="text-orange-500" size={12} />
+                          <p className="text-xs font-semibold opacity-80">{pinnedComment.name || "Anonim"}</p>
+                          <FaThumbtack className="text-orange-600" size={12} />
                           <button
-                            type="button"
                             onClick={() => handlePinComment(pinnedComment.id, true)}
-                            className="px-2 py-0.5 bg-gray-200 text-gray-700 rounded text-xs hover:bg-gray-300"
-                            aria-label="Unpin Comment"
+                            className="pin-button"
+                            aria-label="Unpin Komentar"
                           >
                             Unpin
+                            <span className="pin-tooltip">Lepas pin</span>
                           </button>
                         </div>
-                        <p className="text-xs sm:text-sm leading-normal comment-content">
-                          {pinnedComment.message || "No message"}
+                        <p className="text-xs sm:text-sm leading-relaxed comment-content">
+                          {pinnedComment.message || "Tidak ada pesan"}
                         </p>
                         <p className="timestamp">
-                          {pinnedComment.createdAt?.toLocaleString("en-US", {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }) || "Unknown"}
+                          {pinnedComment.createdAt?.toDate().toLocaleString("id-ID", {
+                            dateStyle: "short",
+                            timeStyle: "short",
+                          }) || "Waktu tidak tersedia"}
                         </p>
                       </div>
                     </div>
@@ -866,69 +916,52 @@ const ContactFooter = () => {
                 </div>
               )}
               {comments.length === 0 && !pinnedComment ? (
-                <p className="text-sm text-center text-gray-500 italic py-4">
-                  No comments yet. Be the first!
+                <p className="text-gray-500 text-xs sm:text-sm italic text-center">
+                  Belum ada komentar. Jadilah yang pertama!
                 </p>
               ) : (
-                regularComments.map((comment, index) => (
-                  <div
-                    key={comment.id}
-                    className={`flex ${
-                      comment.isUser ? "justify-end" : "justify-start"
-                    } comment-card-container`}
-                  >
-                    <div className="flex items-start space-x-2 max-w-sm sm:max-w-md">
-                      {!comment.isUser && (
-                        <span className="emoji-avatar">{comment.profileEmoji || "😊"}</span>
+                regularComments.map(({ id, name, message, profileEmoji, isUser }, index) => (
+                  <div key={id} className={`flex ${isUser ? "justify-end" : "justify-start"} comment-card-container`}>
+                    <div className="flex items-start space-x-2 max-w-[85%]">
+                      {!isUser && (
+                        <span className="emoji-avatar">{profileEmoji || "😊"}</span>
                       )}
                       <div
-                        className={`px-3 py-2 rounded-lg shadow-sm ${
-                          comment.isUser
-                            ? "bg-orange-100 text-gray-800 border-orange-300 rounded-tr-none"
-                            : `text-gray-700 border-gray-200 rounded-tl-none`
+                        className={`px-3 py-2 rounded-2xl shadow-md ${
+                          isUser
+                            ? "bg-orange-500 text-white rounded-br-none"
+                            : `text-gray-800 border border-orange-200 rounded-bl-none`
                         }`}
-                        style={{
-                          backgroundColor: comment.isUser
-                            ? undefined
-                            : commentColors[index % commentColors.length],
-                          border: "1px solid",
-                        }}
+                        style={{ backgroundColor: isUser ? undefined : commentColors[index % commentColors.length] }}
                       >
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-semibold opacity-60">
-                            {comment.name || (comment.isUser ? "You" : "Anon") }}
-                          </span>
-                          {!comment.isUser && (
+                          <p className="text-xs font-semibold opacity-80">
+                            {name || (isUser ? "Saya" : "Anonim")}
+                          </p>
+                          {!isUser && (
                             <button
-                              type="button"
-                              onClick={() => handlePinComment(comment.id, false) }
+                              onClick={() => handlePinComment(id, false)}
                               disabled={isAnyPinned}
-                              className={`px-2 py-0.5 text-xs rounded ${
-                                isAnyPinned
-                                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                                  : "bg-orange-200 text-orange-700 hover:bg-orange-300"
-                              }`}
-                              aria-label="Pin Comment"
+                              className="pin-button"
+                              aria-label="Pin Komentar"
                             >
                               Pin
+                              <span className="pin-tooltip">{isAnyPinned ? "Hanya satu komentar bisa dipin" : "Pin komentar ini"}</span>
                             </button>
                           )}
                         </div>
-                        <p className="text-xs sm:text-sm leading-normal comment-content">
-                          {comment.message || "No message"}
+                        <p className="text-xs sm:text-sm leading-relaxed comment-content">
+                          {message || "Tidak ada pesan"}
                         </p>
                         <p className="timestamp">
-                          {comment.createdAt?.toLocaleString("en-US", {
-                            month: "short",
-                            day: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }) || "Unknown"}
+                          {comments.find((c) => c.id === id)?.createdAt?.toDate().toLocaleString("id-ID", {
+                            dateStyle: "short",
+                            timeStyle: "short",
+                          }) || "Waktu tidak tersedia"}
                         </p>
                       </div>
-                      {comment.isUser && (
-                        <span className="emoji-avatar">{comment.profileEmoji || "😊"}</span>
+                      {isUser && (
+                        <span className="emoji-avatar">{profileEmoji || "😊"}</span>
                       )}
                     </div>
                   </div>
