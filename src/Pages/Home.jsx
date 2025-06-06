@@ -25,7 +25,7 @@ class ErrorBoundary extends React.Component {
 const MainTitle = memo(() => (
   <div className="space-y-2" data-aos="fade-up" data-aos-delay="600">
     <h1 className="text-4xl xs:text-5xl sm:text-6xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-yellow-400 to-orange-600">
-      nugra.my.id<br />
+      Nugra21<br />
       <span className="text-lg xs:text-xl sm:text-2xl text-orange-600 font-light">
         ヌグラ Hi  .  .  .  .
       </span>
