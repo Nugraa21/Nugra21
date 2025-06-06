@@ -21,6 +21,8 @@ import {
   onSnapshot,
   query,
   orderBy,
+  updateDoc,
+  doc,
 } from "../firebase";
 
 const ContactFooter = () => {
@@ -31,16 +33,59 @@ const ContactFooter = () => {
   const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
-  // Daftar emoji untuk dropdown
+  // Daftar emoji lengkap
   const emojiOptions = [
+    { value: "😀", label: "😀 Grinning Face" },
     { value: "😊", label: "😊 Smiling Face" },
-    { value: "👍", label: "👍 Thumbs Up" },
-    { value: "🚀", label: "🚀 Rocket" },
-    { value: "🌟", label: "🌟 Star" },
+    { value: "😂", label: "😂 Laughing Face" },
+    { value: "😍", label: "😍 Heart Eyes" },
+    { value: "😎", label: "😎 Cool Face" },
+    { value: "😢", label: "😢 Crying Face" },
+    { value: "😡", label: "😡 Angry Face" },
+    { value: "🥳", label: "🥳 Party Face" },
+    { value: "🤓", label: "🤓 Nerd Face" },
+    { value: "🤗", label: "🤗 Hugging Face" },
     { value: "🐱", label: "🐱 Cat" },
+    { value: "🐶", label: "🐶 Dog" },
     { value: "🦁", label: "🦁 Lion" },
-    { value: "🎉", label: "🎉 Party" },
+    { value: "🐘", label: "🐘 Elephant" },
+    { value: "🐼", label: "🐼 Panda" },
+    { value: "🐸", label: "🐸 Frog" },
+    { value: "🐵", label: "🐵 Monkey" },
+    { value: "🦄", label: "🦄 Unicorn" },
+    { value: "🐝", label: "🐝 Bee" },
+    { value: "🌟", label: "🌟 Star" },
+    { value: "🚀", label: "🚀 Rocket" },
+    { value: "🎉", label: "🎉 Party Popper" },
     { value: "💡", label: "💡 Light Bulb" },
+    { value: "🌈", label: "🌈 Rainbow" },
+    { value: "🍎", label: "🍎 Apple" },
+    { value: "🍕", label: "🍕 Pizza" },
+    { value: "☕", label: "☕ Coffee" },
+    { value: "🎸", label: "🎸 Guitar" },
+    { value: "⚽", label: "⚽ Soccer" },
+    { value: "🏀", label: "🏀 Basketball" },
+    { value: "🎮", label: "🎮 Game Controller" },
+    { value: "📚", label: "📚 Books" },
+    { value: "💻", label: "💻 Laptop" },
+    { value: "🔥", label: "🔥 Fire" },
+    { value: "🍀", label: "🍀 Four Leaf Clover" },
+    { value: "🌍", label: "🌍 Globe" },
+    { value: "🎥", label: "🎥 Camera" },
+    { value: "✈️", label: "✈️ Airplane" },
+    { value: "🕒", label: "🕒 Clock" },
+    { value: "☀️", label: "☀️ Sun" },
+    { value: "🌙", label: "🌙 Moon" },
+  ];
+
+  // Warna untuk kartu komentar
+  const commentColors = [
+    "#FFF7ED", // Light Orange
+    "#EDF7FF", // Light Blue
+    "#EDFFF7", // Light Green
+    "#FFF7F7", // Light Red
+    "#F7EDFF", // Light Purple
+    "#FFFFED", // Light Yellow
   ];
 
   useEffect(() => {
@@ -171,7 +216,7 @@ const ContactFooter = () => {
         profileEmoji: commentData.profileEmoji,
         isPinned: false,
         createdAt: serverTimestamp(),
-      });
+  });
 
       Swal.fire({
         title: "Berhasil!",
@@ -192,6 +237,39 @@ const ContactFooter = () => {
       });
     } finally {
       setIsCommentSubmitting(false);
+    }
+  };
+
+  const handlePinComment = async (commentId) => {
+    try {
+      // Unpin komentar lain
+      const pinnedComment = comments.find((comment) => comment.isPinned);
+      if (pinnedComment) {
+        await updateDoc(doc(db, "comments", pinnedComment.id), {
+          isPinned: false,
+        });
+      }
+
+      // Pin komentar yang dipilih
+      await updateDoc(doc(db, "comments", commentId), {
+        isPinned: true,
+      });
+
+      Swal.fire({
+        title: "Berhasil!",
+        text: "Komentar telah dipin!",
+        icon: "success",
+        confirmButtonColor: "#f97316",
+        timer: 1500,
+      });
+    } catch (error) {
+      console.error("Error pinning comment:", error.message);
+      Swal.fire({
+        title: "Gagal!",
+        text: `Gagal memin komentar: ${error.message}`,
+        icon: "error",
+        confirmButtonColor: "#f97316",
+      });
     }
   };
 
@@ -364,6 +442,23 @@ const ContactFooter = () => {
           .emoji-select:hover {
             background: #FFE4C4;
           }
+          .pin-button {
+            background: #F97316;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+          }
+          .pin-button:hover {
+            background: #E65A00;
+          }
+          .timestamp {
+            font-size: 0.65rem;
+            color: #6B7280;
+            margin-top: 0.25rem;
+          }
           @media (max-width: 768px) {
             .input-field {
               padding: 0.75rem 1rem;
@@ -389,6 +484,13 @@ const ContactFooter = () => {
               width: 2rem;
               height: 2rem;
               font-size: 1.25rem;
+            }
+            .pin-button {
+              font-size: 0.7rem;
+              padding: 0.2rem 0.4rem;
+            }
+            .timestamp {
+              font-size: 0.6rem;
             }
           }
           @media (max-width: 480px) {
@@ -416,6 +518,13 @@ const ContactFooter = () => {
               width: 1.75rem;
               height: 1.75rem;
               font-size: 1rem;
+            }
+            .pin-button {
+              font-size: 0.65rem;
+              padding: 0.15rem 0.35rem;
+            }
+            .timestamp {
+              font-size: 0.55rem;
             }
           }
         `}</style>
@@ -634,6 +743,12 @@ const ContactFooter = () => {
                         <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
                           {pinnedComment.message || "Tidak ada pesan"}
                         </p>
+                        <p className="timestamp">
+                          {pinnedComment.createdAt?.toDate().toLocaleString("id-ID", {
+                            dateStyle: "short",
+                            timeStyle: "short",
+                          }) || "Waktu tidak tersedia"}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -644,7 +759,7 @@ const ContactFooter = () => {
                   Belum ada komentar. Jadilah yang pertama!
                 </p>
               ) : (
-                regularComments.map(({ id, name, message, profileEmoji, isUser }) => (
+                regularComments.map(({ id, name, message, profileEmoji, isUser }, index) => (
                   <div key={id} className={`flex ${isUser ? "justify-end" : "justify-start"} comment-card`}>
                     <div className="flex items-start space-x-3 max-w-[85%]">
                       {!isUser && (
@@ -654,14 +769,32 @@ const ContactFooter = () => {
                         className={`px-4 py-3 rounded-2xl shadow-md ${
                           isUser
                             ? "bg-orange-500 text-white rounded-br-none"
-                            : "bg-white text-gray-800 border border-orange-200 rounded-bl-none"
+                            : `text-gray-800 border border-orange-200 rounded-bl-none`
                         }`}
+                        style={{ backgroundColor: isUser ? undefined : commentColors[index % commentColors.length] }}
                       >
-                        <p className="text-xs font-semibold mb-1 opacity-80">
-                          {name || (isUser ? "Saya" : "Anonim")}
-                        </p>
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-xs font-semibold opacity-80">
+                            {name || (isUser ? "Saya" : "Anonim")}
+                          </p>
+                          {!isUser && (
+                            <button
+                              onClick={() => handlePinComment(id)}
+                              className="pin-button"
+                              aria-label="Pin Komentar"
+                            >
+                              Pin
+                            </button>
+                          )}
+                        </div>
                         <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
                           {message || "Tidak ada pesan"}
+                        </p>
+                        <p className="timestamp">
+                          {comments.find((c) => c.id === id)?.createdAt?.toDate().toLocaleString("id-ID", {
+                            dateStyle: "short",
+                            timeStyle: "short",
+                          }) || "Waktu tidak tersedia"}
                         </p>
                       </div>
                       {isUser && (
