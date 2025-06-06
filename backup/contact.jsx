@@ -97,7 +97,7 @@ const ContactFooter = () => {
     });
 
     const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(
+      const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
         const commentList = snapshot.docs.map((doc) => ({
@@ -471,47 +471,6 @@ const ContactFooter = () => {
             border: 2px dashed var(--orange);
           }
 
-          .submit-button {
-            display: block;
-            width: 100%;
-            padding: 0.75rem;
-            background-color: var(--orange);
-            color: #ffffff;
-            font-family: 'Shadows Into Light', cursive;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border: 2px solid var(--orange-dark);
-            border-radius: 0.5rem;
-            box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-            cursor: pointer;
-            z-index: 10;
-            position: relative;
-          }
-
-          .submit-button:hover {
-            background-color: var(--orange-dark);
-            border-color: var(--orange);
-            transform: translateY(-2px);
-          }
-
-          .submit-button:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.3);
-          }
-
-          .submit-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-          }
-
-          .submit-button .spinner {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-          }
-
           @media (max-width: 1024px) {
             .grid {
               grid-template-columns: 1fr;
@@ -544,10 +503,6 @@ const ContactFooter = () => {
             }
             .timestamp {
               font-size: 0.65rem;
-            }
-            .submit-button {
-              padding: 0.65rem;
-              font-size: 1rem;
             }
           }
 
@@ -583,10 +538,6 @@ const ContactFooter = () => {
             }
             p, a, select, button {
               font-size: 0.9rem !important;
-            }
-            .submit-button {
-              padding: 0.55rem;
-              font-size: 0.9rem;
             }
           }
         `}</style>
@@ -700,12 +651,12 @@ const ContactFooter = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="submit-button"
+                    className="w-full py-3 rounded-lg bg-orange text-white font-semibold text-sm tracking-wide shadow-md hover:bg-orange-dark transition-colors focus:outline-none focus:ring-2 focus:ring-orange-dark disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
-                      <span className="spinner">
+                      <span className="flex items-center justify-center gap-2">
                         <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                          <circle className="opacity-25" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                         </svg>
                         Sending...
@@ -773,10 +724,10 @@ const ContactFooter = () => {
                   <button
                     type="submit"
                     disabled={isCommentSubmitting}
-                    className="submit-button"
+                    className="w-full py-3 rounded-lg bg-orange text-white font-semibold text-sm tracking-wide shadow-md hover:bg-orange-dark transition-colors focus:outline-none focus:ring-2 focus:ring-orange-dark disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isCommentSubmitting ? (
-                      <span className="spinner">
+                      <span className="flex items-center justify-center gap-2">
                         <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
