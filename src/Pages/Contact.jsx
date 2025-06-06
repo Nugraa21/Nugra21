@@ -283,7 +283,7 @@ const ContactFooter = () => {
 
   return (
     <>
-      <Helmet>
+      {/* <Helmet>
         <title>Contact - Nugra.my.id</title>
         <meta name="description" content="Hubungi Ludang Prasetyo untuk kolaborasi atau pertanyaan." />
         <meta name="keywords" content="Ludang Prasetyo, Nugra21, Contact, Portfolio, Web Developer" />
@@ -292,7 +292,7 @@ const ContactFooter = () => {
         <meta property="og:url" content="https://nugra.my.id/contact" />
         <meta property="og:type" content="website" />
         <link rel="canonical" href="https://nugra.my.id/contact" />
-      </Helmet>
+      </Helmet> */}
 
       <footer
         id="contact"
