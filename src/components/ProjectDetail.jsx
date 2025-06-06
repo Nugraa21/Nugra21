@@ -197,7 +197,6 @@ const ProjectDetails = () => {
 
             <div>
               <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-orange-600 mb-3 xs:mb-4 flex items-center gap-1.5 xs:gap-2">
-                {/* <Star className="w-5 xs:w-6 h-5 xs:h-6" /> */}
                 Key Features
               </h3>
               {project.Features.length > 0 ? (
