@@ -79,7 +79,6 @@
 //   doc,
 //   updateDoc,
 // };
-
 import { initializeApp } from "firebase/app";
 import {
   getFirestore,
@@ -114,7 +113,7 @@ try {
   console.log("Firebase initialized successfully");
 } catch (error) {
   console.error("Error initializing Firebase:", error.message);
-  throw error; // Biarkan aplikasi gagal jika Firebase tidak bisa diinisialisasi
+  throw error;
 }
 
 export {
@@ -134,4 +133,3 @@ export {
   uploadBytes,
   getDownloadURL,
 };
-//  ------------ fix

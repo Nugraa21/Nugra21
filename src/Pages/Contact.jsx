@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   AiOutlineUser,
@@ -16,25 +15,33 @@ import "aos/dist/aos.css";
 import { Helmet } from "react-helmet";
 import {
   db,
-  storage,
   collection,
   addDoc,
   serverTimestamp,
   onSnapshot,
   query,
   orderBy,
-  ref,
-  uploadBytes,
-  getDownloadURL,
 } from "../firebase";
 
 const ContactFooter = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [commentData, setCommentData] = useState({ name: "", message: "", profileImage: null });
+  const [commentData, setCommentData] = useState({ name: "", message: "", profileEmoji: "😊" });
   const [comments, setComments] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCommentSubmitting, setIsCommentSubmitting] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+
+  // Daftar emoji untuk dropdown
+  const emojiOptions = [
+    { value: "😊", label: "😊 Smiling Face" },
+    { value: "👍", label: "👍 Thumbs Up" },
+    { value: "🚀", label: "🚀 Rocket" },
+    { value: "🌟", label: "🌟 Star" },
+    { value: "🐱", label: "🐱 Cat" },
+    { value: "🦁", label: "🦁 Lion" },
+    { value: "🎉", label: "🎉 Party" },
+    { value: "💡", label: "💡 Light Bulb" },
+  ];
 
   useEffect(() => {
     AOS.init({
@@ -91,21 +98,9 @@ const ContactFooter = () => {
   };
 
   const handleCommentChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "profileImage") {
-      if (files[0]) {
-        if (files[0].size > 2 * 1024 * 1024) { // Turunkan batas ke 2MB
-          setFormErrors((prev) => ({ ...prev, profileImage: "Gambar maksimum 2MB" }));
-          return;
-        }
-        console.log("Gambar dipilih:", files[0].name, files[0].size / 1024, "KB");
-        setCommentData((prev) => ({ ...prev, profileImage: files[0] }));
-        setFormErrors((prev) => ({ ...prev, profileImage: null }));
-      }
-    } else {
-      setCommentData((prev) => ({ ...prev, [name]: value }));
-      setFormErrors((prev) => ({ ...prev, [name]: null }));
-    }
+    const { name, value } = e.target;
+    setCommentData((prev) => ({ ...prev, [name]: value }));
+    setFormErrors((prev) => ({ ...prev, [name]: null }));
   };
 
   const handleSubmit = async (e) => {
@@ -170,24 +165,14 @@ const ContactFooter = () => {
     });
 
     try {
-      let profileImageUrl = null;
-      if (commentData.profileImage) {
-        console.log("Mengunggah gambar:", commentData.profileImage.name, commentData.profileImage.size / 1024, "KB");
-        const imageRef = ref(storage, `profileImages/${Date.now()}_${commentData.profileImage.name}`);
-        const uploadResult = await uploadBytes(imageRef, commentData.profileImage);
-        profileImageUrl = await getDownloadURL(uploadResult.ref);
-        console.log("Gambar berhasil diunggah:", profileImageUrl);
-      }
-
       await addDoc(collection(db, "comments"), {
         name: commentData.name,
         message: commentData.message,
-        profileImage: profileImageUrl,
+        profileEmoji: commentData.profileEmoji,
         isPinned: false,
         createdAt: serverTimestamp(),
       });
 
-      console.log("Komentar berhasil disimpan ke Firestore");
       Swal.fire({
         title: "Berhasil!",
         text: "Komentar kamu sudah terkirim!",
@@ -196,11 +181,7 @@ const ContactFooter = () => {
         timer: 2000,
       });
 
-      setCommentData({ name: "", message: "", profileImage: null });
-      // Reset input file
-      if (document.querySelector('input[name="profileImage"]')) {
-        document.querySelector('input[name="profileImage"]').value = "";
-      }
+      setCommentData({ name: "", message: "", profileEmoji: "😊" });
     } catch (error) {
       console.error("Error submitting comment:", error.message);
       Swal.fire({
@@ -359,22 +340,28 @@ const ContactFooter = () => {
             padding: 0.5rem;
             margin-bottom: 1rem;
           }
-          .avatar-img {
-            object-fit: cover;
+          .emoji-avatar {
+            font-size: 1.5rem;
             width: 2.5rem;
             height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 9999px;
             border: 2px solid #F3E8D6;
+            background: #FFF7ED;
           }
-          .file-input {
-            border: 2px dashed #F97316;
+          .emoji-select {
+            border: 2px solid #F3E8D6;
             padding: 0.5rem;
             border-radius: 0.5rem;
             background: #FFF7ED;
             cursor: pointer;
             transition: all 0.3s ease;
+            width: 100%;
+            font-size: 0.95rem;
           }
-          .file-input:hover {
+          .emoji-select:hover {
             background: #FFE4C4;
           }
           @media (max-width: 768px) {
@@ -398,9 +385,10 @@ const ContactFooter = () => {
             .comment-card {
               max-width: 90%;
             }
-            .avatar-img {
+            .emoji-avatar {
               width: 2rem;
               height: 2rem;
+              font-size: 1.25rem;
             }
           }
           @media (max-width: 480px) {
@@ -424,9 +412,10 @@ const ContactFooter = () => {
             .comment-card {
               max-width: 95%;
             }
-            .avatar-img {
+            .emoji-avatar {
               width: 1.75rem;
               height: 1.75rem;
+              font-size: 1rem;
             }
           }
         `}</style>
@@ -584,17 +573,21 @@ const ContactFooter = () => {
                 {formErrors.message && <span id="comment-message-error" className="error-text">{formErrors.message}</span>}
               </div>
               <div className="input-container">
-                <input
-                  type="file"
-                  name="profileImage"
-                  accept="image/*"
+                <select
+                  name="profileEmoji"
+                  value={commentData.profileEmoji}
                   onChange={handleCommentChange}
                   disabled={isCommentSubmitting}
-                  className="file-input w-full text-sm text-gray-600"
-                  aria-describedby="profile-image-error"
-                />
-                <span className="text-xs text-gray-500 mt-1 ml-3">Unggah gambar profil (maks 2MB)</span>
-                {formErrors.profileImage && <span id="profile-image-error" className="error-text">{formErrors.profileImage}</span>}
+                  className="emoji-select"
+                  aria-describedby="profile-emoji-error"
+                >
+                  {emojiOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <span className="text-xs text-gray-500 mt-1 ml-3">Pilih emoji untuk profil</span>
               </div>
               <button
                 type="submit"
@@ -632,12 +625,7 @@ const ContactFooter = () => {
                 <div className="pinned-comment">
                   <div className="flex justify-start comment-card">
                     <div className="flex items-start space-x-3 max-w-[85%]">
-                      <img
-                        src={pinnedComment.profileImage || "/fallback-avatar.png"}
-                        alt={pinnedComment.name || "Anonim"}
-                        className="avatar-img"
-                        onError={(e) => (e.target.src = "/fallback-avatar.png")}
-                      />
+                      <span className="emoji-avatar">{pinnedComment.profileEmoji || "😊"}</span>
                       <div className="px-4 py-3 rounded-2xl shadow-md bg-white text-gray-800 border border-orange-200 rounded-bl-none">
                         <div className="flex items-center gap-2 mb-1">
                           <p className="text-xs font-semibold opacity-80">{pinnedComment.name || "Anonim"}</p>
@@ -656,16 +644,11 @@ const ContactFooter = () => {
                   Belum ada komentar. Jadilah yang pertama!
                 </p>
               ) : (
-                regularComments.map(({ id, name, message, profileImage, isUser }) => (
+                regularComments.map(({ id, name, message, profileEmoji, isUser }) => (
                   <div key={id} className={`flex ${isUser ? "justify-end" : "justify-start"} comment-card`}>
                     <div className="flex items-start space-x-3 max-w-[85%]">
                       {!isUser && (
-                        <img
-                          src={profileImage || "/fallback-avatar.png"}
-                          alt={name || "Anonim"}
-                          className="avatar-img"
-                          onError={(e) => (e.target.src = "/fallback-avatar.png")}
-                        />
+                        <span className="emoji-avatar">{profileEmoji || "😊"}</span>
                       )}
                       <div
                         className={`px-4 py-3 rounded-2xl shadow-md ${
@@ -682,12 +665,7 @@ const ContactFooter = () => {
                         </p>
                       </div>
                       {isUser && (
-                        <img
-                          src={profileImage || "/fallback-avatar.png"}
-                          alt={name || "Saya"}
-                          className="avatar-img"
-                          onError={(e) => (e.target.src = "/fallback-avatar.png")}
-                        />
+                        <span className="emoji-avatar">{profileEmoji || "😊"}</span>
                       )}
                     </div>
                   </div>
