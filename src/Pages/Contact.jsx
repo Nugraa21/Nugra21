@@ -296,7 +296,7 @@ const ContactFooter = () => {
 
       <section
         id="contact"
-        className="bg-white px-4 sm:px-6 md:px-8 pt-16 pb-20"
+        className=" px-4 sm:px-6 md:px-8 pt-16 pb-20"
       >
         <style jsx>{`
           @keyframes fadeInUp {
