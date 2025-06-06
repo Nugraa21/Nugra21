@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./index.css";
-import Home from "./Pages/Home";
-import About from "./Pages/About";
-import AnimatedBackground from "./components/Background";
-import Navbar from "./components/Navbar";
-import Portofolio from "./Pages/Portofolio"; 
-import ContactPage from "./Pages/Contact";
-import ProjectDetails from "./components/ProjectDetail";
-import WelcomeScreen from "./Pages/WelcomeScreen";
-import LoginPage from "./Pages/Login";
-import Pengalaman from "./components/Pengalaman";
-import Dashboard from "./Pages/Dashboard";
+import Home from "./Pages/Home.jsx";
+import About from "./Pages/About.jsx"; // Assuming this is the AboutPage
+import AnimatedBackground from "./components/Background.jsx";
+import Navbar from "./components/Navbar.jsx";
+import Portofolio from "./Pages/Portofolio.jsx"; 
+import ContactPage from "./Pages/Contact.jsx";
+import ProjectDetails from "./components/ProjectDetail.jsx";
+import WelcomeScreen from "./Pages/WelcomeScreen.jsx";
+import LoginPage from "./Pages/Login.jsx";
+import Pengalaman from "./components/Pengalaman.jsx";
+import Dashboard from "./Pages/Dashboard.jsx";
 import { AnimatePresence } from 'framer-motion';
+import NotFound from "./NotFound.jsx"; // Ensure this is .jsx
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   return (
@@ -199,15 +200,25 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-    <div className="w-full min-h-screen overflow-x-hidden ">
+    <div className="w-full min-h-screen overflow-x-hidden">
       <CustomCursor />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />} />
+          {/* Landing Page with all sections */}
+          <Route
+            path="/"
+            element={<LandingPage showWelcome={showWelcome} setShowWelcome={setShowWelcome} />}
+          />
+          {/* Individual page routes */}
+          <Route path="/about" element={<About />} />
+          <Route path="/portfolio" element={<Portofolio />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/pengalaman" element={<Pengalaman />} />
+          <Route path="/project/:id" element={<ProjectPageLayout />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/project/:id" element={<ProjectPageLayout />} />
-          <Route path="/pengalaman" element={<Pengalaman />} />
+          {/* Catch-all route for 404 */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
