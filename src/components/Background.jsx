@@ -17,9 +17,9 @@ const AnimatedBackground = () => {
         className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            `linear-gradient(to right, rgba(0,0,0,0.01) 1px, transparent 1px),
-             linear-gradient(to bottom, rgba(0,0,0,0.01) 1px, transparent 1px)`,
-          backgroundSize: "20px 20px",
+            `linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+             linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px)`,
+          backgroundSize: "10px 10px",
         }}
       />
 
