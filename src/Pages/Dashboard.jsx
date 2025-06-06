@@ -38,7 +38,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: 20, color: "red" }}>
+        <div style={{ padding: "16px", color: "#d32f2f" }}>
           <h2>Terjadi kesalahan!</h2>
           <p>{this.state.error?.message || "Silakan coba lagi atau periksa konsol browser."}</p>
         </div>
@@ -228,55 +228,156 @@ const Dashboard = () => {
 
   return (
     <ErrorBoundary>
-      <div style={{ ...styles.container, backgroundColor: settings.theme === "dark" ? "#222" : "#f9f9f9", color: settings.theme === "dark" ? "#fff" : "#333" }}>
-        <header style={styles.navbar}>
+      <div style={{ ...styles.container, backgroundColor: settings.theme === "dark" ? "#1a1a1a" : "#f5f5f5", color: settings.theme === "dark" ? "#e0e0e0" : "#333" }}>
+        <style jsx>{`
+          * {
+            box-sizing: border-box;
+          }
+          .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+          }
+          .card {
+            background-color: ${settings.theme === "dark" ? "#2a2a2a" : "#fff"};
+            border-radius: 8px;
+            padding: 16px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border: 1px solid ${settings.theme === "dark" ? "#444" : "#ddd"};
+          }
+          .card-header {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: ${settings.theme === "dark" ? "#fff" : "#333"};
+          }
+          .card-content {
+            font-size: 0.9rem;
+            color: ${settings.theme === "dark" ? "#ccc" : "#555"};
+          }
+          .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+          }
+          @media (min-width: 769px) {
+            .card-container {
+              display: none;
+            }
+          }
+          @media (max-width: 768px) {
+            .table-container {
+              display: none;
+            }
+            .header-row {
+              flex-direction: column;
+              align-items: stretch;
+            }
+            .action-buttons {
+              flex-direction: column;
+              gap: 8px;
+            }
+            .navbar {
+              flex-direction: column;
+              align-items: flex-start;
+            }
+            .navbar-nav {
+              width: 100%;
+              transition: max-height 0.3s ease;
+              overflow: hidden;
+              max-height: ${navbarOpen ? "500px" : "0"};
+            }
+            .modal-content {
+              width: 90%;
+              padding: 16px;
+            }
+          }
+          @media (max-width: 576px) {
+            .card {
+              padding: 12px;
+            }
+            .card-header {
+              font-size: 0.9rem;
+            }
+            .card-content {
+              font-size: 0.85rem;
+            }
+            .modal-content {
+              padding: 12px;
+            }
+            .form-input, .form-textarea {
+              font-size: 0.85rem;
+              padding: 8px;
+            }
+          }
+          @media (max-width: 360px) {
+            .card {
+              padding: 10px;
+            }
+            .card-header {
+              font-size: 0.85rem;
+            }
+            .card-content {
+              font-size: 0.8rem;
+            }
+            .modal-content {
+              padding: 10px;
+            }
+            .form-input, .form-textarea {
+              font-size: 0.8rem;
+              padding: 6px;
+            }
+          }
+        `}</style>
+
+        <header className="navbar" style={styles.navbar}>
           <div style={styles.navbarBrand}>
-                        <button onClick={handleLogout} style={styles.logoutButton}>
-              <FaSignOutAlt /> {settings.language === "id" ? "Logout" : "Sign Out"}
+            <button onClick={handleLogout} style={styles.logoutButton}>
+              <FaSignOutAlt size={14} /> {settings.language === "id" ? "Logout" : "Sign Out"}
             </button>
             <h2 style={styles.logo}>Dashboard</h2>
             <button
               onClick={() => setNavbarOpen(!navbarOpen)}
               style={styles.toggleButton}
             >
-              {navbarOpen ? <FaTimes /> : <FaBars />}
+              {navbarOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
             </button>
           </div>
-          <nav style={{ ...styles.nav, display: navbarOpen ? "flex" : "none" }}>
+          <nav className="navbar-nav" style={{ ...styles.nav, display: navbarOpen ? "flex" : "none" }}>
             <button
               onClick={() => { setActiveTab("contacts"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "contacts" ? styles.navItemActive : styles.navItem}
             >
-              <FaTable /> {settings.language === "id" ? "Data Kontak" : "Contacts"}
+              <FaTable size={14} /> {settings.language === "id" ? "Data Kontak" : "Contacts"}
             </button>
             <button
               onClick={() => { setActiveTab("comments"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "comments" ? styles.navItemActive : styles.navItem}
             >
-              <FaComments /> {settings.language === "id" ? "Komentar" : "Comments"}
+              <FaComments size={14} /> {settings.language === "id" ? "Komentar" : "Comments"}
             </button>
-            {/* <button
+            <button
               onClick={() => { setActiveTab("settings"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "settings" ? styles.navItemActive : styles.navItem}
             >
-              <FaCog /> {settings.language === "id" ? "Pengaturan" : "Settings"}
+              <FaCog size={14} /> {settings.language === "id" ? "Pengaturan" : "Settings"}
             </button>
             <button
               onClick={() => { setActiveTab("info"); setSearchTerm(""); setNavbarOpen(false); }}
               style={activeTab === "info" ? styles.navItemActive : styles.navItem}
             >
-              <FaInfoCircle /> {settings.language === "id" ? "Informasi" : "Info"}
-            </button> */}
+              <FaInfoCircle size={14} /> {settings.language === "id" ? "Informasi" : "Info"}
+            </button>
           </nav>
         </header>
 
         <main style={styles.mainContent}>
           {error && (
-            <div style={{ color: "red", marginBottom: 16, padding: "10px", backgroundColor: "#ffe6e6", borderRadius: 4 }}>
+            <div style={styles.error}>
               <strong>Error:</strong> {error}
             </div>
           )}
-          <div style={styles.headerRow}>
+          <div className="header-row" style={styles.headerRow}>
             <h1 style={styles.title}>
               {activeTab === "contacts" ? (settings.language === "id" ? "📋 Kontak Masuk" : "📋 Incoming Contacts") :
                activeTab === "comments" ? (settings.language === "id" ? "💬 Komentar" : "💬 Comments") :
@@ -284,7 +385,7 @@ const Dashboard = () => {
                (settings.language === "id" ? "ℹ️ Informasi" : "ℹ️ Info")}
             </h1>
             {activeTab !== "settings" && activeTab !== "info" && (
-              <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+              <div className="action-buttons" style={styles.actionButtons}>
                 <input
                   type="text"
                   placeholder={activeTab === "contacts" ? (settings.language === "id" ? "🔍 Cari kontak..." : "🔍 Search contacts...") : (settings.language === "id" ? "🔍 Cari komentar..." : "🔍 Search comments...")}
@@ -297,11 +398,11 @@ const Dashboard = () => {
                     onClick={() => openCommentForm()}
                     style={styles.addButton}
                   >
-                    <FaPlus /> {settings.language === "id" ? "Tambah Komentar" : "Add Comment"}
+                    <FaPlus size={14} /> {settings.language === "id" ? "Tambah Komentar" : "Add Comment"}
                   </button>
                 )}
                 <button onClick={exportData} style={styles.submitButton}>
-                  <FaFileExport /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
+                  <FaFileExport size={14} /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
                 </button>
               </div>
             )}
@@ -313,99 +414,153 @@ const Dashboard = () => {
             filteredContacts.length === 0 ? (
               <p style={styles.statusText}>{settings.language === "id" ? "📭 Tidak ada data kontak yang cocok." : "📭 No matching contacts found."}</p>
             ) : (
-              <div style={{ overflowX: "auto" }}>
-                <table style={styles.table}>
-                  <thead>
-                    <tr>
-                      <th style={styles.th}>{settings.language === "id" ? "Nama" : "Name"}</th>
-                      <th style={styles.th}>Email</th>
-                      <th style={styles.th}>{settings.language === "id" ? "Pesan" : "Message"}</th>
-                      <th style={styles.th}>{settings.language === "id" ? "Tanggal" : "Date"}</th>
-                      <th style={styles.th}>{settings.language === "id" ? "Aksi" : "Actions"}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredContacts.map((contact, index) => (
-                      <tr
-                        key={contact.id || index}
-                        style={index % 2 === 0 ? styles.trEven : styles.trOdd}
-                      >
-                        <td style={styles.td}>{contact.name || "N/A"}</td>
-                        <td style={styles.td}>{contact.email || "N/A"}</td>
-                        <td style={styles.td}>{contact.message || "N/A"}</td>
-                        <td style={styles.td}>
-                          {contact.createdAt?.toDate().toLocaleString() || "-"}
-                        </td>
-                        <td style={styles.td}>
-                          <button
-                            onClick={() => handleDelete(contact.id)}
-                            style={styles.deleteButton}
-                            title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
-                            disabled={!contact.id}
-                          >
-                            <FaTrash />
-                          </button>
-                        </td>
+              <>
+                <div className="table-container" style={{ overflowX: "auto" }}>
+                  <table style={styles.table}>
+                    <thead>
+                      <tr>
+                        <th style={styles.th}>{settings.language === "id" ? "Nama" : "Name"}</th>
+                        <th style={styles.th}>Email</th>
+                        <th style={styles.th}>{settings.language === "id" ? "Pesan" : "Message"}</th>
+                        <th style={styles.th}>{settings.language === "id" ? "Tanggal" : "Date"}</th>
+                        <th style={styles.th}>{settings.language === "id" ? "Aksi" : "Actions"}</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {filteredContacts.map((contact, index) => (
+                        <tr
+                          key={contact.id || index}
+                          style={index % 2 === 0 ? styles.trEven : styles.trOdd}
+                        >
+                          <td style={styles.td}>{contact.name || "N/A"}</td>
+                          <td style={styles.td}>{contact.email || "N/A"}</td>
+                          <td style={styles.td}>{contact.message || "N/A"}</td>
+                          <td style={styles.td}>
+                            {contact.createdAt?.toDate().toLocaleString() || "-"}
+                          </td>
+                          <td style={styles.td}>
+                            <button
+                              onClick={() => handleDelete(contact.id)}
+                              style={styles.deleteButton}
+                              title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
+                              disabled={!contact.id}
+                            >
+                              <FaTrash size={12} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="card-container">
+                  {filteredContacts.map((contact, index) => (
+                    <div key={contact.id || index} className="card">
+                      <div className="card-header">{contact.name || "N/A"}</div>
+                      <div className="card-content">
+                        <p><strong>Email:</strong> {contact.email || "N/A"}</p>
+                        <p><strong>{settings.language === "id" ? "Pesan" : "Message"}:</strong> {contact.message || "N/A"}</p>
+                        <p><strong>{settings.language === "id" ? "Tanggal" : "Date"}:</strong> {contact.createdAt?.toDate().toLocaleString() || "-"}</p>
+                      </div>
+                      <div className="card-actions">
+                        <button
+                          onClick={() => handleDelete(contact.id)}
+                          style={styles.deleteButton}
+                          title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
+                          disabled={!contact.id}
+                        >
+                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
             )
           ) : activeTab === "comments" ? (
             filteredComments.length === 0 ? (
               <p style={styles.statusText}>{settings.language === "id" ? "💬 Belum ada komentar." : "💬 No comments yet."}</p>
             ) : (
-              <div style={{ overflowX: "auto" }}>
-                <table style={styles.table}>
-                  <thead>
-                    <tr>
-                      <th style={styles.th}>{settings.language === "id" ? "Nama" : "Name"}</th>
-                      <th style={styles.th}>{settings.language === "id" ? "Komentar" : "Comment"}</th>
-                      <th style={styles.th}>{settings.language === "id" ? "Tanggal" : "Date"}</th>
-                      <th style={styles.th}>{settings.language === "id" ? "Aksi" : "Actions"}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredComments.map((comment, index) => (
-                      <tr
-                        key={comment.id || index}
-                        style={index % 2 === 0 ? styles.trEven : styles.trOdd}
-                      >
-                        <td style={styles.td}>{comment.name || "N/A"}</td>
-                        <td style={styles.td}>{comment.message || "N/A"}</td>
-                        <td style={styles.td}>
-                          {comment.createdAt?.toDate().toLocaleString() || "-"}
-                        </td>
-                        <td style={styles.td}>
-                          <button
-                            onClick={() => openCommentForm(comment)}
-                            style={styles.editButton}
-                            title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
-                          >
-                            <FaEdit />
-                          </button>{" "}
-                          <button
-                            onClick={() => handleDelete(comment.id)}
-                            style={styles.deleteButton}
-                            title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
-                            disabled={!comment.id}
-                          >
-                            <FaTrash />
-                          </button>
-                        </td>
+              <>
+                <div className="table-container" style={{ overflowX: "auto" }}>
+                  <table style={styles.table}>
+                    <thead>
+                      <tr>
+                        <th style={styles.th}>{settings.language === "id" ? "Nama" : "Name"}</th>
+                        <th style={styles.th}>{settings.language === "id" ? "Komentar" : "Comment"}</th>
+                        <th style={styles.th}>{settings.language === "id" ? "Tanggal" : "Date"}</th>
+                        <th style={styles.th}>{settings.language === "id" ? "Aksi" : "Actions"}</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {filteredComments.map((comment, index) => (
+                        <tr
+                          key={comment.id || index}
+                          style={index % 2 === 0 ? styles.trEven : styles.trOdd}
+                        >
+                          <td style={styles.td}>{comment.name || "N/A"}</td>
+                          <td style={styles.td}>{comment.message || "N/A"}</td>
+                          <td style={styles.td}>
+                            {comment.createdAt?.toDate().toLocaleString() || "-"}
+                          </td>
+                          <td style={styles.td}>
+                            <button
+                              onClick={() => openCommentForm(comment)}
+                              style={styles.editButton}
+                              title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
+                            >
+                              <FaEdit size={12} />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(comment.id)}
+                              style={styles.deleteButton}
+                              title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
+                              disabled={!comment.id}
+                            >
+                              <FaTrash size={12} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="card-container">
+                  {filteredComments.map((comment, index) => (
+                    <div key={comment.id || index} className="card">
+                      <div className="card-header">{comment.name || "N/A"}</div>
+                      <div className="card-content">
+                        <p><strong>{settings.language === "id" ? "Komentar" : "Comment"}:</strong> {comment.message || "N/A"}</p>
+                        <p><strong>{settings.language === "id" ? "Tanggal" : "Date"}:</strong> {comment.createdAt?.toDate().toLocaleString() || "-"}</p>
+                      </div>
+                      <div className="card-actions">
+                        <button
+                          onClick={() => openCommentForm(comment)}
+                          style={styles.editButton}
+                          title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
+                        >
+                          <FaEdit size={12} /> {settings.language === "id" ? "Edit" : "Edit"}
+                        </button>
+                        <button
+                          onClick={() => handleDelete(comment.id)}
+                          style={styles.deleteButton}
+                          title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
+                          disabled={!comment.id}
+                        >
+                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
             )
           ) : activeTab === "settings" ? (
             <div style={styles.settingsContainer}>
-              <h3 style={{ fontSize: 20, marginBottom: 16 }}>{settings.language === "id" ? "Pengaturan Dashboard" : "Dashboard Settings"}</h3>
+              <h3 style={styles.settingsTitle}>{settings.language === "id" ? "Pengaturan Dashboard" : "Dashboard Settings"}</h3>
               <div style={styles.formGroup}>
-                <label style={{ fontWeight: "bold", marginBottom: 8 }}>{settings.language === "id" ? "Tema:" : "Theme:"}</label>
-                <div style={{ display: "flex", gap: 12 }}>
+                <label style={styles.formLabel}>{settings.language === "id" ? "Tema:" : "Theme:"}</label>
+                <div style={styles.buttonGroup}>
                   <button
                     onClick={() => handleThemeChange("light")}
                     style={settings.theme === "light" ? styles.submitButton : styles.cancelButton}
@@ -421,8 +576,8 @@ const Dashboard = () => {
                 </div>
               </div>
               <div style={styles.formGroup}>
-                <label style={{ fontWeight: "bold", marginBottom: 8 }}>{settings.language === "id" ? "Bahasa:" : "Language:"}</label>
-                <div style={{ display: "flex", gap: 12 }}>
+                <label style={styles.formLabel}>{settings.language === "id" ? "Bahasa:" : "Language:"}</label>
+                <div style={styles.buttonGroup}>
                   <button
                     onClick={() => handleLanguageChange("id")}
                     style={settings.language === "id" ? styles.submitButton : styles.cancelButton}
@@ -440,28 +595,32 @@ const Dashboard = () => {
             </div>
           ) : (
             <div style={styles.infoContainer}>
-              <h3 style={{ fontSize: 20, marginBottom: 16 }}>{settings.language === "id" ? "Tentang Dashboard" : "About Dashboard"}</h3>
-              <p style={{ marginBottom: 12 }}>{settings.language === "id" ? 
-                "Dashboard ini dirancang untuk mengelola kontak dan komentar dengan mudah. Gunakan navigasi di atas untuk beralih antara fitur." :
-                "This dashboard is designed to manage contacts and comments easily. Use the navigation above to switch between features."}</p>
-              <h4 style={{ fontSize: 18, marginBottom: 8 }}>{settings.language === "id" ? "Tips Penggunaan" : "Usage Tips"}</h4>
-              <ul style={{ listStyleType: "disc", paddingLeft: 20, marginBottom: 12 }}>
+              <h3 style={styles.settingsTitle}>{settings.language === "id" ? "Tentang Dashboard" : "About Dashboard"}</h3>
+              <p style={styles.infoText}>
+                {settings.language === "id" ? 
+                  "Dashboard ini dirancang untuk mengelola kontak dan komentar dengan mudah. Gunakan navigasi di atas untuk beralih antara fitur." :
+                  "This dashboard is designed to manage contacts and comments easily. Use the navigation above to switch between features."}
+              </p>
+              <h4 style={styles.infoSubtitle}>{settings.language === "id" ? "Tips Penggunaan" : "Usage Tips"}</h4>
+              <ul style={styles.infoList}>
                 <li>{settings.language === "id" ? "Gunakan kolom pencarian untuk menemukan data spesifik." : "Use the search field to find specific data."}</li>
                 <li>{settings.language === "id" ? "Sesuaikan tema di pengaturan untuk kenyamanan visual." : "Customize the theme in settings for visual comfort."}</li>
                 <li>{settings.language === "id" ? "Ekspor data untuk analisis lebih lanjut dalam format CSV." : "Export data for further analysis in CSV format."}</li>
               </ul>
-              <p><strong>{settings.language === "id" ? "Versi:" : "Version:"}</strong> 1.2.0</p>
-              <p><strong>{settings.language === "id" ? "Dukungan:" : "Support:"}</strong> <a href="mailto:support@example.com" style={{ color: "#ff6600" }}>support@example.com</a></p>
+              <p style={styles.infoText}><strong>{settings.language === "id" ? "Versi:" : "Version:"}</strong> 1.2.0</p>
+              <p style={styles.infoText}><strong>{settings.language === "id" ? "Dukungan:" : "Support:"}</strong> <a href="mailto:support@example.com" style={styles.supportLink}>support@example.com</a></p>
             </div>
           )}
 
           {commentFormOpen && (
             <div style={styles.modalOverlay}>
-              <div style={styles.modalContent}>
-                <h2>{commentFormData.id ? (settings.language === "id" ? "Edit Komentar" : "Edit Comment") : (settings.language === "id" ? "Tambah Komentar" : "Add Comment")}</h2>
+              <div className="modal-content" style={styles.modalContent}>
+                <h2 style={styles.modalTitle}>
+                  {commentFormData.id ? (settings.language === "id" ? "Edit Komentar" : "Edit Comment") : (settings.language === "id" ? "Tambah Komentar" : "Add Comment")}
+                </h2>
                 <form onSubmit={submitCommentForm}>
                   <div style={styles.formGroup}>
-                    <label htmlFor="name">{settings.language === "id" ? "Nama:" : "Name:"}</label>
+                    <label htmlFor="name" style={styles.formLabel}>{settings.language === "id" ? "Nama:" : "Name:"}</label>
                     <input
                       type="text"
                       name="name"
@@ -470,10 +629,11 @@ const Dashboard = () => {
                       onChange={handleCommentChange}
                       required
                       style={styles.formInput}
+                      className="form-input"
                     />
                   </div>
                   <div style={styles.formGroup}>
-                    <label htmlFor="message">{settings.language === "id" ? "Komentar:" : "Comment:"}</label>
+                    <label htmlFor="message" style={styles.formLabel}>{settings.language === "id" ? "Komentar:" : "Comment:"}</label>
                     <textarea
                       name="message"
                       id="message"
@@ -482,9 +642,10 @@ const Dashboard = () => {
                       onChange={handleCommentChange}
                       required
                       style={styles.formTextarea}
+                      className="form-textarea"
                     />
                   </div>
-                  <div style={{ marginTop: 16, textAlign: "right" }}>
+                  <div style={styles.modalActions}>
                     <button
                       type="button"
                       onClick={closeCommentForm}
@@ -492,7 +653,7 @@ const Dashboard = () => {
                       disabled={commentLoading}
                     >
                       {settings.language === "id" ? "Batal" : "Cancel"}
-                    </button>{" "}
+                    </button>
                     <button
                       type="submit"
                       disabled={commentLoading}
@@ -521,12 +682,11 @@ const styles = {
   navbar: {
     backgroundColor: "#ff6600",
     color: "#fff",
-    padding: "10px 20px",
+    padding: "8px 16px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    flexWrap: "wrap",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
     position: "sticky",
     top: 0,
     zIndex: 1000,
@@ -534,109 +694,125 @@ const styles = {
   navbarBrand: {
     display: "flex",
     alignItems: "center",
-    gap: 10,
+    gap: "8px",
   },
   logo: {
     margin: 0,
     fontWeight: "bold",
-    fontSize: 24,
-    userSelect: "none",
+    fontSize: "1.5rem",
   },
   toggleButton: {
     backgroundColor: "transparent",
     border: "none",
     color: "#fff",
-    padding: "8px",
+    padding: "6px",
     cursor: "pointer",
-    fontSize: 22,
+    fontSize: "1.2rem",
     display: "block",
   },
   nav: {
     display: "flex",
-    gap: 8,
+    gap: "6px",
     flexWrap: "wrap",
   },
   navItem: {
     backgroundColor: "transparent",
     border: "none",
     color: "#fff",
-    padding: "10px 16px",
-    fontSize: 16,
+    padding: "8px 12px",
+    fontSize: "0.9rem",
     cursor: "pointer",
-    borderRadius: 6,
+    borderRadius: "4px",
     display: "flex",
     alignItems: "center",
-    gap: 8,
-    transition: "background-color 0.2s",
+    gap: "6px",
+    transition: "background-color 0.2s, transform 0.2s",
   },
   navItemActive: {
     backgroundColor: "#e65c00",
     border: "none",
     color: "#fff",
-    padding: "10px 16px",
-    fontSize: 16,
+    padding: "8px 12px",
+    fontSize: "0.9rem",
     cursor: "pointer",
-    borderRadius: 6,
+    borderRadius: "4px",
     display: "flex",
     alignItems: "center",
-    gap: 8,
+    gap: "6px",
     fontWeight: "bold",
-    transition: "background-color 0.2s",
+    transition: "background-color 0.2s, transform 0.2s",
   },
   logoutButton: {
     backgroundColor: "#cc3300",
     border: "none",
     color: "#fff",
-    padding: "10px 16px",
+    padding: "8px 12px",
     cursor: "pointer",
-    borderRadius: 6,
+    borderRadius: "4px",
     display: "flex",
     alignItems: "center",
-    gap: 8,
-    fontSize: 16,
-    transition: "background-color 0.2s",
+    gap: "6px",
+    fontSize: "0.9rem",
+    transition: "background-color 0.2s, transform 0.2s",
   },
   mainContent: {
     flexGrow: 1,
-    padding: 30,
-    transition: "margin-top 0.3s ease",
+    padding: "24px",
   },
   headerRow: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: "16px",
     flexWrap: "wrap",
-    gap: 12,
+    gap: "8px",
   },
   title: {
     margin: 0,
-    fontSize: 28,
+    fontSize: "1.8rem",
     fontWeight: "bold",
   },
+  actionButtons: {
+    display: "flex",
+    gap: "8px",
+    flexWrap: "wrap",
+  },
   searchInput: {
-    padding: "10px 14px",
-    fontSize: 16,
-    borderRadius: 6,
+    padding: "8px 12px",
+    fontSize: "0.9rem",
+    borderRadius: "4px",
     border: "1px solid #bbb",
-    width: 240,
     backgroundColor: "#fff",
+    width: "200px",
   },
   addButton: {
     backgroundColor: "#ff6600",
     border: "none",
     color: "#fff",
-    padding: "10px 16px",
-    borderRadius: 6,
+    padding: "8px 12px",
+    borderRadius: "4px",
     cursor: "pointer",
-    fontSize: 16,
+    fontSize: "0.9rem",
     display: "flex",
     alignItems: "center",
-    gap: 8,
-    transition: "background-color 0.2s",
+    gap: "6px",
+    transition: "background-color 0.2s, transform 0.2s",
+  },
+  submitButton: {
+    backgroundColor: "#ff6600",
+    border: "none",
+    color: "#fff",
+    padding: "8px 12px",
+    borderRadius: "4px",
+    cursor: "pointer",
+    fontSize: "0.9rem",
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    transition: "background-color 0.2s, transform 0.2s",
   },
   statusText: {
-    fontSize: 18,
+    fontSize: "1rem",
     fontStyle: "italic",
     color: "#666",
   },
@@ -644,21 +820,23 @@ const styles = {
     width: "100%",
     borderCollapse: "collapse",
     backgroundColor: "#fff",
-    borderRadius: 6,
+    borderRadius: "6px",
     overflow: "hidden",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
   },
   th: {
     borderBottom: "2px solid #ff6600",
-    padding: "12px 16px",
+    padding: "10px 12px",
     textAlign: "left",
     backgroundColor: "#ffe6cc",
     fontWeight: "bold",
+    fontSize: "0.9rem",
   },
   td: {
-    padding: "12px 16px",
+    padding: "10px 12px",
     verticalAlign: "top",
     borderBottom: "1px solid #ddd",
+    fontSize: "0.85rem",
   },
   trEven: {
     backgroundColor: "#fff",
@@ -670,21 +848,21 @@ const styles = {
     backgroundColor: "#cc3300",
     border: "none",
     color: "#fff",
-    padding: "8px 12px",
-    borderRadius: 6,
+    padding: "6px 10px",
+    borderRadius: "4px",
     cursor: "pointer",
-    fontSize: 14,
-    transition: "background-color 0.2s",
+    fontSize: "0.8rem",
+    transition: "background-color 0.2s, transform 0.2s",
   },
   editButton: {
     backgroundColor: "#555",
     border: "none",
     color: "#fff",
-    padding: "8px 12px",
-    borderRadius: 6,
+    padding: "6px 10px",
+    borderRadius: "4px",
     cursor: "pointer",
-    fontSize: 14,
-    transition: "background-color 0.2s",
+    fontSize: "0.8rem",
+    transition: "background-color 0.2s, transform 0.2s",
   },
   modalOverlay: {
     position: "fixed",
@@ -700,91 +878,107 @@ const styles = {
   },
   modalContent: {
     backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 24,
+    borderRadius: "8px",
+    padding: "20px",
     width: "100%",
-    maxWidth: 450,
+    maxWidth: "450px",
     boxShadow: "0 4px 16px rgba(0,0,0,0.2)",
   },
+  modalTitle: {
+    fontSize: "1.2rem",
+    marginBottom: "12px",
+  },
   formGroup: {
-    marginBottom: 16,
+    marginBottom: "12px",
     display: "flex",
     flexDirection: "column",
-    gap: 8,
+    gap: "6px",
+  },
+  formLabel: {
+    fontWeight: "bold",
+    fontSize: "0.9rem",
   },
   formInput: {
-    padding: 12,
-    fontSize: 16,
-    borderRadius: 6,
+    padding: "10px",
+    fontSize: "0.9rem",
+    borderRadius: "4px",
     border: "1px solid #ccc",
     backgroundColor: "#fff",
   },
   formTextarea: {
-    padding: 12,
-    fontSize: 16,
-    borderRadius: 6,
+    padding: "10px",
+    fontSize: "0.9rem",
+    borderRadius: "4px",
     border: "1px solid #ccc",
     resize: "vertical",
     backgroundColor: "#fff",
-    minHeight: 100,
+    minHeight: "80px",
+  },
+  modalActions: {
+    marginTop: "12px",
+    textAlign: "right",
+    display: "flex",
+    gap: "8px",
+    justifyContent: "flex-end",
   },
   cancelButton: {
     backgroundColor: "#ccc",
     color: "#333",
     border: "none",
-    padding: "10px 20px",
-    borderRadius: 6,
+    padding: "8px 16px",
+    borderRadius: "4px",
     cursor: "pointer",
-    fontSize: 16,
-    transition: "background-color 0.2s",
-  },
-  submitButton: {
-    backgroundColor: "#ff6600",
-    color: "#fff",
-    border: "none",
-    padding: "10px 20px",
-    borderRadius: 6,
-    cursor: "pointer",
-    fontSize: 16,
-    display: "flex",
-    alignItems: "center",
-    gap: 8,
-    transition: "background-color 0.2s",
+    fontSize: "0.9rem",
+    transition: "background-color 0.2s, transform 0.2s",
   },
   settingsContainer: {
     backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 8,
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    maxWidth: 600,
+    padding: "16px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    maxWidth: "500px",
+  },
+  settingsTitle: {
+    fontSize: "1.2rem",
+    marginBottom: "12px",
   },
   infoContainer: {
     backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 8,
-    boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    maxWidth: 600,
+    padding: "16px",
+    borderRadius: "8px",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    maxWidth: "500px",
   },
-  // Responsive styles
-  "@media (max-width: 768px)": {
-    toggleButton: {
-      display: "block",
-    },
-    nav: {
-      flexDirection: "column",
-      width: "100%",
-      backgroundColor: "#ff6600",
-      position: "absolute",
-      top: 60,
-      left: 0,
-      padding: "10px 20px",
-    },
-    mainContent: {
-      padding: "20px",
-    },
-    searchInput: {
-      width: "100%",
-    },
+  infoText: {
+    marginBottom: "8px",
+    fontSize: "0.9rem",
+  },
+  infoSubtitle: {
+    fontSize: "1rem",
+    marginBottom: "8px",
+  },
+  infoList: {
+    listStyleType: "disc",
+    paddingLeft: "16px",
+    marginBottom: "12px",
+    fontSize: "0.9rem",
+  },
+  supportLink: {
+    color: "#ff6600",
+    textDecoration: "none",
+  },
+  error: {
+    color: "#d32f2f",
+    marginBottom: "12px",
+    padding: "8px",
+    backgroundColor: "#ffe6e6",
+    borderRadius: "4px",
+    fontSize: "0.9rem",
+  },
+  buttonGroup: {
+    display: "flex",
+    gap: "8px",
+    flexWrap: "wrap",
   },
 };
 
