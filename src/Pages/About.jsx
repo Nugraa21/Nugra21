@@ -3,6 +3,7 @@ import { FileText, Code2, BadgeCheck, Clock, Edit3, Layout, Cpu } from "lucide-r
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Helmet } from "react-helmet";
+import { experienceData } from "../data/data"; // Tetap impor experienceData untuk YearExperience
 import { db, collection, onSnapshot, query } from "../firebase"; // Import Firebase utilities
 
 const Header = memo(() => (
@@ -168,7 +169,9 @@ const SkillCard = ({ icon: Icon, title, description, tools = [], delay }) => (
 const AboutPage = () => {
   const [totalProjects, setTotalProjects] = useState(0);
   const [totalCertificates, setTotalCertificates] = useState(0);
-  const [YearExperience, setYearExperience] = useState(0);
+  const YearExperience = useMemo(() => {
+    return experienceData.length || 0; // Tetap menggunakan experienceData dari lokal
+  }, []);
 
   useEffect(() => {
     AOS.init({
@@ -201,21 +204,11 @@ const AboutPage = () => {
       setTotalCertificates(0); // Fallback to 0 on error
     });
 
-    // Fetch experience data from Firebase (assuming a 'experience' collection)
-    const experienceQuery = query(collection(db, "experience"));
-    const unsubscribeExperience = onSnapshot(experienceQuery, (snapshot) => {
-      setYearExperience(snapshot.docs.length || 0); // Number of experience entries
-    }, (error) => {
-      console.error("Error fetching experience:", error.message);
-      setYearExperience(0); // Fallback to 0 on error
-    });
-
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimer);
       unsubscribeProjects();
       unsubscribeCertificates();
-      unsubscribeExperience();
     };
   }, []);
 
