@@ -15,18 +15,16 @@ import { useNavigate } from "react-router-dom";
 import {
   FaBars,
   FaTimes,
-  FaCog,
   FaSignOutAlt,
   FaTable,
   FaComments,
   FaPlus,
   FaEdit,
   FaTrash,
-  FaInfoCircle,
-  FaFileExport,
-  FaExclamationTriangle,
   FaProjectDiagram,
   FaCertificate,
+  FaEye,
+  FaFileExport,
 } from "react-icons/fa";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -82,31 +80,16 @@ const Dashboard = () => {
   });
   const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [settings, setSettings] = useState(() => {
-    const savedSettings = localStorage.getItem("dashboardSettings");
-    return savedSettings ? JSON.parse(savedSettings) : { theme: "light", language: "id" };
-  });
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
+  const [previewOpen, setPreviewOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     AOS.init({
       once: true,
-      duration: 600,
-      easing: "ease-out",
+      duration: 800,
+      easing: "ease-out-cubic",
     });
-
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("dashboardSettings", JSON.stringify(settings));
-  }, [settings]);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -126,9 +109,9 @@ const Dashboard = () => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
             setContacts(data);
             setLoading(false);
-          }, (error) => {
-            console.error("Error fetching contacts:", error);
-            setError(error.message);
+          }, (err) => {
+            console.error("Error fetching contacts:", err);
+            setError(err.message);
             setLoading(false);
           });
         } else if (activeTab === "comments") {
@@ -137,9 +120,9 @@ const Dashboard = () => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
             setComments(data);
             setLoading(false);
-          }, (error) => {
-            console.error("Error fetching comments:", error);
-            setError(error.message);
+          }, (err) => {
+            console.error("Error fetching comments:", err);
+            setError(err.message);
             setLoading(false);
           });
         } else if (activeTab === "projects") {
@@ -148,9 +131,9 @@ const Dashboard = () => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
             setProjects(data);
             setLoading(false);
-          }, (error) => {
-            console.error("Error fetching projects:", error);
-            setError(error.message);
+          }, (err) => {
+            console.error("Error fetching projects:", err);
+            setError(err.message);
             setLoading(false);
           });
         } else if (activeTab === "certificates") {
@@ -159,15 +142,15 @@ const Dashboard = () => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
             setCertificates(data);
             setLoading(false);
-          }, (error) => {
-            console.error("Error fetching certificates:", error);
-            setError(error.message);
+          }, (err) => {
+            console.error("Error fetching certificates:", err);
+            setError(err.message);
             setLoading(false);
           });
         }
-      } catch (error) {
-        console.error("Error setting up listener:", error);
-        setError(error.message);
+      } catch (err) {
+        console.error("Error setting up listener:", err);
+        setError(err.message);
         setLoading(false);
       }
 
@@ -184,27 +167,17 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (id, type) => {
-    const confirmDelete = window.confirm(
-      settings.language === "id" ? `Apakah kamu yakin ingin menghapus ${type} ini?` : `Are you sure you want to delete this ${type}?`
-    );
-    if (!confirmDelete) return;
+    if (!window.confirm(`Apakah kamu yakin ingin menghapus ${type.slice(0, -1)} ini?`)) return;
 
     try {
       await deleteDoc(doc(db, type, id));
-      if (type === "contacts") {
-        setContacts((prev) => prev.filter((item) => item.id !== id));
-      } else if (type === "comments") {
-        setComments((prev) => prev.filter((item) => item.id !== id));
-      } else if (type === "projects") {
-        setProjects((prev) => prev.filter((item) => item.id !== id));
-      } else if (type === "certificates") {
-        setCertificates((prev) => prev.filter((item) => item.id !== id));
-      }
-    } catch (error) {
-      console.error(`Gagal menghapus ${type}:`, error);
-      setError(
-        settings.language === "id" ? `Gagal menghapus ${type}: ${error.message}` : `Failed to delete ${type}: ${error.message}`
-      );
+      if (type === "contacts") setContacts((prev) => prev.filter((item) => item.id !== id));
+      else if (type === "comments") setComments((prev) => prev.filter((item) => item.id !== id));
+      else if (type === "projects") setProjects((prev) => prev.filter((item) => item.id !== id));
+      else if (type === "certificates") setCertificates((prev) => prev.filter((item) => item.id !== id));
+    } catch (err) {
+      console.error(`Gagal menghapus ${type}:`, err);
+      setError(`Gagal menghapus ${type}: ${err.message}`);
     }
   };
 
@@ -272,6 +245,7 @@ const Dashboard = () => {
 
   const closeForm = () => {
     setFormOpen(false);
+    setPreviewOpen(false);
     setFormData({
       type: null,
       id: null,
@@ -305,7 +279,7 @@ const Dashboard = () => {
       if (type === "comments") {
         const { name, message } = formData;
         if (!name.trim() || !message.trim()) {
-          alert(settings.language === "id" ? "Nama dan Pesan wajib diisi." : "Name and Message are required.");
+          alert("Nama dan Komentar wajib diisi.");
           setFormLoading(false);
           return;
         }
@@ -323,7 +297,7 @@ const Dashboard = () => {
       } else if (type === "projects") {
         const { Title, Description, Img, Github, Link, TechStack, Features, category } = formData;
         if (!Title.trim() || !Description.trim()) {
-          alert(settings.language === "id" ? "Judul dan Deskripsi wajib diisi." : "Title and Description are required.");
+          alert("Judul dan Deskripsi wajib diisi.");
           setFormLoading(false);
           return;
         }
@@ -348,11 +322,7 @@ const Dashboard = () => {
       } else if (type === "certificates") {
         const { title, description, Img, issuer, date, Link } = formData;
         if (!title.trim() || !description.trim() || !issuer.trim() || !date.trim()) {
-          alert(
-            settings.language === "id"
-              ? "Judul, Deskripsi, Penerbit, dan Tanggal wajib diisi."
-              : "Title, Description, Issuer, and Date are required."
-          );
+          alert("Judul, Deskripsi, Penerbit, dan Tanggal wajib diisi.");
           setFormLoading(false);
           return;
         }
@@ -374,43 +344,31 @@ const Dashboard = () => {
         }
       }
       closeForm();
-    } catch (error) {
-      console.error(`Gagal simpan ${type}:`, error);
-      setError(
-        settings.language === "id" ? `Gagal simpan ${type}: ${error.message}` : `Failed to save ${type}: ${error.message}`
-      );
+    } catch (err) {
+      console.error(`Gagal menyimpan ${type}:`, err);
+      setError(`Gagal menyimpan ${type}: ${err.message}`);
     }
     setFormLoading(false);
   };
 
-  const handleThemeChange = (theme) => {
-    setSettings((prev) => ({ ...prev, theme }));
-  };
-
-  const handleLanguageChange = (language) => {
-    setSettings((prev) => ({ ...prev, language }));
-  };
-
   const exportData = () => {
-    let data;
-    let headers;
-    let filename;
+    let data, headers, filename;
     if (activeTab === "contacts") {
       data = filteredData(contacts, "contacts");
-      headers = "Name,Email,Message,Date";
-      filename = "contacts";
+      headers = "Nama,Email,Pesan,Tanggal";
+      filename = "kontak";
     } else if (activeTab === "comments") {
       data = filteredData(comments, "comments");
-      headers = "Name,Message,Date";
-      filename = "comments";
+      headers = "Nama,Komentar,Tanggal";
+      filename = "komentar";
     } else if (activeTab === "projects") {
       data = filteredData(projects, "projects");
-      headers = "Title,Description,Category,TechStack,Features,Github,Link,Image,Date";
-      filename = "projects";
+      headers = "Judul,Deskripsi,Kategori,Teknologi,Fitur,Github,Link,Gambar,Tanggal";
+      filename = "proyek";
     } else if (activeTab === "certificates") {
       data = filteredData(certificates, "certificates");
-      headers = "Title,Description,Issuer,Date,Image,Link";
-      filename = "certificates";
+      headers = "Judul,Deskripsi,Penerbit,Tanggal,Gambar,Link";
+      filename = "sertifikat";
     }
     const csv = [
       headers,
@@ -425,79 +383,68 @@ const Dashboard = () => {
       ),
     ].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
+    const url = document.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `${filename}_export_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.download = `${filename}_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
-    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   };
 
   return (
     <ErrorBoundary>
-      <div className={`dashboard-container ${settings.theme}`}>
-        <style jsx>{`
-          @import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+      <div className="dashboard-wrapper">
+        <style jsx global>{`
+          @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
           :root {
-            --primary: #F97316;
-            --primary-dark: #EA580C;
-            --text: #333;
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --secondary: #FBBF24;
+            --text-dark: #333;
             --text-light: #666;
-            --bg-light: #FFF8E1;
-            --bg-dark: #2A2A2A;
-            --card-bg-light: rgba(255, 248, 225, 0.8);
-            --card-bg-dark: rgba(42, 42, 42, 0.8);
-            --border: url("data:image/svg+xml,%3Csvg width='12' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6c2 0 3-2 6-2s4 2 6 2' stroke='%23F97316' fill='none'/%3E%3C/svg%3E") repeat;
+            --bg-light: #F9FAFB;
+            --card-bg: #FFFFFF;
+            --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+            --transition: all 0.3s ease-in-out;
           }
 
-          .dashboard-container {
+          .dashboard-wrapper {
             min-height: 100vh;
-            font-family: 'Shadows Into Light', cursive;
-            background: var(--bg-light);
-            color: var(--text);
-            position: relative;
-            overflow: hidden;
-          }
-
-          .dashboard-container.dark {
-            background: var(--bg-dark);
-            color: #E0E0E0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
           }
 
           .navbar {
-            background: var(--card-bg-light);
-            backdrop-filter: blur(5px);
-            padding: 12px 24px;
+            background: var(--card-bg);
+            padding: 16px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: var(--card-shadow);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: var(--border);
-          }
-
-          .dark .navbar {
-            background: var(--card-bg-dark);
           }
 
           .navbar-brand {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
           }
 
           .logo {
-            margin: 0;
-            font-size: 2rem;
+            font-size: 1.75rem;
+            font-weight: 700;
             color: var(--primary);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            margin: 0;
           }
 
           .toggle-button {
-            background: transparent;
+            background: none;
             border: none;
             color: var(--primary);
             font-size: 1.5rem;
@@ -507,59 +454,59 @@ const Dashboard = () => {
 
           .nav {
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
           }
 
           .nav-item {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-            padding: 8px 16px;
-            font-size: 1.2rem;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-light);
+            background: none;
+            border: none;
             cursor: pointer;
-            border-radius: 8px;
+            border-radius: var(--border-radius);
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.3s ease;
+            transition: var(--transition);
           }
 
           .nav-item:hover {
             background: var(--primary);
-            color: #FFF;
-            transform: translateY(-2px);
+            color: #FFFFFF;
           }
 
           .nav-item.active {
             background: var(--primary);
-            color: #FFF;
-            font-weight: bold;
-            border-color: var(--primary-dark);
+            color: #FFFFFF;
+            font-weight: 600;
           }
 
           .logout-button {
-            background: #CC3300;
-            border: none;
-            color: #FFF;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 1.2rem;
+            background: var(--secondary);
+            color: var(--text-dark);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            border: none;
           }
 
           .logout-button:hover {
-            background: #B32D00;
+            background: #F59E0B;
             transform: translateY(-2px);
           }
 
           .main-content {
-            padding: 24px;
-            max-width: 1200px;
+            padding: 32px;
+            max-width: 1400px;
             margin: 0 auto;
           }
 
@@ -569,75 +516,72 @@ const Dashboard = () => {
             align-items: center;
             margin-bottom: 24px;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 16px;
           }
 
           .title {
-            font-size: 2.5rem;
+            font-size: 2rem;
+            font-weight: 700;
             color: var(--primary);
             margin: 0;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
           }
 
           .action-buttons {
             display: flex;
             gap: 12px;
+            align-items: center;
             flex-wrap: wrap;
           }
 
           .search-input {
-            padding: 10px 16px;
-            font-size: 1.2rem;
-            border: var(--border);
-            border-radius: 8px;
-            background: var(--card-bg-light);
-            color: var(--text);
-            width: 200px;
-            font-family: 'Shadows Into Light', cursive;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            background: var(--card-bg);
+            color: var(--text-dark);
+            width: 250px;
+            transition: var(--transition);
           }
 
-          .dark .search-input {
-            background: var(--card-bg-dark);
-            color: #E0E0E0;
+          .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
           }
 
           .add-button, .export-button, .submit-button {
             background: var(--primary);
-            border: 2px solid var(--primary-dark);
-            color: #FFF;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 1.2rem;
+            color: #FFFFFF;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
-            transition: all 0.3s ease;
-            font-family: 'Shadows Into Light', cursive;
+            transition: var(--transition);
+            border: none;
           }
 
-          .add-button:hover, .export-button:hover, .submit-button:hover {
+          .add-button:hover .export-button:hover, .submit-button:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
           }
 
           .status-text {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             color: var(--text-light);
             text-align: center;
-            margin: 24px 0;
+            margin: 32px 0;
           }
 
           .table-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
             overflow-x: auto;
-            border: var(--border);
-            border-radius: 12px;
-            background: var(--card-bg-light);
-            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
-          }
-
-          .dark .table-container {
-            background: var(--card-bg-dark);
           }
 
           .table {
@@ -646,91 +590,117 @@ const Dashboard = () => {
           }
 
           .th {
-            padding: 12px 16px;
+            padding: 16px;
             text-align: left;
             background: var(--primary);
-            color: #FFF;
-            font-size: 1.2rem;
-            font-weight: bold;
+            color: #FFFFFF;
+            font-size: 1rem;
+            font-weight: 600;
           }
 
           .td {
-            padding: 12px 16px;
-            border-bottom: 1px dashed var(--primary);
-            font-size: 1.1rem;
-            color: var(--text);
-          }
-
-          .dark .td {
-            color: #E0E0E0;
+            padding: 16px;
+            border-bottom: 1px solid #E5E7EB;
+            font-size: 0.95rem;
+            color: var(--text-dark);
           }
 
           .tr-even {
-            background: transparent;
+            background: var(--card-bg);
           }
 
           .tr-odd {
-            background: rgba(255, 255, 255, 0.05);
+            background: #F9FAFB;
           }
 
-          .delete-button, .edit-button {
-            background: #CC3300;
-            border: none;
-            color: #FFF;
-            padding: 6px 12px;
+          .action-buttons-table {
+            display: flex;
+            gap: 8px;
+          }
+
+          .delete-button, .edit-button, .preview-button {
+            padding: 8px 12px;
             border-radius: 6px;
+            font-size: 0.9rem;
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            margin-right: 8px;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
           }
 
           .edit-button {
-            background: #555;
+            background: #10B981;
+            color: #FFFFFF;
           }
 
-          .delete-button:hover, .edit-button:hover {
-            transform: translateY(-2px);
+          .edit-button:hover {
+            background: #059669;
+            transform: translateY(-1px);
+          }
+
+          .delete-button {
+            background: #EF4444;
+            color: #FFFFFF;
+          }
+
+          .delete-button:hover {
+            background: #DC2626;
+            transform: translateY(-1px);
+          }
+
+          .preview-button {
+            background: var(--secondary);
+            color: var(--text-dark);
+          }
+
+          .preview-button:hover {
+            background: #F59E0B;
+            transform: translateY(-1px);
           }
 
           .card-container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
           }
 
           .card {
-            background: var(--card-bg-light);
-            backdrop-filter: blur(5px);
-            border: var(--border);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            padding: 20px;
+            transition: var(--transition);
           }
 
-          .dark .card {
-            background: var(--card-bg-dark);
+          .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
           }
 
           .card-header {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
             color: var(--primary);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
           }
 
           .card-content {
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             color: var(--text-light);
+            line-height: 1.5;
           }
 
-          .dark .card-content {
-            color: #CCC;
+          .card-content p {
+            margin-bottom: 8px;
           }
 
           .card-actions {
             display: flex;
             gap: 12px;
-            margin-top: 12px;
+            margin-top: 16px;
           }
 
           .modal-overlay {
@@ -739,229 +709,170 @@ const Dashboard = () => {
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.75);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 2000;
+            backdrop-filter: blur(3px);
           }
 
           .modal-content {
-            background: var(--card-bg-light);
-            border: var(--border);
+            background: var(--card-bg);
             border-radius: 12px;
-            padding: 24px;
-            max-width: 600px;
+            padding: 32px;
+            max-width: 900px;
             width: 90%;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            display: flex;
+            gap: 24px;
             position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
           }
 
-          .dark .modal-content {
-            background: var(--card-bg-dark);
+          .modal-form {
+            flex: 1;
+          }
+
+          .modal-preview {
+            flex: 1;
+            background: #F3F4F6;
+            border-radius: 8px;
+            padding: 20px;
+            display: ${previewOpen ? 'block' : 'none'};
           }
 
           .modal-title {
-            font-size: 2rem;
+            font-size: 1.75rem;
+            font-weight: 600;
             color: var(--primary);
-            margin-bottom: 16px;
+            margin-bottom: 24px;
           }
 
           .form-group {
-            margin-bottom: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
+            margin-bottom: 20px;
           }
 
           .form-label {
-            font-size: 1.2rem;
-            color: var(--primary);
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: block;
           }
 
           .form-input, .form-textarea {
+            width: 100%;
             padding: 12px;
-            font-size: 1.2rem;
-            border: var(--border);
-            border-radius: 8px;
-            background: var(--card-bg-light);
-            color: var(--text);
-            font-family: 'Shadows Into Light', cursive;
-            resize: vertical;
-            min-height: 80px;
+            font-size: 1rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            background: #F9FAFB;
+            color: var(--text-dark);
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
           }
 
-          .dark .form-input, .dark .form-textarea {
-            background: var(--card-bg-dark);
-            color: #E0E0E0;
+          .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+          }
+
+          .form-textarea {
+            resize: vertical;
+            min-height: 100px;
           }
 
           .modal-actions {
             display: flex;
             gap: 12px;
             justify-content: flex-end;
-            margin-top: 16px;
+            margin-top: 24px;
           }
 
           .cancel-button {
-            background: #CCC;
-            color: #333;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 8px;
-            font-size: 1.2rem;
+            background: #E5E7EB;
+            color: var(--text-dark);
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Shadows Into Light', cursive;
+            transition: var(--transition);
+            border: none;
           }
 
           .cancel-button:hover {
-            background: #BBB;
+            background: #D1D5DB;
             transform: translateY(-2px);
           }
 
-          .settings-container, .info-container {
-            background: var(--card-bg-light);
-            border: var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            max-width: 600px;
-            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
-          }
-
-          .dark .settings-container, .dark .info-container {
-            background: var(--card-bg-dark);
-          }
-
-          .settings-title {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 16px;
-          }
-
-          .button-group {
+          .preview-toggle {
+            background: var(--secondary);
+            color: var(--text-dark);
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
             display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            border: none;
+            margin-bottom: 20px;
           }
 
-          .info-text {
-            font-size: 1.2rem;
-            color: var(--text-light);
-            margin-bottom: 12px;
+          .preview-toggle:hover {
+            background: #F59E0B;
+            transform: translateY(-2px);
           }
 
-          .dark .info-text {
-            color: #CCC;
+          .preview-content {
+            font-size: 0.95rem;
+            color: var(--text-dark);
           }
 
-          .info-subtitle {
-            font-size: 1.5rem;
-            color: var(--primary);
-            margin-bottom: 12px;
-          }
-
-          .info-list {
-            list-style-type: disc;
-            padding-left: 20px;
-            margin-bottom: 16px;
-            font-size: 1.2rem;
-            color: var(--text-light);
-          }
-
-          .dark .info-list {
-            color: #CCC;
-          }
-
-          .support-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 1.2rem;
-          }
-
-          .support-link:hover {
-            text-decoration: underline;
+          .preview-content img {
+            max-width: 100%;
+            border-radius: 6px;
+            margin-top: 12px;
           }
 
           .error-container {
-            background: #FFE6E6;
-            border: var(--border);
-            border-radius: 12px;
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            border-radius: var(--border-radius);
             padding: 16px;
             margin-bottom: 24px;
-            color: #D32F2F;
-            font-size: 1.2rem;
+            color: #DC2626;
+            font-size: 1rem;
             text-align: center;
           }
 
-          .mobile-warning {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.9);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 3000;
-            color: #FFF;
-            text-align: center;
-            padding: 24px;
-          }
-
-          .mobile-warning-content {
-            background: var(--card-bg-light);
-            border: var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            max-width: 400px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-          }
-
-          .dark .mobile-warning-content {
-            background: var(--card-bg-dark);
-          }
-
-          .mobile-warning-title {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 16px;
-          }
-
-          .mobile-warning-text {
-            font-size: 1.5rem;
-            color: var(--text-light);
-          }
-
-          .dark .mobile-warning-text {
-            color: #CCC;
-          }
-
-          @media (min-width: 769px) {
-            .card-container {
-              display: none;
+          @media (max-width: 1024px) {
+            .modal-content {
+              flex-direction: column;
             }
-            .toggle-button {
-              display: none;
-            }
-            .nav {
-              display: flex !important;
+            .modal-preview {
+              display: ${previewOpen ? 'block' : 'none'};
             }
           }
 
           @media (max-width: 768px) {
-            .table-container {
-              display: none;
+            .main-content {
+              padding: 16px;
             }
             .header-row {
               flex-direction: column;
-              align-items: stretch;
+              align-items: flex-start;
             }
             .action-buttons {
               flex-direction: column;
-              gap: 12px;
+              width: 100%;
+            }
+            .search-input {
+              width: 100%;
             }
             .toggle-button {
               display: block;
@@ -970,119 +881,55 @@ const Dashboard = () => {
               display: none;
               flex-direction: column;
               width: 100%;
-              max-height: 0;
-              overflow: hidden;
-              transition: max-height 0.3s ease;
-              background: var(--card-bg-light);
-              border: var(--border);
-              border-radius: 0 0 12px 12px;
-              padding: 12px;
+              background: var(--card-bg);
               position: absolute;
-              top: 60px;
+              top: 64px;
               left: 0;
-              right: 0;
+              padding: 16px;
+              box-shadow: var(--card-shadow);
               z-index: 999;
-            }
-            .dark .nav {
-              background: var(--card-bg-dark);
             }
             .nav.open {
               display: flex;
-              max-height: 500px;
+            }
+            .table-container {
+              display: none;
+            }
+            .card-container {
+              grid-template-columns: 1fr;
             }
             .modal-content {
+              padding: 20px;
               width: 95%;
-              padding: 16px;
-            }
-            .settings-container, .info-container {
-              padding: 16px;
             }
           }
 
           @media (max-width: 576px) {
-            .card {
-              padding: 12px;
-            }
-            .card-header {
-              font-size: 1.2rem;
-            }
-            .card-content {
-              font-size: 1rem;
-            }
-            .modal-content {
-              padding: 12px;
-            }
-            .form-input, .form-textarea {
-              font-size: 1rem;
-              padding: 8px;
-            }
-            .settings-container, .info-container {
-              padding: 12px;
-            }
-            .button-group {
-              flex-direction: column;
-              gap: 8px;
-            }
             .title {
-              font-size: 2rem;
+              font-size: 1.5rem;
             }
-            .search-input {
-              width: 100%;
-            }
-          }
-
-          @media (max-width: 360px) {
             .card {
-              padding: 8px;
+              padding: 16px;
             }
             .card-header {
-              font-size: 1rem;
+              font-size: 1.1rem;
             }
             .card-content {
               font-size: 0.9rem;
             }
-            .modal-content {
-              padding: 8px;
+            .modal-title {
+              font-size: 1.5rem;
             }
             .form-input, .form-textarea {
-              font-size: 0.9rem;
-              padding: 6px;
-            }
-            .settings-container, .info-container {
-              padding: 8px;
-            }
-            .title {
-              font-size: 1.8rem;
+              font-size: 0.95rem;
             }
           }
         `}</style>
 
-        {isMobile && (
-          <div className="mobile-warning">
-            <div className="mobile-warning-content">
-              <FaExclamationTriangle size={40} color="#F97316" />
-              <h2 className="mobile-warning-title">
-                {settings.language === "id" ? "Perangkat Tidak Didukung" : "Device Not Supported"}
-              </h2>
-              <p className="mobile-warning-text">
-                {settings.language === "id"
-                  ? "Dashboard ini hanya dapat diakses melalui perangkat desktop untuk pengalaman terbaik."
-                  : "This dashboard is only accessible via desktop devices for the best experience."}
-              </p>
-            </div>
-          </div>
-        )}
-
         <header className="navbar" data-aos="fade-down">
           <div className="navbar-brand">
-            <button onClick={handleLogout} className="logout-button">
-              <FaSignOutAlt size={16} /> {settings.language === "id" ? "Logout" : "Sign Out"}
-            </button>
             <h2 className="logo">Dashboard</h2>
-            <button
-              onClick={() => setNavbarOpen(!navbarOpen)}
-              className="toggle-button"
-            >
+            <button onClick={() => setNavbarOpen(!navbarOpen)} className="toggle-button">
               {navbarOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
             </button>
           </div>
@@ -1091,37 +938,28 @@ const Dashboard = () => {
               onClick={() => { setActiveTab("contacts"); setSearchTerm(""); setNavbarOpen(false); }}
               className={`nav-item ${activeTab === "contacts" ? "active" : ""}`}
             >
-              <FaTable size={16} /> {settings.language === "id" ? "Data Kontak" : "Contacts"}
+              <FaTable size={16} /> Kontak
             </button>
             <button
               onClick={() => { setActiveTab("comments"); setSearchTerm(""); setNavbarOpen(false); }}
               className={`nav-item ${activeTab === "comments" ? "active" : ""}`}
             >
-              <FaComments size={16} /> {settings.language === "id" ? "Komentar" : "Comments"}
+              <FaComments size={16} /> Komentar
             </button>
             <button
               onClick={() => { setActiveTab("projects"); setSearchTerm(""); setNavbarOpen(false); }}
               className={`nav-item ${activeTab === "projects" ? "active" : ""}`}
             >
-              <FaProjectDiagram size={16} /> {settings.language === "id" ? "Proyek" : "Projects"}
+              <FaProjectDiagram size={16} /> Proyek
             </button>
             <button
               onClick={() => { setActiveTab("certificates"); setSearchTerm(""); setNavbarOpen(false); }}
               className={`nav-item ${activeTab === "certificates" ? "active" : ""}`}
             >
-              <FaCertificate size={16} /> {settings.language === "id" ? "Sertifikat" : "Certificates"}
+              <FaCertificate size={16} /> Sertifikat
             </button>
-            <button
-              onClick={() => { setActiveTab("settings"); setSearchTerm(""); setNavbarOpen(false); }}
-              className={`nav-item ${activeTab === "settings" ? "active" : ""}`}
-            >
-              <FaCog size={16} /> {settings.language === "id" ? "Pengaturan" : "Settings"}
-            </button>
-            <button
-              onClick={() => { setActiveTab("info"); setSearchTerm(""); setNavbarOpen(false); }}
-              className={`nav-item ${activeTab === "info" ? "active" : ""}`}
-            >
-              <FaInfoCircle size={16} /> {settings.language === "id" ? "Informasi" : "Info"}
+            <button onClick={handleLogout} className="logout-button">
+              <FaSignOutAlt size={16} /> Keluar
             </button>
           </nav>
         </header>
@@ -1134,86 +972,67 @@ const Dashboard = () => {
           )}
           <div className="header-row" data-aos="fade-up">
             <h1 className="title">
-              {activeTab === "contacts" ? (settings.language === "id" ? "📋 Kontak Masuk" : "📋 Incoming Contacts") :
-               activeTab === "comments" ? (settings.language === "id" ? "💬 Komentar" : "💬 Comments") :
-               activeTab === "projects" ? (settings.language === "id" ? "📂 Proyek" : "📂 Projects") :
-               activeTab === "certificates" ? (settings.language === "id" ? "🎓 Sertifikat" : "🎓 Certificates") :
-               activeTab === "settings" ? (settings.language === "id" ? "⚙️ Pengaturan" : "⚙️ Settings") :
-               (settings.language === "id" ? "ℹ️ Informasi" : "ℹ️ Info")}
+              {activeTab === "contacts" ? "📋 Kontak" :
+               activeTab === "comments" ? "💬 Komentar" :
+               activeTab === "projects" ? "📂 Proyek" :
+               "🎓 Sertifikat"}
             </h1>
-            {activeTab !== "settings" && activeTab !== "info" && (
-              <div className="action-buttons">
-                <input
-                  type="text"
-                  placeholder={
-                    activeTab === "contacts" ? (settings.language === "id" ? "🔍 Cari kontak..." : "🔍 Search contacts...") :
-                    activeTab === "comments" ? (settings.language === "id" ? "🔍 Cari komentar..." : "🔍 Search comments...") :
-                    activeTab === "projects" ? (settings.language === "id" ? "🔍 Cari proyek..." : "🔍 Search projects...") :
-                    (settings.language === "id" ? "🔍 Cari sertifikat..." : "🔍 Search certificates...")
-                  }
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-input"
-                />
-                {(activeTab === "comments" || activeTab === "projects" || activeTab === "certificates") && (
-                  <button
-                    onClick={() => openForm(activeTab)}
-                    className="add-button"
-                  >
-                    <FaPlus size={16} />
-                    {settings.language === "id"
-                      ? activeTab === "comments" ? "Tambah Komentar" :
-                        activeTab === "projects" ? "Tambah Proyek" : "Tambah Sertifikat"
-                      : activeTab === "comments" ? "Add Comment" :
-                        activeTab === "projects" ? "Add Project" : "Add Certificate"}
-                  </button>
-                )}
-                <button onClick={exportData} className="export-button">
-                  <FaFileExport size={16} /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
+            <div className="action-buttons">
+              <input
+                type="text"
+                placeholder={`🔍 Cari ${activeTab === "contacts" ? "kontak" : activeTab === "comments" ? "komentar" : activeTab === "projects" ? "proyek" : "sertifikat"}...`}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              {(activeTab === "comments" || activeTab === "projects" || activeTab === "certificates") && (
+                <button onClick={() => openForm(activeTab)} className="add-button">
+                  <FaPlus size={16} />
+                  Tambah {activeTab === "comments" ? "Komentar" : activeTab === "projects" ? "Proyek" : "Sertifikat"}
                 </button>
-              </div>
-            )}
+              )}
+              <button onClick={exportData} className="export-button">
+                <FaFileExport size={16} /> Ekspor Data
+              </button>
+            </div>
           </div>
 
           {loading ? (
-            <p className="status-text" data-aos="fade-up">{settings.language === "id" ? "Memuat data..." : "Loading data..."}</p>
+            <p className="status-text" data-aos="fade-up">Memuat data...</p>
           ) : activeTab === "contacts" ? (
             filteredData(contacts, "contacts").length === 0 ? (
-              <p className="status-text" data-aos="fade-up">{settings.language === "id" ? "📭 Tidak ada data kontak yang cocok." : "📭 No matching contacts found."}</p>
+              <p className="status-text" data-aos="fade-up">📭 Tidak ada kontak ditemukan.</p>
             ) : (
               <>
                 <div className="table-container" data-aos="fade-up">
                   <table className="table">
                     <thead>
                       <tr>
-                        <th className="th">{settings.language === "id" ? "Nama" : "Name"}</th>
+                        <th className="th">Nama</th>
                         <th className="th">Email</th>
-                        <th className="th">{settings.language === "id" ? "Pesan" : "Message"}</th>
-                        <th className="th">{settings.language === "id" ? "Tanggal" : "Date"}</th>
-                        <th className="th">{settings.language === "id" ? "Aksi" : "Actions"}</th>
+                        <th className="th">Pesan</th>
+                        <th className="th">Tanggal</th>
+                        <th className="th">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredData(contacts, "contacts").map((contact, index) => (
-                        <tr
-                          key={contact.id || index}
-                          className={index % 2 === 0 ? "tr-even" : "tr-odd"}
-                        >
+                        <tr key={contact.id} className={index % 2 === 0 ? "tr-even" : "tr-odd"}>
                           <td className="td">{contact.name || "N/A"}</td>
                           <td className="td">{contact.email || "N/A"}</td>
                           <td className="td">{contact.message || "N/A"}</td>
+                          <td className="td">{contact.createdAt?.toDate().toLocaleString() || "-"}</td>
                           <td className="td">
-                            {contact.createdAt?.toDate().toLocaleString() || "-"}
-                          </td>
-                          <td className="td">
-                            <button
-                              onClick={() => handleDelete(contact.id, "contacts")}
-                              className="delete-button"
-                              title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
-                              disabled={!contact.id}
-                            >
-                              <FaTrash size={12} />
-                            </button>
+                            <div className="action-buttons-table">
+                              <button
+                                onClick={() => handleDelete(contact.id, "contacts")}
+                                className="delete-button"
+                                title="Hapus kontak"
+                                disabled={!contact.id}
+                              >
+                                <FaTrash size={12} /> Hapus
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -1221,22 +1040,22 @@ const Dashboard = () => {
                   </table>
                 </div>
                 <div className="card-container" data-aos="fade-up">
-                  {filteredData(contacts, "contacts").map((contact, index) => (
-                    <div key={contact.id || index} className="card">
+                  {filteredData(contacts, "contacts").map((contact) => (
+                    <div key={contact.id} className="card">
                       <div className="card-header">{contact.name || "N/A"}</div>
                       <div className="card-content">
                         <p><strong>Email:</strong> {contact.email || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Pesan" : "Message"}:</strong> {contact.message || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Tanggal" : "Date"}:</strong> {contact.createdAt?.toDate().toLocaleString() || "-"}</p>
+                        <p><strong>Pesan:</strong> {contact.message || "N/A"}</p>
+                        <p><strong>Tanggal:</strong> {contact.createdAt?.toDate().toLocaleString() || "-"}</p>
                       </div>
                       <div className="card-actions">
                         <button
                           onClick={() => handleDelete(contact.id, "contacts")}
                           className="delete-button"
-                          title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
+                          title="Hapus kontak"
                           disabled={!contact.id}
                         >
-                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                          <FaTrash size={12} /> Hapus
                         </button>
                       </div>
                     </div>
@@ -1246,46 +1065,43 @@ const Dashboard = () => {
             )
           ) : activeTab === "comments" ? (
             filteredData(comments, "comments").length === 0 ? (
-              <p className="status-text" data-aos="fade-up">{settings.language === "id" ? "💬 Belum ada komentar." : "💬 No comments yet."}</p>
+              <p className="status-text" data-aos="fade-up">💬 Tidak ada komentar ditemukan.</p>
             ) : (
               <>
                 <div className="table-container" data-aos="fade-up">
                   <table className="table">
                     <thead>
                       <tr>
-                        <th className="th">{settings.language === "id" ? "Nama" : "Name"}</th>
-                        <th className="th">{settings.language === "id" ? "Komentar" : "Comment"}</th>
-                        <th className="th">{settings.language === "id" ? "Tanggal" : "Date"}</th>
-                        <th className="th">{settings.language === "id" ? "Aksi" : "Actions"}</th>
+                        <th className="th">Nama</th>
+                        <th className="th">Komentar</th>
+                        <th className="th">Tanggal</th>
+                        <th className="th">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredData(comments, "comments").map((comment, index) => (
-                        <tr
-                          key={comment.id || index}
-                          className={index % 2 === 0 ? "tr-even" : "tr-odd"}
-                        >
+                        <tr key={comment.id} className={index % 2 === 0 ? "tr-even" : "tr-odd"}>
                           <td className="td">{comment.name || "N/A"}</td>
                           <td className="td">{comment.message || "N/A"}</td>
+                          <td className="td">{comment.createdAt?.toDate().toLocaleString() || "-"}</td>
                           <td className="td">
-                            {comment.createdAt?.toDate().toLocaleString() || "-"}
-                          </td>
-                          <td className="td">
-                            <button
-                              onClick={() => openForm("comments", comment)}
-                              className="edit-button"
-                              title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
-                            >
-                              <FaEdit size={12} />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(comment.id, "comments")}
-                              className="delete-button"
-                              title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
-                              disabled={!comment.id}
-                            >
-                              <FaTrash size={12} />
-                            </button>
+                            <div className="action-buttons-table">
+                              <button
+                                onClick={() => openForm("comments", comment)}
+                                className="edit-button"
+                                title="Edit komentar"
+                              >
+                                <FaEdit size={12} /> Edit
+                              </button>
+                              <button
+                                onClick={() => handleDelete(comment.id, "comments")}
+                                className="delete-button"
+                                title="Hapus komentar"
+                                disabled={!comment.id}
+                              >
+                                <FaTrash size={12} /> Hapus
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -1293,28 +1109,28 @@ const Dashboard = () => {
                   </table>
                 </div>
                 <div className="card-container" data-aos="fade-up">
-                  {filteredData(comments, "comments").map((comment, index) => (
-                    <div key={comment.id || index} className="card">
+                  {filteredData(comments, "comments").map((comment) => (
+                    <div key={comment.id} className="card">
                       <div className="card-header">{comment.name || "N/A"}</div>
                       <div className="card-content">
-                        <p><strong>{settings.language === "id" ? "Komentar" : "Comment"}:</strong> {comment.message || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Tanggal" : "Date"}:</strong> {comment.createdAt?.toDate().toLocaleString() || "-"}</p>
+                        <p><strong>Komentar:</strong> {comment.message || "N/A"}</p>
+                        <p><strong>Tanggal:</strong> {comment.createdAt?.toDate().toLocaleString() || "-"}</p>
                       </div>
                       <div className="card-actions">
                         <button
                           onClick={() => openForm("comments", comment)}
                           className="edit-button"
-                          title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
+                          title="Edit komentar"
                         >
-                          <FaEdit size={12} /> {settings.language === "id" ? "Edit" : "Edit"}
+                          <FaEdit size={12} /> Edit
                         </button>
                         <button
                           onClick={() => handleDelete(comment.id, "comments")}
                           className="delete-button"
-                          title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
+                          title="Hapus komentar"
                           disabled={!comment.id}
                         >
-                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                          <FaTrash size={12} /> Hapus
                         </button>
                       </div>
                     </div>
@@ -1324,50 +1140,54 @@ const Dashboard = () => {
             )
           ) : activeTab === "projects" ? (
             filteredData(projects, "projects").length === 0 ? (
-              <p className="status-text" data-aos="fade-up">{settings.language === "id" ? "📂 Belum ada proyek." : "📂 No projects yet."}</p>
+              <p className="status-text" data-aos="fade-up">📂 Tidak ada proyek ditemukan.</p>
             ) : (
               <>
                 <div className="table-container" data-aos="fade-up">
                   <table className="table">
                     <thead>
                       <tr>
-                        <th className="th">{settings.language === "id" ? "Judul" : "Title"}</th>
-                        <th className="th">{settings.language === "id" ? "Deskripsi" : "Description"}</th>
-                        <th className="th">{settings.language === "id" ? "Kategori" : "Category"}</th>
-                        <th className="th">{settings.language === "id" ? "Teknologi" : "Tech Stack"}</th>
-                        <th className="th">{settings.language === "id" ? "Tanggal" : "Date"}</th>
-                        <th className="th">{settings.language === "id" ? "Aksi" : "Actions"}</th>
+                        <th className="th">Judul</th>
+                        <th className="th">Deskripsi</th>
+                        <th className="th">Kategori</th>
+                        <th className="th">Teknologi</th>
+                        <th className="th">Tanggal</th>
+                        <th className="th">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredData(projects, "projects").map((project, index) => (
-                        <tr
-                          key={project.id || index}
-                          className={index % 2 === 0 ? "tr-even" : "tr-odd"}
-                        >
+                        <tr key={project.id} className={index % 2 === 0 ? "tr-even" : "tr-odd"}>
                           <td className="td">{project.Title || "N/A"}</td>
                           <td className="td">{project.Description?.substring(0, 50) || "N/A"}...</td>
                           <td className="td">{project.category || "N/A"}</td>
                           <td className="td">{project.TechStack?.join(", ") || "N/A"}</td>
+                          <td className="td">{project.createdAt?.toDate().toLocaleString() || "-"}</td>
                           <td className="td">
-                            {project.createdAt?.toDate().toLocaleString() || "-"}
-                          </td>
-                          <td className="td">
-                            <button
-                              onClick={() => openForm("projects", project)}
-                              className="edit-button"
-                              title={settings.language === "id" ? "Edit proyek" : "Edit project"}
-                            >
-                              <FaEdit size={12} />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(project.id, "projects")}
-                              className="delete-button"
-                              title={settings.language === "id" ? "Hapus proyek" : "Delete project"}
-                              disabled={!project.id}
-                            >
-                              <FaTrash size={12} />
-                            </button>
+                            <div className="action-buttons-table">
+                              <button
+                                onClick={() => openForm("projects", project)}
+                                className="edit-button"
+                                title="Edit proyek"
+                              >
+                                <FaEdit size={12} /> Edit
+                              </button>
+                              <button
+                                onClick={() => { setFormData({ ...project, type: "projects" }); setPreviewOpen(true); setFormOpen(true); }}
+                                className="preview-button"
+                                title="Pratinjau proyek"
+                              >
+                                <FaEye size={12} /> Pratinjau
+                              </button>
+                              <button
+                                onClick={() => handleDelete(project.id, "projects")}
+                                className="delete-button"
+                                title="Hapus proyek"
+                                disabled={!project.id}
+                              >
+                                <FaTrash size={12} /> Hapus
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -1375,34 +1195,41 @@ const Dashboard = () => {
                   </table>
                 </div>
                 <div className="card-container" data-aos="fade-up">
-                  {filteredData(projects, "projects").map((project, index) => (
-                    <div key={project.id || index} className="card">
+                  {filteredData(projects, "projects").map((project) => (
+                    <div key={project.id} className="card">
                       <div className="card-header">{project.Title || "N/A"}</div>
                       <div className="card-content">
-                        <p><strong>{settings.language === "id" ? "Deskripsi" : "Description"}:</strong> {project.Description || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Kategori" : "Category"}:</strong> {project.category || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Teknologi" : "Tech Stack"}:</strong> {project.TechStack?.join(", ") || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Fitur" : "Features"}:</strong> {project.Features?.join(", ") || "N/A"}</p>
-                        <p><strong>GitHub:</strong> {project.Github !== "----" ? <a href={project.Github} target="_blank" rel="noopener noreferrer">{project.Github}</a> : "N/A"}</p>
-                        <p><strong>Link:</strong> {project.Link !== "----" ? <a href={project.Link} target="_blank" rel="noopener noreferrer">{project.Link}</a> : "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Gambar" : "Image"}:</strong> {project.Img !== "----" ? <a href={project.Img} target="_blank" rel="noopener noreferrer">{project.Img}</a> : "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Tanggal" : "Date"}:</strong> {project.createdAt?.toDate().toLocaleString() || "-"}</p>
+                        <p><strong>Deskripsi:</strong> {project.Description || "N/A"}</p>
+                        <p><strong>Kategori:</strong> {project.category || "N/A"}</p>
+                        <p><strong>Teknologi:</strong> {project.TechStack?.join(", ") || "N/A"}</p>
+                        <p><strong>Fitur:</strong> {project.Features?.join(", ") || "N/A"}</p>
+                        <p><strong>GitHub:</strong> {project.Github !== "----" ? <a href={project.Github} target="_blank" rel="noopener noreferrer">Link</a> : "N/A"}</p>
+                        <p><strong>Link:</strong> {project.Link !== "----" ? <a href={project.Link} target="_blank" rel="noopener noreferrer">Link</a> : "N/A"}</p>
+                        <p><strong>Gambar:</strong> {project.Img !== "----" ? <a href={project.Img} target="_blank" rel="noopener noreferrer">Lihat</a> : "N/A"}</p>
+                        <p><strong>Tanggal:</strong> {project.createdAt?.toDate().toLocaleString() || "-"}</p>
                       </div>
                       <div className="card-actions">
                         <button
                           onClick={() => openForm("projects", project)}
                           className="edit-button"
-                          title={settings.language === "id" ? "Edit proyek" : "Edit project"}
+                          title="Edit proyek"
                         >
-                          <FaEdit size={12} /> {settings.language === "id" ? "Edit" : "Edit"}
+                          <FaEdit size={12} /> Edit
+                        </button>
+                        <button
+                          onClick={() => { setFormData({ ...project, type: "projects" }); setPreviewOpen(true); setFormOpen(true); }}
+                          className="preview-button"
+                          title="Pratinjau proyek"
+                        >
+                          <FaEye size={12} /> Pratinjau
                         </button>
                         <button
                           onClick={() => handleDelete(project.id, "projects")}
                           className="delete-button"
-                          title={settings.language === "id" ? "Hapus proyek" : "Delete project"}
+                          title="Hapus proyek"
                           disabled={!project.id}
                         >
-                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                          <FaTrash size={12} /> Hapus
                         </button>
                       </div>
                     </div>
@@ -1412,46 +1239,52 @@ const Dashboard = () => {
             )
           ) : activeTab === "certificates" ? (
             filteredData(certificates, "certificates").length === 0 ? (
-              <p className="status-text" data-aos="fade-up">{settings.language === "id" ? "🎓 Belum ada sertifikat." : "🎓 No certificates yet."}</p>
+              <p className="status-text" data-aos="fade-up">🎓 Tidak ada sertifikat ditemukan.</p>
             ) : (
               <>
                 <div className="table-container" data-aos="fade-up">
                   <table className="table">
                     <thead>
                       <tr>
-                        <th className="th">{settings.language === "id" ? "Judul" : "Title"}</th>
-                        <th className="th">{settings.language === "id" ? "Deskripsi" : "Description"}</th>
-                        <th className="th">{settings.language === "id" ? "Penerbit" : "Issuer"}</th>
-                        <th className="th">{settings.language === "id" ? "Tanggal" : "Date"}</th>
-                        <th className="th">{settings.language === "id" ? "Aksi" : "Actions"}</th>
+                        <th className="th">Judul</th>
+                        <th className="th">Deskripsi</th>
+                        <th className="th">Penerbit</th>
+                        <th className="th">Tanggal</th>
+                        <th className="th">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredData(certificates, "certificates").map((certificate, index) => (
-                        <tr
-                          key={certificate.id || index}
-                          className={index % 2 === 0 ? "tr-even" : "tr-odd"}
-                        >
+                        <tr key={certificate.id} className={index % 2 === 0 ? "tr-even" : "tr-odd"}>
                           <td className="td">{certificate.title || "N/A"}</td>
                           <td className="td">{certificate.description?.substring(0, 50) || "N/A"}...</td>
                           <td className="td">{certificate.issuer || "N/A"}</td>
                           <td className="td">{certificate.date || "N/A"}</td>
                           <td className="td">
-                            <button
-                              onClick={() => openForm("certificates", certificate)}
-                              className="edit-button"
-                              title={settings.language === "id" ? "Edit sertifikat" : "Edit certificate"}
-                            >
-                              <FaEdit size={12} />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(certificate.id, "certificates")}
-                              className="delete-button"
-                              title={settings.language === "id" ? "Hapus sertifikat" : "Delete certificate"}
-                              disabled={!certificate.id}
-                            >
-                              <FaTrash size={12} />
-                            </button>
+                            <div className="action-buttons-table">
+                              <button
+                                onClick={() => openForm("certificates", certificate)}
+                                className="edit-button"
+                                title="Edit sertifikat"
+                              >
+                                <FaEdit size={12} /> Edit
+                              </button>
+                              <button
+                                onClick={() => { setFormData({ ...certificate, type: "certificates" }); setPreviewOpen(true); setFormOpen(true); }}
+                                className="preview-button"
+                                title="Pratinjau sertifikat"
+                              >
+                                <FaEye size={12} /> Pratinjau
+                              </button>
+                              <button
+                                onClick={() => handleDelete(certificate.id, "certificates")}
+                                className="delete-button"
+                                title="Hapus sertifikat"
+                                disabled={!certificate.id}
+                              >
+                                <FaTrash size={12} /> Hapus
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))}
@@ -1459,31 +1292,38 @@ const Dashboard = () => {
                   </table>
                 </div>
                 <div className="card-container" data-aos="fade-up">
-                  {filteredData(certificates, "certificates").map((certificate, index) => (
-                    <div key={certificate.id || index} className="card">
+                  {filteredData(certificates, "certificates").map((certificate) => (
+                    <div key={certificate.id} className="card">
                       <div className="card-header">{certificate.title || "N/A"}</div>
                       <div className="card-content">
-                        <p><strong>{settings.language === "id" ? "Deskripsi" : "Description"}:</strong> {certificate.description || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Penerbit" : "Issuer"}:</strong> {certificate.issuer || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Tanggal" : "Date"}:</strong> {certificate.date || "N/A"}</p>
-                        <p><strong>{settings.language === "id" ? "Gambar" : "Image"}:</strong> {certificate.Img !== "----" ? <a href={certificate.Img} target="_blank" rel="noopener noreferrer">{certificate.Img}</a> : "N/A"}</p>
-                        <p><strong>Link:</strong> {certificate.Link !== "----" ? <a href={certificate.Link} target="_blank" rel="noopener noreferrer">{certificate.Link}</a> : "N/A"}</p>
+                        <p><strong>Deskripsi:</strong> {certificate.description || "N/A"}</p>
+                        <p><strong>Penerbit:</strong> {certificate.issuer || "N/A"}</p>
+                        <p><strong>Tanggal:</strong> {certificate.date || "N/A"}</p>
+                        <p><strong>Gambar:</strong> {certificate.Img !== "----" ? <a href={certificate.Img} target="_blank" rel="noopener noreferrer">Lihat</a> : "N/A"}</p>
+                        <p><strong>Link:</strong> {certificate.Link !== "----" ? <a href={certificate.Link} target="_blank" rel="noopener noreferrer">Link</a> : "N/A"}</p>
                       </div>
                       <div className="card-actions">
                         <button
                           onClick={() => openForm("certificates", certificate)}
                           className="edit-button"
-                          title={settings.language === "id" ? "Edit sertifikat" : "Edit certificate"}
+                          title="Edit sertifikat"
                         >
-                          <FaEdit size={12} /> {settings.language === "id" ? "Edit" : "Edit"}
+                          <FaEdit size={12} /> Edit
+                        </button>
+                        <button
+                          onClick={() => { setFormData({ ...certificate, type: "certificates" }); setPreviewOpen(true); setFormOpen(true); }}
+                          className="preview-button"
+                          title="Pratinjau sertifikat"
+                        >
+                          <FaEye size={12} /> Pratinjau
                         </button>
                         <button
                           onClick={() => handleDelete(certificate.id, "certificates")}
                           className="delete-button"
-                          title={settings.language === "id" ? "Hapus sertifikat" : "Delete certificate"}
+                          title="Hapus sertifikat"
                           disabled={!certificate.id}
                         >
-                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                          <FaTrash size={12} /> Hapus
                         </button>
                       </div>
                     </div>
@@ -1491,286 +1331,270 @@ const Dashboard = () => {
                 </div>
               </>
             )
-          ) : activeTab === "settings" ? (
-            <div className="settings-container" data-aos="fade-up">
-              <h3 className="settings-title">{settings.language === "id" ? "Pengaturan Dashboard" : "Dashboard Settings"}</h3>
-              <div className="form-group">
-                <label className="form-label">{settings.language === "id" ? "Tema:" : "Theme:"}</label>
-                <div className="button-group">
-                  <button
-                    onClick={() => handleThemeChange("light")}
-                    className={settings.theme === "light" ? "submit-button" : "cancel-button"}
-                  >
-                    {settings.language === "id" ? "Terang" : "Light"}
-                  </button>
-                  <button
-                    onClick={() => handleThemeChange("dark")}
-                    className={settings.theme === "dark" ? "submit-button" : "cancel-button"}
-                  >
-                    {settings.language === "id" ? "Gelap" : "Dark"}
-                  </button>
-                </div>
-              </div>
-              <div className="form-group">
-                <label className="form-label">{settings.language === "id" ? "Bahasa:" : "Language:"}</label>
-                <div className="button-group">
-                  <button
-                    onClick={() => handleLanguageChange("id")}
-                    className={settings.language === "id" ? "submit-button" : "cancel-button"}
-                  >
-                    Bahasa Indonesia
-                  </button>
-                  <button
-                    onClick={() => handleLanguageChange("en")}
-                    className={settings.language === "en" ? "submit-button" : "cancel-button"}
-                  >
-                    English
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="info-container" data-aos="fade-up">
-              <h3 className="settings-title">{settings.language === "id" ? "Tentang Dashboard" : "About Dashboard"}</h3>
-              <p className="info-text">
-                {settings.language === "id" ? 
-                  "Dashboard ini dirancang untuk mengelola kontak, komentar, proyek, dan sertifikat dengan mudah. Gunakan navigasi di atas untuk beralih antara fitur."
-                  : "This dashboard is designed to manage contacts, comments, projects, and certificates easily. Use the navigation above to switch between features."}
-              </p>
-              <h4 className="info-subtitle">{settings.language === "id" ? "Tips Penggunaan" : "Usage Tips"}</h4>
-              <ul className="info-list">
-                <li>{settings.language === "id" ? "Gunakan kolom pencarian untuk menemukan data spesifik." : "Use the search field to find specific data."}</li>
-                <li>{settings.language === "id" ? "Sesuaikan tema di pengaturan untuk kenyamanan visual." : "Customize the theme in settings for visual comfort."}</li>
-                <li>{settings.language === "id" ? "Ekspor data untuk analisis lebih lanjut dalam format CSV." : "Export data for further analysis in CSV format."}</li>
-              </ul>
-              <p className="info-text"><strong>{settings.language === "id" ? "Versi:" : "Version:"}</strong> 1.2.0</p>
-              <p className="info-text"><strong>{settings.language === "id" ? "Dukungan:" : "Support:"}</strong> <a href="mailto:support@example.com" className="support-link">support@example.com</a></p>
-            </div>
-          )}
+          ) : null}
 
           {formOpen && (
             <div className="modal-overlay">
               <div className="modal-content" data-aos="zoom-in">
-                <h2 className="modal-title">
-                  {formData.type === "comments" ? 
-                    (formData.id ? (settings.language === "id" ? "Edit Komentar" : "Edit Comment") : (settings.language === "id" ? "Tambah Komentar" : "Add Comment")) :
-                   formData.type === "projects" ?
-                    (formData.id ? (settings.language === "id" ? "Edit Proyek" : "Edit Project") : (settings.language === "id" ? "Tambah Proyek" : "Add Project")) :
-                    (formData.id ? (settings.language === "id" ? "Edit Sertifikat" : "Edit Certificate") : (settings.language === "id" ? "Tambah Sertifikat" : "Add Certificate"))}
-                </h2>
-                <form onSubmit={submitForm}>
-                  {formData.type === "comments" ? (
-                    <>
-                      <div className="form-group">
-                        <label htmlFor="name" className="form-label">{settings.language === "id" ? "Nama:" : "Name:"}</label>
-                        <input
-                          type="text"
-                          name="name"
-                          id="name"
-                          value={formData.name}
-                          onChange={handleFormChange}
-                          required
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="message" className="form-label">{settings.language === "id" ? "Komentar:" : "Comment:"}</label>
-                        <textarea
-                          name="message"
-                          id="message"
-                          rows={4}
-                          value={formData.message}
-                          onChange={handleFormChange}
-                          required
-                          className="form-textarea"
-                        />
-                      </div>
-                    </>
-                  ) : formData.type === "projects" ? (
-                    <>
-                      <div className="form-group">
-                        <label htmlFor="Title" className="form-label">{settings.language === "id" ? "Judul:" : "Title:"}</label>
-                        <input
-                          type="text"
-                          name="Title"
-                          id="Title"
-                          value={formData.Title}
-                          onChange={handleFormChange}
-                          required
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="Description" className="form-label">{settings.language === "id" ? "Deskripsi:" : "Description:"}</label>
-                        <textarea
-                          name="Description"
-                          id="Description"
-                          rows={4}
-                          value={formData.Description}
-                          onChange={handleFormChange}
-                          required
-                          className="form-textarea"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="category" className="form-label">{settings.language === "id" ? "Kategori:" : "Category:"}</label>
-                        <input
-                          type="text"
-                          name="category"
-                          id="category"
-                          value={formData.category}
-                          onChange={handleFormChange}
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="TechStack" className="form-label">{settings.language === "id" ? "Teknologi (pisahkan dengan koma):" : "Tech Stack (comma-separated):"}</label>
-                        <input
-                          type="text"
-                          name="TechStack"
-                          id="TechStack"
-                          value={formData.TechStack}
-                          onChange={handleFormChange}
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="Features" className="form-label">{settings.language === "id" ? "Fitur (pisahkan dengan koma):" : "Features (comma-separated):"}</label>
-                        <input
-                          type="text"
-                          name="Features"
-                          id="Features"
-                          value={formData.Features}
-                          onChange={handleFormChange}
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="Img" className="form-label">{settings.language === "id" ? "URL Gambar:" : "Image URL:"}</label>
-                        <input
-                          type="text"
-                          name="Img"
-                          id="Img"
-                          value={formData.Img}
-                          onChange={handleFormChange}
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="Github" className="form-label">GitHub URL:</label>
-                        <input
-                          type="text"
-                          name="Github"
-                          id="Github"
-                          value={formData.Github}
-                          onChange={handleFormChange}
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="Link" className="form-label">Link:</label>
-                        <input
-                          type="text"
-                          name="Link"
-                          id="Link"
-                          value={formData.Link}
-                          onChange={handleFormChange}
-                          className="form-input"
-                        />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="form-group">
-                        <label htmlFor="title" className="form-label">{settings.language === "id" ? "Judul:" : "Title:"}</label>
-                        <input
-                          type="text"
-                          name="title"
-                          id="title"
-                          value={formData.title}
-                          onChange={handleFormChange}
-                          required
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="description" className="form-label">{settings.language === "id" ? "Deskripsi:" : "Description:"}</label>
-                        <textarea
-                          name="description"
-                          id="description"
-                          rows={4}
-                          value={formData.description}
-                          onChange={handleFormChange}
-                          required
-                          className="form-textarea"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="issuer" className="form-label">{settings.language === "id" ? "Penerbit:" : "Issuer:"}</label>
-                        <input
-                          type="text"
-                          name="issuer"
-                          id="issuer"
-                          value={formData.issuer}
-                          onChange={handleFormChange}
-                          required
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="date" className="form-label">{settings.language === "id" ? "Tanggal:" : "Date:"}</label>
-                        <input
-                          type="text"
-                          name="date"
-                          id="date"
-                          value={formData.date}
-                          onChange={handleFormChange}
-                          required
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="Img" className="form-label">{settings.language === "id" ? "URL Gambar:" : "Image URL:"}</label>
-                        <input
-                          type="text"
-                          name="Img"
-                          id="Img"
-                          value={formData.Img}
-                          onChange={handleFormChange}
-                          className="form-input"
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor="Link" className="form-label">Link:</label>
-                        <input
-                          type="text"
-                          name="Link"
-                          id="Link"
-                          value={formData.Link}
-                          onChange={handleFormChange}
-                          className="form-input"
-                        />
-                      </div>
-                    </>
-                  )}
-                  <div className="modal-actions">
-                    <button
-                      type="button"
-                      onClick={closeForm}
-                      className="cancel-button"
-                      disabled={formLoading}
-                    >
-                      {settings.language === "id" ? "Batal" : "Cancel"}
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={formLoading}
-                      className="submit-button"
-                    >
-                      {formLoading ? (settings.language === "id" ? "Menyimpan..." : "Saving...") : (settings.language === "id" ? "Simpan" : "Save")}
-                    </button>
+                <div className="modal-form">
+                  <h2 className="modal-title">
+                    {formData.type === "comments" ? (formData.id ? "Edit Komentar" : "Tambah Komentar") :
+                     formData.type === "projects" ? (formData.id ? "Edit Proyek" : "Tambah Proyek") :
+                     (formData.id ? "Edit Sertifikat" : "Tambah Sertifikat")}
+                  </h2>
+                  <button
+                    onClick={() => setPreviewOpen(!previewOpen)}
+                    className="preview-toggle"
+                  >
+                    <FaEye size={16} /> {previewOpen ? "Sembunyikan Pratinjau" : "Tampilkan Pratinjau"}
+                  </button>
+                  <form onSubmit={submitForm}>
+                    {formData.type === "comments" ? (
+                      <>
+                        <div className="form-group">
+                          <label htmlFor="name" className="form-label">Nama:</label>
+                          <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            value={formData.name}
+                            onChange={handleFormChange}
+                            required
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="message" className="form-label">Komentar:</label>
+                          <textarea
+                            name="message"
+                            id="message"
+                            rows={4}
+                            value={formData.message}
+                            onChange={handleFormChange}
+                            required
+                            className="form-textarea"
+                          />
+                        </div>
+                      </>
+                    ) : formData.type === "projects" ? (
+                      <>
+                        <div className="form-group">
+                          <label htmlFor="Title" className="form-label">Judul:</label>
+                          <input
+                            type="text"
+                            name="Title"
+                            id="Title"
+                            value={formData.Title}
+                            onChange={handleFormChange}
+                            required
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="Description" className="form-label">Deskripsi:</label>
+                          <textarea
+                            name="Description"
+                            id="Description"
+                            rows={4}
+                            value={formData.Description}
+                            onChange={handleFormChange}
+                            required
+                            className="form-textarea"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="category" className="form-label">Kategori:</label>
+                          <input
+                            type="text"
+                            name="category"
+                            id="category"
+                            value={formData.category}
+                            onChange={handleFormChange}
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="TechStack" className="form-label">Teknologi (pisahkan dengan koma):</label>
+                          <input
+                            type="text"
+                            name="TechStack"
+                            id="TechStack"
+                            value={formData.TechStack}
+                            onChange={handleFormChange}
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="Features" className="form-label">Fitur (pisahkan dengan koma):</label>
+                          <input
+                            type="text"
+                            name="Features"
+                            id="Features"
+                            value={formData.Features}
+                            onChange={handleFormChange}
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="Img" className="form-label">URL Gambar:</label>
+                          <input
+                            type="text"
+                            name="Img"
+                            id="Img"
+                            value={formData.Img}
+                            onChange={handleFormChange}
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="Github" className="form-label">GitHub URL:</label>
+                          <input
+                            type="text"
+                            name="Github"
+                            id="Github"
+                            value={formData.Github}
+                            onChange={handleFormChange}
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="Link" className="form-label">Link:</label>
+                          <input
+                            type="text"
+                            name="Link"
+                            id="Link"
+                            value={formData.Link}
+                            onChange={handleFormChange}
+                            className="form-input"
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="form-group">
+                          <label htmlFor="title" className="form-label">Judul:</label>
+                          <input
+                            type="text"
+                            name="title"
+                            id="title"
+                            value={formData.title}
+                            onChange={handleFormChange}
+                            required
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="description" className="form-label">Deskripsi:</label>
+                          <textarea
+                            name="description"
+                            id="description"
+                            rows={4}
+                            value={formData.description}
+                            onChange={handleFormChange}
+                            required
+                            className="form-textarea"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="issuer" className="form-label">Penerbit:</label>
+                          <input
+                            type="text"
+                            name="issuer"
+                            id="issuer"
+                            value={formData.issuer}
+                            onChange={handleFormChange}
+                            required
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="date" className="form-label">Tanggal:</label>
+                          <input
+                            type="text"
+                            name="date"
+                            id="date"
+                            value={formData.date}
+                            onChange={handleFormChange}
+                            required
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="Img" className="form-label">URL Gambar:</label>
+                          <input
+                            type="text"
+                            name="Img"
+                            id="Img"
+                            value={formData.Img}
+                            onChange={handleFormChange}
+                            className="form-input"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="Link" className="form-label">Link:</label>
+                          <input
+                            type="text"
+                            name="Link"
+                            id="Link"
+                            value={formData.Link}
+                            onChange={handleFormChange}
+                            className="form-input"
+                          />
+                        </div>
+                      </>
+                    )}
+                    <div className="modal-actions">
+                      <button
+                        type="button"
+                        onClick={closeForm}
+                        className="cancel-button"
+                        disabled={formLoading}
+                      >
+                        Batal
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={formLoading}
+                        className="submit-button"
+                      >
+                        {formLoading ? "Menyimpan..." : "Simpan"}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+                {previewOpen && (
+                  <div className="modal-preview">
+                    <h3 className="modal-title">Pratinjau</h3>
+                    <div className="preview-content">
+                      {formData.type === "comments" ? (
+                        <>
+                          <p><strong>Nama:</strong> {formData.name || "N/A"}</p>
+                          <p><strong>Komentar:</strong> {formData.message || "N/A"}</p>
+                        </>
+                      ) : formData.type === "projects" ? (
+                        <>
+                          <p><strong>Judul:</strong> {formData.Title || "N/A"}</p>
+                          <p><strong>Deskripsi:</strong> {formData.Description || "N/A"}</p>
+                          <p><strong>Kategori:</strong> {formData.category || "N/A"}</p>
+                          <p><strong>Teknologi:</strong> {formData.TechStack || "N/A"}</p>
+                          <p><strong>Fitur:</strong> {formData.Features || "N/A"}</p>
+                          <p><strong>GitHub:</strong> {formData.Github !== "----" ? <a href={formData.Github} target="_blank" rel="noopener noreferrer">Link</a> : "N/A"}</p>
+                          <p><strong>Link:</strong> {formData.Link !== "----" ? <a href={formData.Link} target="_blank" rel="noopener noreferrer">Link</a> : "N/A"}</p>
+                          {formData.Img && formData.Img !== "----" && <img src={formData.Img} alt="Project Preview" />}
+                        </>
+                      ) : (
+                        <>
+                          <p><strong>Judul:</strong> {formData.title || "N/A"}</p>
+                          <p><strong>Deskripsi:</strong> {formData.description || "N/A"}</p>
+                          <p><strong>Penerbit:</strong> {formData.issuer || "N/A"}</p>
+                          <p><strong>Tanggal:</strong> {formData.date || "N/A"}</p>
+                          <p><strong>Link:</strong> {formData.Link !== "----" ? <a href={formData.Link} target="_blank" rel="noopener noreferrer">Link</a> : "N/A"}</p>
+                          {formData.Img && formData.Img !== "----" && <img src={formData.Img} alt="Certificate Preview" />}
+                        </>
+                      )}
+                    </div>
                   </div>
-                </form>
+                )}
               </div>
             </div>
           )}
