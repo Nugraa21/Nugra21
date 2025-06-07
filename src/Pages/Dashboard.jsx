@@ -298,7 +298,7 @@ const Dashboard = () => {
               >
                 {navbarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
               </button>
-              <h1 className="text-2xl font-bold text-orange-600">Dashboard</h1>
+              <h1 className="text-2xl font-bold text-orange-600">Dashboard - Nugra21</h1>
             </div>
             <nav
               className={`${
@@ -340,10 +340,10 @@ const Dashboard = () => {
           )}
           <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
             <h2 className="text-3xl font-bold text-gray-800 flex items-center gap-2">
-              {activeTab === "contacts" && "📋 Contacts"}
-              {activeTab === "comments" && "💬 Comments"}
-              {activeTab === "projects" && "🚀 Projects"}
-              {activeTab === "certificates" && "🏆 Certificates"}
+              {activeTab === "contacts" && "Contacts"}
+              {activeTab === "comments" && "Comments"}
+              {activeTab === "projects" && "Projects"}
+              {activeTab === "certificates" && "Certificates"}
             </h2>
             <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
               <div className="relative">
