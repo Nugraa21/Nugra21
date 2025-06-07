@@ -273,7 +273,7 @@ const Dashboard = () => {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 font-sans text-gray-900">
-        {isMobile && (
+        {/* {isMobile && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-xl shadow-2xl max-w-md text-center">
               <FaExclamationTriangle className="text-red-500 text-5xl mb-4 mx-auto" />
@@ -287,7 +287,7 @@ const Dashboard = () => {
               </button>
             </div>
           </div>
-        )}
+        )} */}
 
         <header className="bg-white shadow-lg sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
