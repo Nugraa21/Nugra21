@@ -5,7 +5,7 @@ import {
   ChevronRight, Layers,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import { db, collection, doc, onSnapshot } from "../firebase";
+import { db, doc, onSnapshot } from "../firebase";
 
 const TECH_ICONS = {
   React: Code2,
@@ -77,33 +77,89 @@ const handleGithubClick = (githubLink) => {
   return true;
 };
 
+// Simple Error Boundary Component
+class ErrorBoundary extends React.Component {
+  state = { hasError: false, error: null };
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-orange-50">
+          <div className="text-center space-y-4">
+            <h2 className="text-lg font-semibold text-orange-600">Something went wrong!</h2>
+            <p className="text-sm text-gray-500">{this.state.error?.message || "Unknown error"}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const ProjectDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const unsubscribe = onSnapshot(doc(db, "projects", id), (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const enhancedProject = {
-          ...data,
-          Features: data.Features || [],
-          TechStack: data.TechStack || [],
-          Github: data.Github || "https://github.com/nugraa21",
-        };
-        setProject(enhancedProject);
-      } else {
-        setProject(null); // Handle case where project is not found
+    const unsubscribe = onSnapshot(
+      doc(db, "projects", id),
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          console.log("Fetched project data:", data); // Debugging
+          const enhancedProject = {
+            ...data,
+            Features: data.Features || [],
+            TechStack: data.TechStack || [],
+            Github: data.Github || "https://github.com/nugraa21",
+            Link: data.Link || null, // Ensure Link is null if undefined
+          };
+          setProject(enhancedProject);
+        } else {
+          console.warn("Project not found for ID:", id);
+          setError("Project not found");
+          setProject(null);
+        }
+      },
+      (error) => {
+        console.error("Error fetching project:", error.message);
+        setError(error.message);
+        setProject(null);
       }
-    }, (error) => {
-      console.error("Error fetching project:", error.message);
-      setProject(null);
-    });
+    );
 
     return () => unsubscribe();
   }, [id]);
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-orange-50">
+        <div className="text-center space-y-4">
+          <h2 className="text-lg font-semibold text-orange-600">Error</h2>
+          <p className="text-sm text-gray-500">{error}</p>
+          <button
+            onClick={() => navigate(-1)}
+            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (!project) {
     return (
@@ -117,120 +173,124 @@ const ProjectDetails = () => {
   }
 
   return (
-    <section className="min-h-screen px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 py-16 xs:py-20 sm:py-24 bg-orange-50 overflow-x-hidden">
-      <div className="max-w-7xl w-full mx-auto rounded-2xl p-6 xs:p-8 sm:p-10 md:p-12 animate-slide-in-up">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 xs:mb-8 sm:mb-10 gap-4 sm:gap-0">
-          <button
-            onClick={() => navigate(-1)}
-            className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 sm:px-5 py-1.5 xs:py-2 rounded-lg border-2 border-orange-300 text-orange-600 font-semibold text-xs xs:text-sm hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-300 shadow-sm hover:shadow-md active:scale-95"
-            aria-label="Back to Portfolio"
-          >
-            <ArrowLeft className="w-4 xs:w-5 h-4 xs:h-5" />
-            <span>Back</span>
-          </button>
-          <div className="text-xs xs:text-sm text-orange-400 flex items-center gap-1 sm:gap-1.5 truncate max-w-[160px] xs:max-w-[180px] sm:max-w-[240px]">
-            <span>Projects</span>
-            <ChevronRight className="w-3 xs:w-4 h-3 xs:h-4" />
-            <span className="font-semibold truncate">{project.Title}</span>
+    <ErrorBoundary>
+      <section className="min-h-screen px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 py-16 xs:py-20 sm:py-24 bg-orange-50 overflow-x-hidden">
+        <div className="max-w-7xl w-full mx-auto rounded-2xl p-6 xs:p-8 sm:p-10 md:p-12 animate-slide-in-up">
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 xs:mb-8 sm:mb-10 gap-4 sm:gap-0">
+            <button
+              onClick={() => navigate(-1)}
+              className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 sm:px-5 py-1.5 xs:py-2 rounded-lg border-2 border-orange-300 text-orange-600 font-semibold text-xs xs:text-sm hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-300 shadow-sm hover:shadow-md active:scale-95"
+              aria-label="Back to Portfolio"
+            >
+              <ArrowLeft className="w-4 xs:w-5 h-4 xs:h-5" />
+              <span>Back</span>
+            </button>
+            <div className="text-xs xs:text-sm text-orange-400 flex items-center gap-1 sm:gap-1.5 truncate max-w-[160px] xs:max-w-[180px] sm:max-w-[240px]">
+              <span>Projects</span>
+              <ChevronRight className="w-3 xs:w-4 h-3 xs:h-4" />
+              <span className="font-semibold truncate">{project.Title || "Untitled"}</span>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="grid lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-10 md:gap-12">
+            {/* Left Content */}
+            <div className="flex flex-col gap-4 xs:gap-6 sm:gap-8">
+              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-extrabold text-orange-600 tracking-tight">
+                {project.Title || "Untitled Project"}
+              </h1>
+              <p className="text-sm xs:text-base sm:text-lg text-gray-700 leading-relaxed">
+                {project.Description || "No description available."}
+              </p>
+
+              <ProjectStats project={project} />
+
+              <div className="flex flex-wrap gap-2 xs:gap-3 sm:gap-4">
+                {project.Link && (
+                  <a
+                    href={project.Link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 sm:px-5 py-1.5 xs:py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg font-semibold text-xs xs:text-sm hover:from-orange-600 hover:to-yellow-500 transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
+                    aria-label="Live Demo"
+                  >
+                    <ExternalLink className="w-4 xs:w-4.5 sm:w-5 h-4 xs:h-4.5 sm:h-5" />
+                    Kunjungi
+                  </a>
+                )}
+                <a
+                  href={project.Github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 sm:px-5 py-1.5 xs:py-2 bg-white border-2 border-orange-500 text-orange-600 rounded-lg font-semibold text-xs xs:text-sm hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
+                  onClick={(e) => !handleGithubClick(project.Github) && e.preventDefault()}
+                  aria-label="Github Repository"
+                >
+                  <Github className="w-4 xs:w-4.5 sm:w-5 h-4 xs:h-4.5 sm:h-5" />
+                  Github
+                </a>
+              </div>
+
+              <div>
+                <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-orange-600 mt-6 xs:mt-8 mb-3 xs:mb-4 flex items-center gap-1.5 xs:gap-2">
+                  <Code2 className="w-5 xs:w-6 h-5 xs:h-6" />
+                  Technologies Used
+                </h3>
+                {project.TechStack.length > 0 ? (
+                  <div className="flex flex-wrap gap-1.5 xs:gap-2 sm:gap-3">
+                    {project.TechStack.map((tech, i) => (
+                      <TechBadge key={i} tech={tech} />
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 italic text-xs xs:text-sm">No technologies added.</p>
+                )}
+              </div>
+            </div>
+
+            {/* Right Content */}
+            <div className="flex flex-col gap-6 xs:gap-8 sm:gap-10">
+              <div className="relative rounded-xl overflow-hidden border border-orange-200 shadow-lg group">
+                <img
+                  src={project.Img || "/fallback.png"}
+                  alt={project.Title || "Project Image"}
+                  className="w-full aspect-[16/9] object-cover transition-transform duration-700 group-hover:scale-110"
+                  loading="lazy"
+                  onError={(e) => (e.currentTarget.src = "/fallback.png")}
+                />
+                <div className="absolute inset-0 bg-orange-600/10 group-hover:bg-orange-600/20 transition-all duration-500 pointer-events-none" />
+              </div>
+
+              <div>
+                <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-orange-600 mb-3 xs:mb-4 flex items-center gap-1.5 xs:gap-2">
+                  Key Features
+                </h3>
+                {project.Features.length > 0 ? (
+                  <ul className="space-y-2 xs:space-y-3">
+                    {project.Features.map((feature, i) => (
+                      <FeatureItem key={i} feature={feature} />
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-gray-500 italic text-xs xs:text-sm">No features added.</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Main Content */}
-        <div className="grid lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-10 md:gap-12">
-          {/* Left Content */}
-          <div className="flex flex-col gap-4 xs:gap-6 sm:gap-8">
-            <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-extrabold text-orange-600 tracking-tight">
-              {project.Title}
-            </h1>
-            <p className="text-sm xs:text-base sm:text-lg text-gray-700 leading-relaxed">
-              {project.Description}
-            </p>
-
-            <ProjectStats project={project} />
-
-            <div className="flex flex-wrap gap-2 xs:gap-3 sm:gap-4">
-              <a
-                href={project.Link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 sm:px-5 py-1.5 xs:py-2 bg-gradient-to-r from-orange-500 to-yellow-400 text-white rounded-lg font-semibold text-xs xs:text-sm hover:from-orange-600 hover:to-yellow-500 transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
-                aria-label="Live Demo"
-              >
-                <ExternalLink className="w-4 xs:w-4.5 sm:w-5 h-4 xs:h-4.5 sm:h-5" />
-                Kunjungi
-              </a>
-              <a
-                href={project.Github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 xs:gap-2 px-3 xs:px-4 sm:px-5 py-1.5 xs:py-2 bg-white border-2 border-orange-500 text-orange-600 rounded-lg font-semibold text-xs xs:text-sm hover:bg-orange-500 hover:text-white hover:border-orange-500 transition-all duration-300 shadow-md hover:shadow-lg active:scale-95"
-                onClick={(e) => !handleGithubClick(project.Github) && e.preventDefault()}
-                aria-label="Github Repository"
-              >
-                <Github className="w-4 xs:w-4.5 sm:w-5 h-4 xs:h-4.5 sm:h-5" />
-                Github
-              </a>
-            </div>
-
-            <div>
-              <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-orange-600 mt-6 xs:mt-8 mb-3 xs:mb-4 flex items-center gap-1.5 xs:gap-2">
-                <Code2 className="w-5 xs:w-6 h-5 xs:h-6" />
-                Technologies Used
-              </h3>
-              {project.TechStack.length > 0 ? (
-                <div className="flex flex-wrap gap-1.5 xs:gap-2 sm:gap-3">
-                  {project.TechStack.map((tech, i) => (
-                    <TechBadge key={i} tech={tech} />
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-500 italic text-xs xs:text-sm">No technologies added.</p>
-              )}
-            </div>
-          </div>
-
-          {/* Right Content */}
-          <div className="flex flex-col gap-6 xs:gap-8 sm:gap-10">
-            <div className="relative rounded-xl overflow-hidden border border-orange-200 shadow-lg group">
-              <img
-                src={project.Img}
-                alt={project.Title}
-                className="w-full aspect-[16/9] object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-                onError={(e) => (e.currentTarget.src = "/fallback.png")}
-              />
-              <div className="absolute inset-0 bg-orange-600/10 group-hover:bg-orange-600/20 transition-all duration-500 pointer-events-none" />
-            </div>
-
-            <div>
-              <h3 className="text-lg xs:text-xl sm:text-2xl font-semibold text-orange-600 mb-3 xs:mb-4 flex items-center gap-1.5 xs:gap-2">
-                Key Features
-              </h3>
-              {project.Features.length > 0 ? (
-                <ul className="space-y-2 xs:space-y-3">
-                  {project.Features.map((feature, i) => (
-                    <FeatureItem key={i} feature={feature} />
-                  ))}
-                </ul>
-              ) : (
-                <p className="text-gray-500 italic text-xs xs:text-sm">No features added.</p>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <style jsx>{`
-        .animate-slide-in-up {
-          animation: slideInUp 0.6s ease-out;
-        }
-        @keyframes slideInUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
-    </section>
+        <style jsx>{`
+          .animate-slide-in-up {
+            animation: slideInUp 0.6s ease-out;
+          }
+          @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
+      </section>
+    </ErrorBoundary>
   );
 };
 
