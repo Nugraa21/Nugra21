@@ -23,9 +23,11 @@ import {
   FaEdit,
   FaTrash,
   FaInfoCircle,
-  FaLanguage,
   FaFileExport,
+  FaExclamationTriangle,
 } from "react-icons/fa";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
@@ -38,7 +40,7 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: "16px", color: "#d32f2f" }}>
+        <div className="error-container">
           <h2>Terjadi kesalahan!</h2>
           <p>{this.state.error?.message || "Silakan coba lagi atau periksa konsol browser."}</p>
         </div>
@@ -59,9 +61,31 @@ const Dashboard = () => {
   const [commentFormData, setCommentFormData] = useState({ id: null, name: "", message: "" });
   const [commentLoading, setCommentLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [settings, setSettings] = useState({ theme: "light", language: "id" });
+  const [settings, setSettings] = useState(() => {
+    const savedSettings = localStorage.getItem("dashboardSettings");
+    return savedSettings ? JSON.parse(savedSettings) : { theme: "light", language: "id" };
+  });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    AOS.init({
+      once: true,
+      duration: 600,
+      easing: "ease-out",
+    });
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("dashboardSettings", JSON.stringify(settings));
+  }, [settings]);
 
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("isLoggedIn");
@@ -117,7 +141,7 @@ const Dashboard = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm("Apakah kamu yakin ingin menghapus data ini?");
+    const confirmDelete = window.confirm(settings.language === "id" ? "Apakah kamu yakin ingin menghapus data ini?" : "Are you sure you want to delete this data?");
     if (!confirmDelete) return;
 
     try {
@@ -130,7 +154,7 @@ const Dashboard = () => {
       }
     } catch (error) {
       console.error("Gagal menghapus data:", error);
-      setError("Gagal menghapus data: " + error.message);
+      setError(settings.language === "id" ? "Gagal menghapus data: " + error.message : "Failed to delete data: " + error.message);
     }
   };
 
@@ -170,7 +194,7 @@ const Dashboard = () => {
     const { id, name, message } = commentFormData;
 
     if (!name.trim() || !message.trim()) {
-      alert("Nama dan Pesan wajib diisi.");
+      alert(settings.language === "id" ? "Nama dan Pesan wajib diisi." : "Name and Message are required.");
       return;
     }
 
@@ -192,7 +216,7 @@ const Dashboard = () => {
       closeCommentForm();
     } catch (error) {
       console.error("Gagal simpan komentar:", error);
-      setError("Gagal simpan komentar: " + error.message);
+      setError(settings.language === "id" ? "Gagal simpan komentar: " + error.message : "Failed to save comment: " + error.message);
     }
     setCommentLoading(false);
   };
@@ -228,43 +252,522 @@ const Dashboard = () => {
 
   return (
     <ErrorBoundary>
-      <div style={{ ...styles.container, backgroundColor: settings.theme === "dark" ? "#1a1a1a" : "#f5f5f5", color: settings.theme === "dark" ? "#e0e0e0" : "#333" }}>
+      <div className={`dashboard-container ${settings.theme}`}>
         <style jsx>{`
-          * {
-            box-sizing: border-box;
+          @import url('https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap');
+
+          :root {
+            --primary: #F97316;
+            --primary-dark: #EA580C;
+            --text: #333;
+            --text-light: #666;
+            --bg-light: #FFF8E1;
+            --bg-dark: #2A2A2A;
+            --card-bg-light: rgba(255, 248, 225, 0.8);
+            --card-bg-dark: rgba(42, 42, 42, 0.8);
+            --border: url("data:image/svg+xml,%3Csvg width='12' height='12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6c2 0 3-2 6-2s4 2 6 2' stroke='%23F97316' fill='none'/%3E%3C/svg%3E") repeat;
           }
+
+          .dashboard-container {
+            min-height: 100vh;
+            font-family: 'Shadows Into Light', cursive;
+            background: var(--bg-light);
+            color: var(--text);
+            position: relative;
+            overflow: hidden;
+          }
+
+          .dashboard-container.dark {
+            background: var(--bg-dark);
+            color: #E0E0E0;
+          }
+
+          .navbar {
+            background: var(--card-bg-light);
+            backdrop-filter: blur(5px);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: var(--border);
+          }
+
+          .dark .navbar {
+            background: var(--card-bg-dark);
+          }
+
+          .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+          }
+
+          .logo {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--primary);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+          }
+
+          .toggle-button {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+          }
+
+          .nav {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+          }
+
+          .nav-item {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+          }
+
+          .nav-item:hover {
+            background: var(--primary);
+            color: #FFF;
+            transform: translateY(-2px);
+          }
+
+          .nav-item.active {
+            background: var(--primary);
+            color: #FFF;
+            font-weight: bold;
+            border-color: var(--primary-dark);
+          }
+
+          .logout-button {
+            background: #CC3300;
+            border: none;
+            color: #FFF;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+          }
+
+          .logout-button:hover {
+            background: #B32D00;
+            transform: translateY(-2px);
+          }
+
+          .main-content {
+            padding: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+          }
+
+          .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+          }
+
+          .title {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+          }
+
+          .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+          }
+
+          .search-input {
+            padding: 10px 16px;
+            font-size: 1.2rem;
+            border: var(--border);
+            border-radius: 8px;
+            background: var(--card-bg-light);
+            color: var(--text);
+            width: 200px;
+            font-family: 'Shadows Into Light', cursive;
+          }
+
+          .dark .search-input {
+            background: var(--card-bg-dark);
+            color: #E0E0E0;
+          }
+
+          .add-button, .export-button, .submit-button {
+            background: var(--primary);
+            border: 2px solid var(--primary-dark);
+            color: #FFF;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            font-family: 'Shadows Into Light', cursive;
+          }
+
+          .add-button:hover, .export-button:hover, .submit-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+          }
+
+          .status-text {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            text-align: center;
+            margin: 24px 0;
+          }
+
+          .table-container {
+            overflow-x: auto;
+            border: var(--border);
+            border-radius: 12px;
+            background: var(--card-bg-light);
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+          }
+
+          .dark .table-container {
+            background: var(--card-bg-dark);
+          }
+
+          .table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+
+          .th {
+            padding: 12px 16px;
+            text-align: left;
+            background: var(--primary);
+            color: #FFF;
+            font-size: 1.2rem;
+            font-weight: bold;
+          }
+
+          .td {
+            padding: 12px 16px;
+            border-bottom: 1px dashed var(--primary);
+            font-size: 1.1rem;
+            color: var(--text);
+          }
+
+          .dark .td {
+            color: #E0E0E0;
+          }
+
+          .tr-even {
+            background: transparent;
+          }
+
+          .tr-odd {
+            background: rgba(255, 255, 255, 0.05);
+          }
+
+          .delete-button, .edit-button {
+            background: #CC3300;
+            border: none;
+            color: #FFF;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin-right: 8px;
+          }
+
+          .edit-button {
+            background: #555;
+          }
+
+          .delete-button:hover, .edit-button:hover {
+            transform: translateY(-2px);
+          }
+
           .card-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 16px;
           }
+
           .card {
-            background-color: ${settings.theme === "dark" ? "#2a2a2a" : "#fff"};
-            border-radius: 6px;
-            padding: 14px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border: 1px solid ${settings.theme === "dark" ? "#444" : "#ddd"};
+            background: var(--card-bg-light);
+            backdrop-filter: blur(5px);
+            border: var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
           }
+
+          .dark .card {
+            background: var(--card-bg-dark);
+          }
+
           .card-header {
-            font-weight: bold;
-            font-size: 0.95rem;
-            margin-bottom: 6px;
-            color: ${settings.theme === "dark" ? "#fff" : "#333"};
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 8px;
           }
+
           .card-content {
-            font-size: 0.85rem;
-            color: ${settings.theme === "dark" ? "#ccc" : "#555"};
+            font-size: 1.2rem;
+            color: var(--text-light);
           }
+
+          .dark .card-content {
+            color: #CCC;
+          }
+
           .card-actions {
             display: flex;
-            gap: 6px;
-            margin-top: 10px;
+            gap: 12px;
+            margin-top: 12px;
           }
+
+          .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+          }
+
+          .modal-content {
+            background: var(--card-bg-light);
+            border: var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            position: relative;
+          }
+
+          .dark .modal-content {
+            background: var(--card-bg-dark);
+          }
+
+          .modal-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+          }
+
+          .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+          }
+
+          .form-label {
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: bold;
+          }
+
+          .form-input, .form-textarea {
+            padding: 12px;
+            font-size: 1.2rem;
+            border: var(--border);
+            border-radius: 8px;
+            background: var(--card-bg-light);
+            color: var(--text);
+            font-family: 'Shadows Into Light', cursive;
+            resize: vertical;
+            min-height: 80px;
+          }
+
+          .dark .form-input, .dark .form-textarea {
+            background: var(--card-bg-dark);
+            color: #E0E0E0;
+          }
+
+          .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 16px;
+          }
+
+          .cancel-button {
+            background: #CCC;
+            color: #333;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Shadows Into Light', cursive;
+          }
+
+          .cancel-button:hover {
+            background: #BBB;
+            transform: translateY(-2px);
+          }
+
+          .settings-container, .info-container {
+            background: var(--card-bg-light);
+            border: var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 600px;
+            box-shadow: 3px 3px 6px rgba(0,0,0,0.1);
+          }
+
+          .dark .settings-container, .dark .info-container {
+            background: var(--card-bg-dark);
+          }
+
+          .settings-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+          }
+
+          .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+          }
+
+          .info-text {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+          }
+
+          .dark .info-text {
+            color: #CCC;
+          }
+
+          .info-subtitle {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+          }
+
+          .info-list {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+            color: var(--text-light);
+          }
+
+          .dark .info-list {
+            color: #CCC;
+          }
+
+          .support-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+          }
+
+          .support-link:hover {
+            text-decoration: underline;
+          }
+
+          .error-container {
+            background: #FFE6E6;
+            border: var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            color: #D32F2F;
+            font-size: 1.2rem;
+            text-align: center;
+          }
+
+          .mobile-warning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            color: #FFF;
+            text-align: center;
+            padding: 24px;
+          }
+
+          .mobile-warning-content {
+            background: var(--card-bg-light);
+            border: var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 400px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+          }
+
+          .dark .mobile-warning-content {
+            background: var(--card-bg-dark);
+          }
+
+          .mobile-warning-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+          }
+
+          .mobile-warning-text {
+            font-size: 1.5rem;
+            color: var(--text-light);
+          }
+
+          .dark .mobile-warning-text {
+            color: #CCC;
+          }
+
           @media (min-width: 769px) {
             .card-container {
               display: none;
             }
+            .toggle-button {
+              display: none;
+            }
+            .nav {
+              display: flex !important;
+            }
           }
+
           @media (max-width: 768px) {
             .table-container {
               display: none;
@@ -275,190 +778,235 @@ const Dashboard = () => {
             }
             .action-buttons {
               flex-direction: column;
-              gap: 6px;
+              gap: 12px;
             }
-            .navbar {
+            .toggle-button {
+              display: block;
+            }
+            .nav {
+              display: none;
               flex-direction: column;
-              align-items: flex-start;
-            }
-            .navbar-nav {
               width: 100%;
-              transition: max-height 0.3s ease;
+              max-height: 0;
               overflow: hidden;
-              max-height: ${navbarOpen ? "500px" : "0"};
+              transition: max-height 0.3s ease;
+              background: var(--card-bg-light);
+              border: var(--border);
+              border-radius: 0 0 12px 12px;
+              padding: 12px;
+              position: absolute;
+              top: 60px;
+              left: 0;
+              right: 0;
+              z-index: 999;
+            }
+            .dark .nav {
+              background: var(--card-bg-dark);
+            }
+            .nav.open {
+              display: flex;
+              max-height: 500px;
             }
             .modal-content {
-              width: 90%;
-              padding: 14px;
+              width: 95%;
+              padding: 16px;
             }
             .settings-container, .info-container {
-              padding: 14px;
+              padding: 16px;
             }
           }
+
           @media (max-width: 576px) {
             .card {
-              padding: 10px;
+              padding: 12px;
             }
             .card-header {
-              font-size: 0.9rem;
+              font-size: 1.2rem;
             }
             .card-content {
-              font-size: 0.8rem;
+              font-size: 1rem;
             }
             .modal-content {
-              padding: 10px;
+              padding: 12px;
             }
             .form-input, .form-textarea {
-              font-size: 0.8rem;
-              padding: 6px;
+              font-size: 1rem;
+              padding: 8px;
             }
             .settings-container, .info-container {
-              padding: 10px;
+              padding: 12px;
             }
             .button-group {
               flex-direction: column;
-              gap: 6px;
+              gap: 8px;
+            }
+            .title {
+              font-size: 2rem;
+            }
+            .search-input {
+              width: 100%;
             }
           }
+
           @media (max-width: 360px) {
             .card {
               padding: 8px;
             }
             .card-header {
-              font-size: 0.85rem;
+              font-size: 1rem;
             }
             .card-content {
-              font-size: 0.75rem;
+              font-size: 0.9rem;
             }
             .modal-content {
               padding: 8px;
             }
             .form-input, .form-textarea {
-              font-size: 0.75rem;
-              padding: 5px;
+              font-size: 0.9rem;
+              padding: 6px;
             }
             .settings-container, .info-container {
               padding: 8px;
             }
+            .title {
+              font-size: 1.8rem;
+            }
           }
         `}</style>
 
-        <header className="navbar" style={styles.navbar}>
-          <div style={styles.navbarBrand}>
-            <button onClick={handleLogout} style={styles.logoutButton}>
-              <FaSignOutAlt size={12} /> {settings.language === "id" ? "Logout" : "Sign Out"}
+        {isMobile && (
+          <div className="mobile-warning">
+            <div className="mobile-warning-content">
+              <FaExclamationTriangle size={40} color="#F97316" />
+              <h2 className="mobile-warning-title">
+                {settings.language === "id" ? "Perangkat Tidak Didukung" : "Device Not Supported"}
+              </h2>
+              <p className="mobile-warning-text">
+                {settings.language === "id"
+                  ? "Dashboard ini hanya dapat diakses melalui perangkat desktop untuk pengalaman terbaik."
+                  : "This dashboard is only accessible via desktop devices for the best experience."}
+              </p>
+            </div>
+          </div>
+        )}
+
+        <header className="navbar" data-aos="fade-down">
+          <div className="navbar-brand">
+            <button onClick={handleLogout} className="logout-button">
+              <FaSignOutAlt size={16} /> {settings.language === "id" ? "Logout" : "Sign Out"}
             </button>
-            <h2 style={styles.logo}>Dashboard</h2>
+            <h2 className="logo">Dashboard</h2>
             <button
               onClick={() => setNavbarOpen(!navbarOpen)}
-              style={styles.toggleButton}
+              className="toggle-button"
             >
-              {navbarOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
+              {navbarOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
             </button>
           </div>
-          <nav className="navbar-nav" style={{ ...styles.nav, display: navbarOpen ? "flex" : "none" }}>
+          <nav className={`nav ${navbarOpen ? "open" : ""}`}>
             <button
               onClick={() => { setActiveTab("contacts"); setSearchTerm(""); setNavbarOpen(false); }}
-              style={activeTab === "contacts" ? styles.navItemActive : styles.navItem}
+              className={`nav-item ${activeTab === "contacts" ? "active" : ""}`}
             >
-              <FaTable size={12} /> {settings.language === "id" ? "Data Kontak" : "Contacts"}
+              <FaTable size={16} /> {settings.language === "id" ? "Data Kontak" : "Contacts"}
             </button>
             <button
               onClick={() => { setActiveTab("comments"); setSearchTerm(""); setNavbarOpen(false); }}
-              style={activeTab === "comments" ? styles.navItemActive : styles.navItem}
+              className={`nav-item ${activeTab === "comments" ? "active" : ""}`}
             >
-              <FaComments size={12} /> {settings.language === "id" ? "Komentar" : "Comments"}
+              <FaComments size={16} /> {settings.language === "id" ? "Komentar" : "Comments"}
             </button>
             <button
               onClick={() => { setActiveTab("settings"); setSearchTerm(""); setNavbarOpen(false); }}
-              style={activeTab === "settings" ? styles.navItemActive : styles.navItem}
+              className={`nav-item ${activeTab === "settings" ? "active" : ""}`}
             >
-              <FaCog size={12} /> {settings.language === "id" ? "Pengaturan" : "Settings"}
+              <FaCog size={16} /> {settings.language === "id" ? "Pengaturan" : "Settings"}
             </button>
             <button
+            ck
               onClick={() => { setActiveTab("info"); setSearchTerm(""); setNavbarOpen(false); }}
-              style={activeTab === "info" ? styles.navItemActive : styles.navItem}
+              className="nav-item ${activeTab}"
             >
-              <FaInfoCircle size={12} /> {settings.language === "id" ? "Informasi" : "Info"}
+              <FaInfoCircle size={16} /> {settings.language === "id" ? "Informasi" : "Info"}
             </button>
           </nav>
         </header>
 
-        <main style={styles.mainContent}>
+        <main className="main-content">
           {error && (
-            <div style={styles.error}>
+            <div className="error-container" data-aos="fade-up">
               <strong>Error:</strong> {error}
             </div>
           )}
-          <div className="header-row" style={styles.headerRow}>
-            <h1 style={styles.title}>
+          <div className="header-row" data-aos="fade-up">
+            <h1 className="title">
               {activeTab === "contacts" ? (settings.language === "id" ? "📋 Kontak Masuk" : "📋 Incoming Contacts") :
                activeTab === "comments" ? (settings.language === "id" ? "💬 Komentar" : "💬 Comments") :
                activeTab === "settings" ? (settings.language === "id" ? "⚙️ Pengaturan" : "⚙️ Settings") :
                (settings.language === "id" ? "ℹ️ Informasi" : "ℹ️ Info")}
             </h1>
             {activeTab !== "settings" && activeTab !== "info" && (
-              <div className="action-buttons" style={styles.actionButtons}>
+              <div className="action-buttons">
                 <input
                   type="text"
                   placeholder={activeTab === "contacts" ? (settings.language === "id" ? "🔍 Cari kontak..." : "🔍 Search contacts...") : (settings.language === "id" ? "🔍 Cari komentar..." : "🔍 Search comments...")}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  style={styles.searchInput}
+                  className="search-input"
                 />
                 {activeTab === "comments" && (
                   <button
                     onClick={() => openCommentForm()}
-                    style={styles.addButton}
+                    className="add-button"
                   >
-                    <FaPlus size={12} /> {settings.language === "id" ? "Tambah Komentar" : "Add Comment"}
+                    <FaPlus size={16} /> {settings.language === "id" ? "Tambah Komentar" : "Add Comment"}
                   </button>
                 )}
-                <button onClick={exportData} style={styles.submitButton}>
-                  <FaFileExport size={12} /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
+                <button onClick={exportData} className="export-button">
+                  <FaFileExport size={16} /> {settings.language === "id" ? "Ekspor Data" : "Export Data"}
                 </button>
               </div>
             )}
           </div>
 
           {loading ? (
-            <p style={styles.statusText}>{settings.language === "id" ? "Memuat data..." : "Loading data..."}</p>
+            <p className="status-text" data-aos="fade-up">{settings.language === "id" ? "Memuat data..." : "Loading data..."}</p>
           ) : activeTab === "contacts" ? (
             filteredContacts.length === 0 ? (
-              <p style={styles.statusText}>{settings.language === "id" ? "📭 Tidak ada data kontak yang cocok." : "📭 No matching contacts found."}</p>
+              <p className="status-text" data-aos="fade-up">{settings.language === "id" ? "📭 Tidak ada data kontak yang cocok." : "📭 No matching contacts found."}</p>
             ) : (
               <>
-                <div className="table-container" style={{ overflowX: "auto" }}>
-                  <table style={styles.table}>
+                <div className="table-container" data-aos="fade-up">
+                  <table className="table">
                     <thead>
                       <tr>
-                        <th style={styles.th}>{settings.language === "id" ? "Nama" : "Name"}</th>
-                        <th style={styles.th}>Email</th>
-                        <th style={styles.th}>{settings.language === "id" ? "Pesan" : "Message"}</th>
-                        <th style={styles.th}>{settings.language === "id" ? "Tanggal" : "Date"}</th>
-                        <th style={styles.th}>{settings.language === "id" ? "Aksi" : "Actions"}</th>
+                        <th className="th">{settings.language === "id" ? "Nama" : "Name"}</th>
+                        <th className="th">Email</th>
+                        <th className="th">{settings.language === "id" ? "Pesan" : "Message"}</th>
+                        <th className="th">{settings.language === "id" ? "Tanggal" : "Date"}</th>
+                        <th className="th">{settings.language === "id" ? "Aksi" : "Actions"}</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredContacts.map((contact, index) => (
                         <tr
                           key={contact.id || index}
-                          style={index % 2 === 0 ? styles.trEven : styles.trOdd}
+                          className={index % 2 === 0 ? "tr-even" : "tr-odd"}
                         >
-                          <td style={styles.td}>{contact.name || "N/A"}</td>
-                          <td style={styles.td}>{contact.email || "N/A"}</td>
-                          <td style={styles.td}>{contact.message || "N/A"}</td>
-                          <td style={styles.td}>
+                          <td className="td">{contact.name || "N/A"}</td>
+                          <td className="td">{contact.email || "N/A"}</td>
+                          <td className="td">{contact.message || "N/A"}</td>
+                          <td className="td">
                             {contact.createdAt?.toDate().toLocaleString() || "-"}
                           </td>
-                          <td style={styles.td}>
+                          <td className="td">
                             <button
                               onClick={() => handleDelete(contact.id)}
-                              style={styles.deleteButton}
+                              className="delete-button"
                               title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
                               disabled={!contact.id}
                             >
-                              <FaTrash size={10} />
+                              <FaTrash size={12} />
                             </button>
                           </td>
                         </tr>
@@ -466,7 +1014,7 @@ const Dashboard = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="card-container">
+                <div className="card-container" data-aos="fade-up">
                   {filteredContacts.map((contact, index) => (
                     <div key={contact.id || index} className="card">
                       <div className="card-header">{contact.name || "N/A"}</div>
@@ -478,11 +1026,11 @@ const Dashboard = () => {
                       <div className="card-actions">
                         <button
                           onClick={() => handleDelete(contact.id)}
-                          style={styles.deleteButton}
+                          className="delete-button"
                           title={settings.language === "id" ? "Hapus kontak" : "Delete contact"}
                           disabled={!contact.id}
                         >
-                          <FaTrash size={10} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
                         </button>
                       </div>
                     </div>
@@ -492,45 +1040,45 @@ const Dashboard = () => {
             )
           ) : activeTab === "comments" ? (
             filteredComments.length === 0 ? (
-              <p style={styles.statusText}>{settings.language === "id" ? "💬 Belum ada komentar." : "💬 No comments yet."}</p>
+              <p className="status-text" data-aos="fade-up">{settings.language === "id" ? "💬 Belum ada komentar." : "💬 No comments yet."}</p>
             ) : (
               <>
-                <div className="table-container" style={{ overflowX: "auto" }}>
-                  <table style={styles.table}>
+                <div className="table-container" data-aos="fade-up">
+                  <table className="table">
                     <thead>
                       <tr>
-                        <th style={styles.th}>{settings.language === "id" ? "Nama" : "Name"}</th>
-                        <th style={styles.th}>{settings.language === "id" ? "Komentar" : "Comment"}</th>
-                        <th style={styles.th}>{settings.language === "id" ? "Tanggal" : "Date"}</th>
-                        <th style={styles.th}>{settings.language === "id" ? "Aksi" : "Actions"}</th>
+                        <th className="th">{settings.language === "id" ? "Nama" : "Name"}</th>
+                        <th className="th">{settings.language === "id" ? "Komentar" : "Comment"}</th>
+                        <th className="th">{settings.language === "id" ? "Tanggal" : "Date"}</th>
+                        <th className="th">{settings.language === "id" ? "Aksi" : "Actions"}</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredComments.map((comment, index) => (
                         <tr
                           key={comment.id || index}
-                          style={index % 2 === 0 ? styles.trEven : styles.trOdd}
+                          className={index % 2 === 0 ? "tr-even" : "tr-odd"}
                         >
-                          <td style={styles.td}>{comment.name || "N/A"}</td>
-                          <td style={styles.td}>{comment.message || "N/A"}</td>
-                          <td style={styles.td}>
+                          <td className="td">{comment.name || "N/A"}</td>
+                          <td className="td">{comment.message || "N/A"}</td>
+                          <td className="td">
                             {comment.createdAt?.toDate().toLocaleString() || "-"}
                           </td>
-                          <td style={styles.td}>
+                          <td className="td">
                             <button
                               onClick={() => openCommentForm(comment)}
-                              style={styles.editButton}
+                              className="edit-button"
                               title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
                             >
-                              <FaEdit size={10} />
+                              <FaEdit size={12} />
                             </button>
                             <button
                               onClick={() => handleDelete(comment.id)}
-                              style={styles.deleteButton}
+                              className="delete-button"
                               title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
                               disabled={!comment.id}
                             >
-                              <FaTrash size={10} />
+                              <FaTrash size={12} />
                             </button>
                           </td>
                         </tr>
@@ -538,7 +1086,7 @@ const Dashboard = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="card-container">
+                <div className="card-container" data-aos="fade-up">
                   {filteredComments.map((comment, index) => (
                     <div key={comment.id || index} className="card">
                       <div className="card-header">{comment.name || "N/A"}</div>
@@ -549,18 +1097,18 @@ const Dashboard = () => {
                       <div className="card-actions">
                         <button
                           onClick={() => openCommentForm(comment)}
-                          style={styles.editButton}
+                          className="edit-button"
                           title={settings.language === "id" ? "Edit komentar" : "Edit comment"}
                         >
-                          <FaEdit size={10} /> {settings.language === "id" ? "Edit" : "Edit"}
+                          <FaEdit size={12} /> {settings.language === "id" ? "Edit" : "Edit"}
                         </button>
                         <button
                           onClick={() => handleDelete(comment.id)}
-                          style={styles.deleteButton}
+                          className="delete-button"
                           title={settings.language === "id" ? "Hapus komentar" : "Delete comment"}
                           disabled={!comment.id}
                         >
-                          <FaTrash size={10} /> {settings.language === "id" ? "Hapus" : "Delete"}
+                          <FaTrash size={12} /> {settings.language === "id" ? "Hapus" : "Delete"}
                         </button>
                       </div>
                     </div>
@@ -569,37 +1117,37 @@ const Dashboard = () => {
               </>
             )
           ) : activeTab === "settings" ? (
-            <div className="settings-container" style={styles.settingsContainer}>
-              <h3 style={styles.settingsTitle}>{settings.language === "id" ? "Pengaturan Dashboard" : "Dashboard Settings"}</h3>
-              <div style={styles.formGroup}>
-                <label style={styles.formLabel}>{settings.language === "id" ? "Tema:" : "Theme:"}</label>
-                <div className="button-group" style={styles.buttonGroup}>
+            <div className="settings-container" data-aos="fade-up">
+              <h3 className="settings-title">{settings.language === "id" ? "Pengaturan Dashboard" : "Dashboard Settings"}</h3>
+              <div className="form-group">
+                <label className="form-label">{settings.language === "id" ? "Tema:" : "Theme:"}</label>
+                <div className="button-group">
                   <button
                     onClick={() => handleThemeChange("light")}
-                    style={settings.theme === "light" ? styles.submitButton : styles.cancelButton}
+                    className={settings.theme === "light" ? "submit-button" : "cancel-button"}
                   >
                     {settings.language === "id" ? "Terang" : "Light"}
                   </button>
                   <button
                     onClick={() => handleThemeChange("dark")}
-                    style={settings.theme === "dark" ? styles.submitButton : styles.cancelButton}
+                    className={settings.theme === "dark" ? "submit-button" : "cancel-button"}
                   >
                     {settings.language === "id" ? "Gelap" : "Dark"}
                   </button>
                 </div>
               </div>
-              <div style={styles.formGroup}>
-                <label style={styles.formLabel}>{settings.language === "id" ? "Bahasa:" : "Language:"}</label>
-                <div className="button-group" style={styles.buttonGroup}>
+              <div className="form-group">
+                <label className="form-label">{settings.language === "id" ? "Bahasa:" : "Language:"}</label>
+                <div className="button-group">
                   <button
                     onClick={() => handleLanguageChange("id")}
-                    style={settings.language === "id" ? styles.submitButton : styles.cancelButton}
+                    className={settings.language === "id" ? "submit-button" : "cancel-button"}
                   >
                     Bahasa Indonesia
                   </button>
                   <button
                     onClick={() => handleLanguageChange("en")}
-                    style={settings.language === "en" ? styles.submitButton : styles.cancelButton}
+                    className={settings.language === "en" ? "submit-button" : "cancel-button"}
                   >
                     English
                   </button>
@@ -607,33 +1155,33 @@ const Dashboard = () => {
               </div>
             </div>
           ) : (
-            <div className="info-container" style={styles.infoContainer}>
-              <h3 style={styles.settingsTitle}>{settings.language === "id" ? "Tentang Dashboard" : "About Dashboard"}</h3>
-              <p style={styles.infoText}>
+            <div className="info-container" data-aos="fade-up">
+              <h3 className="settings-title">{settings.language === "id" ? "Tentang Dashboard" : "About Dashboard"}</h3>
+              <p className="info-text">
                 {settings.language === "id" ? 
                   "Dashboard ini dirancang untuk mengelola kontak dan komentar dengan mudah. Gunakan navigasi di atas untuk beralih antara fitur." :
                   "This dashboard is designed to manage contacts and comments easily. Use the navigation above to switch between features."}
               </p>
-              <h4 style={styles.infoSubtitle}>{settings.language === "id" ? "Tips Penggunaan" : "Usage Tips"}</h4>
-              <ul style={styles.infoList}>
+              <h4 className="info-subtitle">{settings.language === "id" ? "Tips Penggunaan" : "Usage Tips"}</h4>
+              <ul className="info-list">
                 <li>{settings.language === "id" ? "Gunakan kolom pencarian untuk menemukan data spesifik." : "Use the search field to find specific data."}</li>
                 <li>{settings.language === "id" ? "Sesuaikan tema di pengaturan untuk kenyamanan visual." : "Customize the theme in settings for visual comfort."}</li>
                 <li>{settings.language === "id" ? "Ekspor data untuk analisis lebih lanjut dalam format CSV." : "Export data for further analysis in CSV format."}</li>
               </ul>
-              <p style={styles.infoText}><strong>{settings.language === "id" ? "Versi:" : "Version:"}</strong> 1.2.0</p>
-              <p style={styles.infoText}><strong>{settings.language === "id" ? "Dukungan:" : "Support:"}</strong> <a href="mailto:support@example.com" style={styles.supportLink}>support@example.com</a></p>
+              <p className="info-text"><strong>{settings.language === "id" ? "Versi:" : "Version:"}</strong> 1.2.0</p>
+              <p className="info-text"><strong>{settings.language === "id" ? "Dukungan:" : "Support:"}</strong> <a href="mailto:support@example.com" className="support-link">support@example.com</a></p>
             </div>
           )}
 
           {commentFormOpen && (
-            <div style={styles.modalOverlay}>
-              <div className="modal-content" style={styles.modalContent}>
-                <h2 style={styles.modalTitle}>
+            <div className="modal-overlay">
+              <div className="modal-content" data-aos="zoom-in">
+                <h2 className="modal-title">
                   {commentFormData.id ? (settings.language === "id" ? "Edit Komentar" : "Edit Comment") : (settings.language === "id" ? "Tambah Komentar" : "Add Comment")}
                 </h2>
                 <form onSubmit={submitCommentForm}>
-                  <div style={styles.formGroup}>
-                    <label htmlFor="name" style={styles.formLabel}>{settings.language === "id" ? "Nama:" : "Name:"}</label>
+                  <div className="form-group">
+                    <label htmlFor="name" className="form-label">{settings.language === "id" ? "Nama:" : "Name:"}</label>
                     <input
                       type="text"
                       name="name"
@@ -641,12 +1189,11 @@ const Dashboard = () => {
                       value={commentFormData.name}
                       onChange={handleCommentChange}
                       required
-                      style={styles.formInput}
                       className="form-input"
                     />
                   </div>
-                  <div style={styles.formGroup}>
-                    <label htmlFor="message" style={styles.formLabel}>{settings.language === "id" ? "Komentar:" : "Comment:"}</label>
+                  <div className="form-group">
+                    <label htmlFor="message" className="form-label">{settings.language === "id" ? "Komentar:" : "Comment:"}</label>
                     <textarea
                       name="message"
                       id="message"
@@ -654,15 +1201,14 @@ const Dashboard = () => {
                       value={commentFormData.message}
                       onChange={handleCommentChange}
                       required
-                      style={styles.formTextarea}
                       className="form-textarea"
                     />
                   </div>
-                  <div style={styles.modalActions}>
+                  <div className="modal-actions">
                     <button
                       type="button"
                       onClick={closeCommentForm}
-                      style={styles.cancelButton}
+                      className="cancel-button"
                       disabled={commentLoading}
                     >
                       {settings.language === "id" ? "Batal" : "Cancel"}
@@ -670,7 +1216,7 @@ const Dashboard = () => {
                     <button
                       type="submit"
                       disabled={commentLoading}
-                      style={styles.submitButton}
+                      className="submit-button"
                     >
                       {commentLoading ? (settings.language === "id" ? "Menyimpan..." : "Saving...") : (settings.language === "id" ? "Simpan" : "Save")}
                     </button>
@@ -683,316 +1229,6 @@ const Dashboard = () => {
       </div>
     </ErrorBoundary>
   );
-};
-
-const styles = {
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    minHeight: "100vh",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-  },
-  navbar: {
-    backgroundColor: "#ff6600",
-    color: "#fff",
-    padding: "6px 12px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    position: "sticky",
-    top: 0,
-    zIndex: 1000,
-  },
-  navbarBrand: {
-    display: "flex",
-    alignItems: "center",
-    gap: "6px",
-  },
-  logo: {
-    margin: 0,
-    fontWeight: "bold",
-    fontSize: "1.4rem",
-  },
-  toggleButton: {
-    backgroundColor: "transparent",
-    border: "none",
-    color: "#fff",
-    padding: "4px",
-    cursor: "pointer",
-    fontSize: "1.1rem",
-    display: "block",
-  },
-  nav: {
-    display: "flex",
-    gap: "4px",
-    flexWrap: "wrap",
-  },
-  navItem: {
-    backgroundColor: "transparent",
-    border: "none",
-    color: "#fff",
-    padding: "6px 10px",
-    fontSize: "0.85rem",
-    cursor: "pointer",
-    borderRadius: "3px",
-    display: "flex",
-    alignItems: "center",
-    gap: "4px",
-    transition: "background-color 0.2s, transform 0.2s",
-  },
-  navItemActive: {
-    backgroundColor: "#e65c00",
-    border: "none",
-    color: "#fff",
-    padding: "6px 10px",
-    fontSize: "0.85rem",
-    cursor: "pointer",
-    borderRadius: "3px",
-    display: "flex",
-    alignItems: "center",
-    gap: "4px",
-    fontWeight: "bold",
-    transition: "background-color 0.2s, transform 0.2s",
-  },
-  logoutButton: {
-    backgroundColor: "#cc3300",
-    border: "none",
-    color: "#fff",
-    padding: "6px 10px",
-    cursor: "pointer",
-    borderRadius: "3px",
-    display: "flex",
-    alignItems: "center",
-    gap: "4px",
-    fontSize: "0.85rem",
-    transition: "background-color 0.2s, transform 0.2s",
-  },
-  mainContent: {
-    flexGrow: 1,
-    padding: "20px",
-  },
-  headerRow: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: "14px",
-    flexWrap: "wrap",
-    gap: "6px",
-  },
-  title: {
-    margin: 0,
-    fontSize: "1.6rem",
-    fontWeight: "bold",
-  },
-  actionButtons: {
-    display: "flex",
-    gap: "6px",
-    flexWrap: "wrap",
-  },
-  searchInput: {
-    padding: "6px 10px",
-    fontSize: "0.85rem",
-    borderRadius: "3px",
-    border: "1px solid #bbb",
-    backgroundColor: "#fff",
-    width: "180px",
-  },
-  addButton: {
-    backgroundColor: "#ff6600",
-    border: "none",
-    color: "#fff",
-    padding: "6px 10px",
-    borderRadius: "3px",
-    cursor: "pointer",
-    fontSize: "0.85rem",
-    display: "flex",
-    alignItems: "center",
-    gap: "4px",
-    transition: "background-color 0.2s, transform 0.2s",
-  },
-  submitButton: {
-    backgroundColor: "#ff6600",
-    border: "none",
-    color: "#fff",
-    padding: "6px 10px",
-    borderRadius: "3px",
-    cursor: "pointer",
-    fontSize: "0.85rem",
-    display: "flex",
-    alignItems: "center",
-    gap: "4px",
-    transition: "background-color 0.2s, transform 0.2s",
-  },
-  statusText: {
-    fontSize: "0.95rem",
-    fontStyle: "italic",
-    color: "#666",
-  },
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
-    backgroundColor: "#fff",
-    borderRadius: "5px",
-    overflow: "hidden",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-  },
-  th: {
-    borderBottom: "2px solid #ff6600",
-    padding: "8px 10px",
-    textAlign: "left",
-    backgroundColor: "#ffe6cc",
-    fontWeight: "bold",
-    fontSize: "0.85rem",
-  },
-  td: {
-    padding: "8px 10px",
-    verticalAlign: "top",
-    borderBottom: "1px solid #ddd",
-    fontSize: "0.8rem",
-  },
-  trEven: {
-    backgroundColor: "#fff",
-  },
-  trOdd: {
-    backgroundColor: "#f7f7f7",
-  },
-  deleteButton: {
-    backgroundColor: "#cc3300",
-    border: "none",
-    color: "#fff",
-    padding: "5px 8px",
-    borderRadius: "3px",
-    cursor: "pointer",
-    fontSize: "0.75rem",
-    transition: "background-color 0.2s, transform 0.2s",
-  },
-  editButton: {
-    backgroundColor: "#555",
-    border: "none",
-    color: "#fff",
-    padding: "5px 8px",
-    borderRadius: "3px",
-    cursor: "pointer",
-    fontSize: "0.75rem",
-    transition: "background-color 0.2s, transform 0.2s",
-  },
-  modalOverlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 2000,
-  },
-  modalContent: {
-    backgroundColor: "#fff",
-    borderRadius: "6px",
-    padding: "16px",
-    width: "100%",
-    maxWidth: "400px",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-  },
-  modalTitle: {
-    fontSize: "1.1rem",
-    marginBottom: "10px",
-  },
-  formGroup: {
-    marginBottom: "10px",
-    display: "flex",
-    flexDirection: "column",
-    gap: "5px",
-  },
-  formLabel: {
-    fontWeight: "bold",
-    fontSize: "0.85rem",
-  },
-  formInput: {
-    padding: "8px",
-    fontSize: "0.85rem",
-    borderRadius: "3px",
-    border: "1px solid #ccc",
-    backgroundColor: "#fff",
-  },
-  formTextarea: {
-    padding: "8px",
-    fontSize: "0.85rem",
-    borderRadius: "3px",
-    border: "1px solid #ccc",
-    resize: "vertical",
-    backgroundColor: "#fff",
-    minHeight: "70px",
-  },
-  modalActions: {
-    marginTop: "10px",
-    textAlign: "right",
-    display: "flex",
-    gap: "6px",
-    justifyContent: "flex-end",
-  },
-  cancelButton: {
-    backgroundColor: "#ccc",
-    color: "#333",
-    border: "none",
-    padding: "6px 12px",
-    borderRadius: "3px",
-    cursor: "pointer",
-    fontSize: "0.85rem",
-    transition: "background-color 0.2s, transform 0.2s",
-  },
-  settingsContainer: {
-    backgroundColor: "#fff",
-    padding: "12px",
-    borderRadius: "6px",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    maxWidth: "450px",
-  },
-  settingsTitle: {
-    fontSize: "1.1rem",
-    marginBottom: "10px",
-  },
-  infoContainer: {
-    backgroundColor: "#fff",
-    padding: "12px",
-    borderRadius: "6px",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-    maxWidth: "450px",
-  },
-  infoText: {
-    marginBottom: "6px",
-    fontSize: "0.85rem",
-  },
-  infoSubtitle: {
-    fontSize: "0.95rem",
-    marginBottom: "6px",
-  },
-  infoList: {
-    listStyleType: "disc",
-    paddingLeft: "14px",
-    marginBottom: "10px",
-    fontSize: "0.85rem",
-  },
-  supportLink: {
-    color: "#ff6600",
-    textDecoration: "none",
-  },
-  error: {
-    color: "#d32f2f",
-    marginBottom: "10px",
-    padding: "6px",
-    backgroundColor: "#ffe6e6",
-    borderRadius: "3px",
-    fontSize: "0.85rem",
-  },
-  buttonGroup: {
-    display: "flex",
-    gap: "6px",
-    flexWrap: "wrap",
-  },
 };
 
 export default Dashboard;
