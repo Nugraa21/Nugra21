@@ -142,14 +142,14 @@ const Navbar = () => {
                 />
               </Link>
             ))}
-
-            {/* <Link
+            {/* kalau mau matikan */}
+            <Link
               to="/login"
               onClick={() => setIsOpen(false)}
               className="px-3 py-2 text-sm font-semibold text-white bg-orange-500 rounded-lg hover:bg-orange-600 transition"
             >
               Login
-            </Link> */}
+            </Link>
           </div>
 
           {/* Hamburger Mobile */}
@@ -194,8 +194,8 @@ const Navbar = () => {
               {item.label}
             </Link>
           ))}
-
-          {/* <Link
+          {/* Kalau mau matikan */}
+          <Link
             to="/login"
             onClick={() => setIsOpen(false)}
             className="mt-auto px-6 py-4 text-lg font-semibold text-white bg-orange-500 rounded mx-6 mb-8 hover:bg-orange-600 transition"
@@ -206,7 +206,7 @@ const Navbar = () => {
             }}
           >
             Login
-          </Link> */}
+          </Link>
         </div>
       </div>
     </nav>
