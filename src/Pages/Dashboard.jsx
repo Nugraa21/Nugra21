@@ -103,7 +103,10 @@ const Dashboard = () => {
         }
         if (activeTab === "projects" || activeTab === "all") {
           const projectsUnsubscribe = onSnapshot(collection(db, "projects"), (querySnapshot) => {
-            setProjects(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+            const projectsData = querySnapshot.docs
+              .map((doc) => ({ id: doc.id, ...doc.data() }))
+              .sort((a, b) => parseInt(a.id) - parseInt(b.id)); // Urutkan berdasarkan id dokumen
+            setProjects(projectsData);
             if (activeTab === "projects") setLoading(false);
           }, (error) => { setError(error.message); setLoading(false); });
           unsubscribes.push(projectsUnsubscribe);
