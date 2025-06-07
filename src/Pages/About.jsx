@@ -3,7 +3,7 @@ import { FileText, Code2, BadgeCheck, Clock, Edit3, Layout, Cpu } from "lucide-r
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Helmet } from "react-helmet";
-import { experienceData } from "../data/data"; // Import shared experienceData
+import { db, collection, onSnapshot, query } from "../firebase"; // Import Firebase utilities
 
 const Header = memo(() => (
   <div className="text-center mb-4 xs:mb-6 sm:mb-8 px-2 xs:px-4 sm:px-6">
@@ -166,19 +166,9 @@ const SkillCard = ({ icon: Icon, title, description, tools = [], delay }) => (
 );
 
 const AboutPage = () => {
-  const { totalProjects, totalCertificates, YearExperience } = useMemo(() => {
-    const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
-    const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
-
-    // Calculate YearExperience as the number of entries in experienceData
-    const experience = experienceData.length;
-
-    return {
-      totalProjects: storedProjects.length || 1,
-      totalCertificates: storedCertificates.length || 0,
-      YearExperience: experience || 0, // Fallback to 0 if no valid data
-    };
-  }, []);
+  const [totalProjects, setTotalProjects] = useState(0);
+  const [totalCertificates, setTotalCertificates] = useState(0);
+  const [YearExperience, setYearExperience] = useState(0);
 
   useEffect(() => {
     AOS.init({
@@ -192,9 +182,40 @@ const AboutPage = () => {
       resizeTimer = setTimeout(() => AOS.refresh(), 250);
     };
     window.addEventListener("resize", handleResize);
+
+    // Fetch projects data from Firebase
+    const projectsQuery = query(collection(db, "projects"));
+    const unsubscribeProjects = onSnapshot(projectsQuery, (snapshot) => {
+      setTotalProjects(snapshot.docs.length || 1); // Fallback to 1 if no projects
+    }, (error) => {
+      console.error("Error fetching projects:", error.message);
+      setTotalProjects(1); // Fallback to 1 on error
+    });
+
+    // Fetch certificates data from Firebase
+    const certificatesQuery = query(collection(db, "certificates"));
+    const unsubscribeCertificates = onSnapshot(certificatesQuery, (snapshot) => {
+      setTotalCertificates(snapshot.docs.length || 0); // Fallback to 0 if no certificates
+    }, (error) => {
+      console.error("Error fetching certificates:", error.message);
+      setTotalCertificates(0); // Fallback to 0 on error
+    });
+
+    // Fetch experience data from Firebase (assuming a 'experience' collection)
+    const experienceQuery = query(collection(db, "experience"));
+    const unsubscribeExperience = onSnapshot(experienceQuery, (snapshot) => {
+      setYearExperience(snapshot.docs.length || 0); // Number of experience entries
+    }, (error) => {
+      console.error("Error fetching experience:", error.message);
+      setYearExperience(0); // Fallback to 0 on error
+    });
+
     return () => {
       window.removeEventListener("resize", handleResize);
       clearTimeout(resizeTimer);
+      unsubscribeProjects();
+      unsubscribeCertificates();
+      unsubscribeExperience();
     };
   }, []);
 
@@ -301,7 +322,7 @@ const AboutPage = () => {
               />
               <StatsCard
                 icon={Clock}
-                value={`${YearExperience}`}
+                value={YearExperience}
                 label="Years of Experience"
                 description="In software development"
                 delay={500}
