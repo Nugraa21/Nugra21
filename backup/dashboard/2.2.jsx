@@ -4,12 +4,13 @@ import {
   collection,
   deleteDoc,
   doc,
-  setDoc,
+  addDoc,
   updateDoc,
   onSnapshot,
   query,
   orderBy,
   serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import {
@@ -59,7 +60,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("projects"); // Default to projects tab
+  const [activeTab, setActiveTab] = useState("contacts");
   const [formOpen, setFormOpen] = useState(false);
   const [formData, setFormData] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
@@ -102,7 +103,7 @@ const Dashboard = () => {
             setContacts(data);
             if (activeTab === "contacts") setLoading(false);
           }, (error) => {
-            console.error("Error fetching contacts:", error.message);
+            console.error("Error fetching contacts:", error);
             setError(error.message);
             setLoading(false);
           });
@@ -117,7 +118,7 @@ const Dashboard = () => {
             setComments(data);
             if (activeTab === "comments") setLoading(false);
           }, (error) => {
-            console.error("Error fetching comments:", error.message);
+            console.error("Error fetching comments:", error);
             setError(error.message);
             setLoading(false);
           });
@@ -131,7 +132,7 @@ const Dashboard = () => {
             setProjects(data);
             if (activeTab === "projects") setLoading(false);
           }, (error) => {
-            console.error("Error fetching projects:", error.message);
+            console.error("Error fetching projects:", error);
             setError(error.message);
             setLoading(false);
           });
@@ -145,7 +146,7 @@ const Dashboard = () => {
             setCertificates(data);
             if (activeTab === "certificates") setLoading(false);
           }, (error) => {
-            console.error("Error fetching certificates:", error.message);
+            console.error("Error fetching certificates:", error);
             setError(error.message);
             setLoading(false);
           });
@@ -154,7 +155,7 @@ const Dashboard = () => {
 
         if (activeTab === "all") setLoading(false);
       } catch (error) {
-        console.error("Error setting up listener:", error.message);
+        console.error("Error setting up listener:", error);
         setError(error.message);
         setLoading(false);
       }
@@ -187,7 +188,7 @@ const Dashboard = () => {
         setCertificates((prev) => prev.filter((item) => item.id !== id));
       }
     } catch (error) {
-      console.error(`Failed to delete ${collectionName.slice(0, -1)}:`, error.message);
+      console.error(`Failed to delete ${collectionName.slice(0, -1)}:`, error);
       setError(`Failed to delete ${collectionName.slice(0, -1)}: ${error.message}`);
     }
   };
@@ -219,18 +220,29 @@ const Dashboard = () => {
       certificate.issuer?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const getNextId = async (collectionName) => {
+    try {
+      const querySnapshot = await getDocs(collection(db, collectionName));
+      const ids = querySnapshot.docs.map((doc) => parseInt(doc.id, 10)).filter((id) => !isNaN(id));
+      return ids.length > 0 ? Math.max(...ids) + 1 : 1;
+    } catch (error) {
+      console.error(`Error fetching IDs for ${collectionName}:`, error);
+      return 1; // Fallback to 1 if error occurs
+    }
+  };
+
   const openForm = (collectionName, item = null) => {
     if (collectionName === "comments") {
       setFormData({
         collection: "comments",
-        id: item ? item.id : "",
+        id: item ? item.id : null,
         name: item ? item.name || "" : "",
         message: item ? item.message || "" : "",
       });
     } else if (collectionName === "projects") {
       setFormData({
         collection: "projects",
-        id: item ? item.id : "",
+        id: item ? item.id : null,
         Title: item ? item.Title || "" : "",
         Description: item ? item.Description || "" : "",
         Img: item ? item.Img || "" : "",
@@ -243,7 +255,7 @@ const Dashboard = () => {
     } else if (collectionName === "certificates") {
       setFormData({
         collection: "certificates",
-        id: item ? item.id : "",
+        id: item ? item.id : null,
         title: item ? item.title || "" : "",
         description: item ? item.description || "" : "",
         Img: item ? item.Img || "" : "",
@@ -296,46 +308,50 @@ const Dashboard = () => {
     if (collection === "comments" && (!data.name.trim() || !data.message.trim())) {
       alert("Name and Message are required.");
       return;
-    } else if (collection === "projects" && (!data.Title.trim() || !data.Description.trim() || !id.trim())) {
-      alert("ID, Title, and Description are required.");
+    } else if (collection === "projects" && (!data.Title.trim() || !data.Description.trim())) {
+      alert("Title and Description are required.");
       return;
-    } else if (collection === "certificates" && (!data.title.trim() || !data.description.trim() || !id.trim())) {
-      alert("ID, Title, and Description are required.");
+    } else if (collection === "certificates" && (!data.title.trim() || !data.description.trim())) {
+      alert("Title and Description are required.");
       return;
     }
 
     setFormLoading(true);
     try {
-      // Use setDoc to create or update the document with the specified ID
-      await setDoc(doc(db, collection, id), {
-        ...data,
-        updatedAt: serverTimestamp(),
-        createdAt: data.createdAt || serverTimestamp(), // Preserve createdAt if exists
-      });
-
-      // Update local state
-      if (collection === "comments") {
-        setComments((prev) =>
-          prev.some((c) => c.id === id)
-            ? prev.map((c) => (c.id === id ? { id, ...data } : c))
-            : [...prev, { id, ...data }]
-        );
-      } else if (collection === "projects") {
-        setProjects((prev) =>
-          prev.some((p) => p.id === id)
-            ? prev.map((p) => (p.id === id ? { id, ...data } : p))
-            : [...prev, { id, ...data }]
-        );
-      } else if (collection === "certificates") {
-        setCertificates((prev) =>
-          prev.some((c) => c.id === id)
-            ? prev.map((c) => (c.id === id ? { id, ...data } : c))
-            : [...prev, { id, ...data }]
-        );
+      if (id) {
+        // Update existing document
+        await updateDoc(doc(db, collection, id), { ...data, updatedAt: serverTimestamp() });
+        if (collection === "comments") {
+          setComments((prev) =>
+            prev.map((c) => (c.id === id ? { ...c, ...data } : c))
+          );
+        } else if (collection === "projects") {
+          setProjects((prev) =>
+            prev.map((p) => (p.id === id ? { ...p, ...data } : p))
+          );
+        } else if (collection === "certificates") {
+          setCertificates((prev) =>
+            prev.map((c) => (c.id === id ? { ...c, ...data } : c))
+          );
+        }
+      } else {
+        // Create new document with auto-incremented ID
+        const nextId = await getNextId(collection);
+        const docRef = await addDoc(collection(db, collection), {
+          ...data,
+          createdAt: serverTimestamp(),
+        });
+        if (collection === "comments") {
+          setComments((prev) => [...prev, { id: docRef.id, ...data }]);
+        } else if (collection === "projects") {
+          setProjects((prev) => [...prev, { id: docRef.id, ...data }]);
+        } else if (collection === "certificates") {
+          setCertificates((prev) => [...prev, { id: docRef.id, ...data }]);
+        }
       }
       closeForm();
     } catch (error) {
-      console.error(`Failed to save ${collection.slice(0, -1)}:`, error.message);
+      console.error(`Failed to save ${collection.slice(0, -1)}:`, error);
       setError(`Failed to save ${collection.slice(0, -1)}: ${error.message}`);
     }
     setFormLoading(false);
@@ -777,20 +793,6 @@ const Dashboard = () => {
                   {formData.id ? `Edit ${formData.collection.slice(0, -1)}` : `Add ${formData.collection.slice(0, -1)}`}
                 </h2>
                 <form onSubmit={submitForm}>
-                  {(formData.collection === "comments" || formData.collection === "projects" || formData.collection === "certificates") && (
-                    <div className="mb-5">
-                      <label htmlFor="id" className="block text-orange-600 font-semibold mb-2 text-sm">ID:</label>
-                      <input
-                        type="text"
-                        name="id"
-                        id="id"
-                        value={formData.id}
-                        onChange={handleFormChange}
-                        required
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                      />
-                    </div>
-                  )}
                   {formData.collection === "comments" && (
                     <>
                       <div className="mb-5">
@@ -880,18 +882,18 @@ const Dashboard = () => {
                       </div>
                       <div className="mb-5">
                         <label className="block text-orange-600 font-semibold mb-2 text-sm">Tech Stack:</label>
-                        {formData.TechStack.map((item, index) => (
+                        {formData.TechStack.map((tech, index) => (
                           <div key={index} className="flex items-center gap-2 mb-2">
                             <input
                               type="text"
-                              value={item}
+                              value={tech}
                               onChange={(e) => handleArrayChange(e, "TechStack", index)}
                               className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
                             />
                             <button
                               type="button"
                               onClick={() => removeArrayItem("TechStack", index)}
-                              className="text-red-500 hover:text-red-600 transition duration-200"
+                              className="text-red-500 hover:text-red-600 transition-transform hover:scale-105 duration-200"
                             >
                               <FaTrash size={14} />
                             </button>
@@ -900,14 +902,14 @@ const Dashboard = () => {
                         <button
                           type="button"
                           onClick={() => addArrayItem("TechStack")}
-                          className="text-orange-600 text-sm font-semibold hover:underline"
+                          className="text-orange-500 hover:text-orange-600 text-sm"
                         >
                           + Add Tech
                         </button>
                       </div>
                       <div className="mb-5">
                         <label className="block text-orange-600 font-semibold mb-2 text-sm">Features:</label>
-                        {formData?.Features?.map((feature, index) => (
+                        {formData.Features.map((feature, index) => (
                           <div key={index} className="flex items-center gap-2 mb-2">
                             <input
                               type="text"
@@ -918,7 +920,7 @@ const Dashboard = () => {
                             <button
                               type="button"
                               onClick={() => removeArrayItem("Features", index)}
-                              className="text-right-500 hover:text-red-600 transition duration-200"
+                              className="text-red-500 hover:text-red-600 transition-transform hover:scale-105 duration-200"
                             >
                               <FaTrash size={14} />
                             </button>
@@ -927,7 +929,7 @@ const Dashboard = () => {
                         <button
                           type="button"
                           onClick={() => addArrayItem("Features")}
-                          className="text-orange-600 text-sm font-semibold hover duration-200 transition duration-200"
+                          className="text-orange-500 hover:text-orange-600 text-sm"
                         >
                           + Add Feature
                         </button>
@@ -940,7 +942,6 @@ const Dashboard = () => {
                           id="category"
                           value={formData.category}
                           onChange={handleFormChange}
-                          required
                           className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
                         />
                       </div>
@@ -991,7 +992,6 @@ const Dashboard = () => {
                           id="issuer"
                           value={formData.issuer}
                           onChange={handleFormChange}
-                          required
                           className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
                         />
                       </div>
@@ -1003,7 +1003,6 @@ const Dashboard = () => {
                           id="date"
                           value={formData.date}
                           onChange={handleFormChange}
-                          required
                           className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
                         />
                       </div>
@@ -1024,7 +1023,7 @@ const Dashboard = () => {
                     <button
                       type="button"
                       onClick={closeForm}
-                      className="px-4 py-3 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 transition-transform hover:scale-105 duration-200 text-sm"
+                      className="px-4 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-transform hover:scale-105 duration-200 text-sm"
                       disabled={formLoading}
                     >
                       Cancel
