@@ -11,7 +11,7 @@ import {
 import { FaThumbtack } from "react-icons/fa";
 import Swal from "sweetalert2";
 import AOS from "aos";
-import "aos/dist/aos.css";
+// import "aos/dist/aos.css";
 import { Helmet } from "react-helmet";
 import {
   db,
@@ -844,7 +844,8 @@ const ContactFooter = () => {
                             }`}
                             style={{ backgroundColor: isUser ? undefined : commentColors[index % commentColors.length] }}
                           >
-                            <div className="flex items-center gap-2 mb-1">
+                            {/* ---------------------------- Bagian tombol pin ---------------------------- */}
+                            {/* <div className="flex items-center gap-2 mb-1">
                               <p className="text-sm font-semibold text-orange">
                                 {name || (isUser ? "Me" : "Anonymous")}
                               </p>
@@ -857,7 +858,7 @@ const ContactFooter = () => {
                                   Pin
                                 </button>
                               )}
-                            </div>
+                            </div> */}
                             <p className="text-sm text-orange leading-relaxed whitespace-pre-wrap">
                               {message || "No message"}
                             </p>
