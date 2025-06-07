@@ -99,7 +99,6 @@ export default function FullWidthTabs() {
         ...doc.data(),
       }));
       setProjects(projectsData);
-      localStorage.setItem("projects", JSON.stringify(projectsData));
     }, (error) => {
       console.error("Error fetching projects:", error.message);
     });
@@ -112,7 +111,6 @@ export default function FullWidthTabs() {
         ...doc.data(),
       }));
       setCertificates(certificatesData);
-      localStorage.setItem("certificates", JSON.stringify(certificatesData));
     }, (error) => {
       console.error("Error fetching certificates:", error.message);
     });
@@ -178,7 +176,7 @@ export default function FullWidthTabs() {
 
       <div
         className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 mt-10 rounded-2xl"
-        id="Portfolio"
+        id="Portofolio"
       >
         <style>
           {`
@@ -269,7 +267,7 @@ export default function FullWidthTabs() {
           `}
         </style>
 
-        <div id="Portfolio" className="glass-bg text-center py-6" data-aos="fadeIn">
+        <div id="Portofolio" className="glass-bg text-center py-6" data-aos="fadeIn">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-400">
             Portfolio
           </h2>
@@ -440,7 +438,7 @@ export default function FullWidthTabs() {
                 ? certificates
                 : certificates.slice(0, DEFAULT_DISPLAY_COUNT)
               ).map((certificate, i) => (
-                <div key={i} data-aos="fade-up" data-aos-delay={i * 100}>
+                <div key={certificate.id} data-aos="fade-up" data-aos-delay={i * 100}>
                   <Certificate
                     ImgSertif={certificate.Img}
                     title={certificate.title}

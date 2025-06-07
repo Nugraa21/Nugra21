@@ -5,7 +5,7 @@ import {
   ChevronRight, Layers,
 } from "lucide-react";
 import Swal from "sweetalert2";
-import data from "../data/data.json";
+import { db, collection, doc, onSnapshot } from "../firebase";
 
 const TECH_ICONS = {
   React: Code2,
@@ -84,17 +84,25 @@ const ProjectDetails = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const selectedProject = data.projects.find((p) => String(p.id) === id);
+    const unsubscribe = onSnapshot(doc(db, "projects", id), (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const enhancedProject = {
+          ...data,
+          Features: data.Features || [],
+          TechStack: data.TechStack || [],
+          Github: data.Github || "https://github.com/nugraa21",
+        };
+        setProject(enhancedProject);
+      } else {
+        setProject(null); // Handle case where project is not found
+      }
+    }, (error) => {
+      console.error("Error fetching project:", error.message);
+      setProject(null);
+    });
 
-    if (selectedProject) {
-      const enhancedProject = {
-        ...selectedProject,
-        Features: selectedProject.Features || [],
-        TechStack: selectedProject.TechStack || [],
-        Github: selectedProject.Github || "https://github.com/nugraa21",
-      };
-      setProject(enhancedProject);
-    }
+    return () => unsubscribe();
   }, [id]);
 
   if (!project) {

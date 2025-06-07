@@ -41,9 +41,9 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-lg text-orange-700">
-          <h2 className="text-xl font-bold">Something went wrong!</h2>
-          <p>{this.state.error?.message || "Please try again or check the browser console."}</p>
+        <div className="bg-orange-100 border-l-4 border-orange-600 p-6 rounded-xl text-orange-800 max-w-3xl mx-auto mt-8">
+          <h2 className="text-2xl font-bold">Something went wrong!</h2>
+          <p className="mt-2">{this.state.error?.message || "Please check the console or try again."}</p>
         </div>
       );
     }
@@ -59,20 +59,21 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("projects"); // Default to projects tab
+  const [activeTab, setActiveTab] = useState("projects");
   const [formOpen, setFormOpen] = useState(false);
   const [formData, setFormData] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [imagePreview, setImagePreview] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     AOS.init({
       once: true,
-      duration: 800,
-      easing: "ease-out-cubic",
+      duration: 600,
+      easing: "ease-out-sine",
     });
 
     const handleResize = () => {
@@ -95,7 +96,6 @@ const Dashboard = () => {
 
       const unsubscribes = [];
       try {
-        // Fetch Contacts
         if (activeTab === "contacts" || activeTab === "all") {
           const contactsUnsubscribe = onSnapshot(collection(db, "contacts"), (querySnapshot) => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -109,7 +109,6 @@ const Dashboard = () => {
           unsubscribes.push(contactsUnsubscribe);
         }
 
-        // Fetch Comments
         if (activeTab === "comments" || activeTab === "all") {
           const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
           const commentsUnsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -124,7 +123,6 @@ const Dashboard = () => {
           unsubscribes.push(commentsUnsubscribe);
         }
 
-        // Fetch Projects
         if (activeTab === "projects" || activeTab === "all") {
           const projectsUnsubscribe = onSnapshot(collection(db, "projects"), (querySnapshot) => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -138,7 +136,6 @@ const Dashboard = () => {
           unsubscribes.push(projectsUnsubscribe);
         }
 
-        // Fetch Certificates
         if (activeTab === "certificates" || activeTab === "all") {
           const certificatesUnsubscribe = onSnapshot(collection(db, "certificates"), (querySnapshot) => {
             const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -240,6 +237,7 @@ const Dashboard = () => {
         Features: item ? item.Features || [] : [],
         category: item ? item.category || "" : "",
       });
+      setImagePreview(item?.Img || "");
     } else if (collectionName === "certificates") {
       setFormData({
         collection: "certificates",
@@ -251,6 +249,7 @@ const Dashboard = () => {
         date: item ? item.date || "" : "",
         Link: item ? item.Link || "" : "",
       });
+      setImagePreview(item?.Img || "");
     }
     setFormOpen(true);
   };
@@ -258,11 +257,15 @@ const Dashboard = () => {
   const closeForm = () => {
     setFormOpen(false);
     setFormData(null);
+    setImagePreview("");
   };
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "Img") {
+      setImagePreview(value);
+    }
   };
 
   const handleArrayChange = (e, field, index) => {
@@ -292,7 +295,6 @@ const Dashboard = () => {
     e.preventDefault();
     const { collection, id, ...data } = formData;
 
-    // Basic validation
     if (collection === "comments" && (!data.name.trim() || !data.message.trim())) {
       alert("Name and Message are required.");
       return;
@@ -306,18 +308,16 @@ const Dashboard = () => {
 
     setFormLoading(true);
     try {
-      // Use setDoc to create or update the document with the specified ID
       await setDoc(doc(db, collection, id), {
         ...data,
         updatedAt: serverTimestamp(),
-        createdAt: data.createdAt || serverTimestamp(), // Preserve createdAt if exists
+        createdAt: data.createdAt || serverTimestamp(),
       });
 
-      // Update local state
       if (collection === "comments") {
-        setComments((prev) =>
-          prev.some((c) => c.id === id)
-            ? prev.map((c) => (c.id === id ? { id, ...data } : c))
+        setProjects((prev) =>
+          prev.some((p) => p.id === id)
+            ? prev.map((p) => (p.id === id ? { id, ...data } : p))
             : [...prev, { id, ...data }]
         );
       } else if (collection === "projects") {
@@ -381,56 +381,49 @@ const Dashboard = () => {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-white font-sans">
+      <div className="min-h-screen bg-gray-50 font-sans">
         {isMobile && (
           <div className="fixed inset-0 bg-gray-900 bg-opacity-95 flex items-center justify-center z-50">
             <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md text-center">
               <FaExclamationTriangle className="text-orange-500 text-5xl mb-6 mx-auto" />
-              <h2 className="text-2xl font-extrabold text-orange-600 mb-4">Device Not Supported</h2>
-              <p className="text-gray-600">This dashboard is optimized for desktop devices to provide the best experience.</p>
+              <h2 className="text-2xl font-bold text-orange-600 mb-4">Device Not Supported</h2>
+              <p className="text-gray-600">This dashboard is optimized for desktop devices.</p>
             </div>
           </div>
         )}
 
-        <header className="bg-white shadow-lg sticky top-0 z-40" data-aos="fade-down">
+        <header className="bg-white shadow-lg sticky top-0 z-40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
             <div className="flex items-center gap-4">
-              <h2 className="text-2xl font-extrabold text-orange-600">Dashboard</h2>
+              <h2 className="text-2xl font-bold text-orange-600">Dashboard</h2>
               <button
                 onClick={() => setNavbarOpen(!navbarOpen)}
                 className="text-orange-600 hover:text-orange-700 md:hidden transition-transform duration-300"
               >
-                {navbarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+                {navbarOpen ? <FaTimes size={24} /> : <FaBars/>}
               </button>
             </div>
-            <nav className={`${navbarOpen ? "flex" : "hidden"} md:flex flex-col md:flex-row gap-4 absolute md:static top-16 left-0 right-0 bg-white md:bg-transparent p-4 md:p-0 shadow-lg md:shadow-none transition-all duration-500 ease-in-out`}>
-              <button
-                onClick={() => { setActiveTab("contacts"); setSearchTerm(""); setNavbarOpen(false); }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold ${activeTab === "contacts" ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-orange-100"} transition-transform hover:scale-105 duration-200`}
-              >
-                <FaTable size={16} /> Contacts
-              </button>
-              <button
-                onClick={() => { setActiveTab("comments"); setSearchTerm(""); setNavbarOpen(false); }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold ${activeTab === "comments" ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-orange-100"} transition-transform hover:scale-105 duration-200`}
-              >
-                <FaComments size={16} /> Comments
-              </button>
-              <button
-                onClick={() => { setActiveTab("projects"); setSearchTerm(""); setNavbarOpen(false); }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold ${activeTab === "projects" ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-orange-100"} transition-transform hover:scale-105 duration-200`}
-              >
-                <FaProjectDiagram size={16} /> Projects
-              </button>
-              <button
-                onClick={() => { setActiveTab("certificates"); setSearchTerm(""); setNavbarOpen(false); }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold ${activeTab === "certificates" ? "bg-orange-500 text-white" : "text-gray-700 hover:bg-orange-100"} transition-transform hover:scale-105 duration-200`}
-              >
-                <FaCertificate size={16} /> Certificates
-              </button>
+            <nav className={`${navbarOpen ? "flex" : "hidden"} md:flex flex-col md:flex-row gap-3 absolute md:static top-16 left-0 right-0 bg-white md:bg-transparent p-4 md:p-0 shadow-lg md:shadow-none transition-all duration-300`}>
+              {["contacts", "comments", "projects", "certificates"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => { setActiveTab(tab); setSearchTerm(""); setNavbarOpen(false); }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                    activeTab === tab
+                      ? "bg-orange-500 text-white shadow-md"
+                      : "text-gray-700 hover:bg-orange-100 hover:shadow-sm"
+                  }`}
+                >
+                  {tab === "contacts" && <FaTable size={16} />}
+                  {tab === "comments" && <FaComments size={16} />}
+                  {tab === "projects" && <FaProjectDiagram size={16} />}
+                  {tab === "certificates" && <FaCertificate size={16} />}
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-red-500 text-white hover:bg-red-600 transition-transform hover:scale-105 duration-200"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-red-500 text-white hover:bg-red-600 transition-all duration-200 shadow-md"
               >
                 <FaSignOutAlt size={16} /> Sign Out
               </button>
@@ -438,48 +431,51 @@ const Dashboard = () => {
           </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {error && (
-            <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-lg mb-8 text-orange-700" data-aos="fade-up">
+            <div className="bg-orange-100 border-l-4 border-orange-600 p-4 rounded-lg mb-6 text-orange-800" data-aos="fade-up">
               <strong>Error:</strong> {error}
             </div>
           )}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6" data-aos="fade-up">
-            <h1 className="text-3xl font-extrabold text-orange-600">
-              {activeTab === "contacts" ? "📋 Incoming Contacts" :
+          <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4" data-aos="fade-up">
+            <h1 className="text-3xl font-bold text-orange-600">
+              {activeTab === "contacts" ? "📋 Contacts" :
                activeTab === "comments" ? "💬 Comments" :
                activeTab === "projects" ? "🚀 Projects" : "🏆 Certificates"}
             </h1>
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               <input
                 type="text"
                 placeholder={`🔍 Search ${activeTab}...`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200 w-full sm:w-64"
+                className="px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-200 w-full sm:w-64 shadow-sm"
               />
               {(activeTab === "comments" || activeTab === "projects" || activeTab === "certificates") && (
                 <button
                   onClick={() => openForm(activeTab)}
-                  className="flex items-center gap-2 px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-transform hover:scale-105 duration-200"
+                  className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-200 shadow-sm"
                 >
                   <FaPlus size={16} /> Add {activeTab.slice(0, -1)}
                 </button>
               )}
               <button
                 onClick={exportData}
-                className="flex items-center gap-2 px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-transform hover:scale-105 duration-200"
+                className="flex items-center gap-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-200 shadow-sm"
               >
-                <FaFileExport size={16} /> Export Data
+                <FaFileExport size={16} /> Export
               </button>
             </div>
           </div>
 
           {loading ? (
-            <p className="text-center text-gray-600 text-lg font-medium" data-aos="fade-up">Loading data...</p>
+            <div className="text-center text-gray-600 text-lg font-medium" data-aos="fade-up">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500"></div>
+              <span className="ml-2">Loading...</span>
+            </div>
           ) : activeTab === "contacts" ? (
             filteredContacts.length === 0 ? (
-              <p className="text-center text-gray-600 text-lg font-medium" data-aos="fade-up">📭 No matching contacts found.</p>
+              <p className="text-center text-gray-600 text-lg font-medium" data-aos="fade-up">📭 No contacts found.</p>
             ) : (
               <>
                 <div className="hidden md:block bg-white rounded-xl shadow-lg overflow-hidden" data-aos="fade-up">
@@ -497,16 +493,18 @@ const Dashboard = () => {
                       {filteredContacts.map((contact, index) => (
                         <tr
                           key={contact.id || index}
-                          className={`${index % 2 === 0 ? "bg-white" : "bg-orange-50"} hover:bg-orange-100 transition duration-200`}
+                          className={`${
+                            index % 2 === 0 ? "bg-white" : "bg-orange-50"
+                          } hover:bg-orange-100 transition-all duration-200`}
                         >
                           <td className="p-4 text-gray-900 text-sm">{contact.name || "N/A"}</td>
                           <td className="p-4 text-gray-900 text-sm">{contact.email || "N/A"}</td>
-                          <td className="p-4 text-gray-900 text-sm">{contact.message || "N/A"}</td>
+                          <td className="p-4 text-gray-900 text-sm truncate max-w-md">{contact.message || "N/A"}</td>
                           <td className="p-4 text-gray-900 text-sm">{contact.createdAt?.toDate().toLocaleString() || "-"}</td>
                           <td className="p-4">
                             <button
                               onClick={() => handleDelete(contact.id, "contacts")}
-                              className="text-red-500 hover:text-red-600 transition-transform hover:scale-110 duration-200"
+                              className="text-red-500 hover:text-red-600 transition-all duration-200"
                               title="Delete contact"
                               disabled={!contact.id}
                             >
@@ -518,7 +516,7 @@ const Dashboard = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="md:hidden space-y-6" data-aos="fade-up">
+                <div className="md:hidden space-y-4" data-aos="fade-up">
                   {filteredContacts.map((contact, index) => (
                     <div key={contact.id || index} className="bg-white rounded-xl shadow-lg p-6">
                       <h3 className="text-lg font-semibold text-orange-600">{contact.name || "N/A"}</h3>
@@ -527,7 +525,7 @@ const Dashboard = () => {
                       <p className="text-gray-600 text-sm mt-1"><strong>Date:</strong> {contact.createdAt?.toDate().toLocaleString() || "-"}</p>
                       <button
                         onClick={() => handleDelete(contact.id, "contacts")}
-                        className="mt-4 text-red-500 hover:text-red-600 transition-transform hover:scale-105 duration-200 flex items-center gap-2 text-sm"
+                        className="mt-4 text-red-500 hover:text-red-600 flex items-center gap-2 text-sm transition-all duration-200"
                         title="Delete contact"
                         disabled={!contact.id}
                       >
@@ -540,7 +538,7 @@ const Dashboard = () => {
             )
           ) : activeTab === "comments" ? (
             filteredComments.length === 0 ? (
-              <p className="text-center text-gray-600 text-lg font-medium" data-aos="fade-up">💬 No comments yet.</p>
+              <p className="text-center text-gray-600 text-lg font-medium" data-aos="fade-up">💬 No comments found.</p>
             ) : (
               <>
                 <div className="hidden md:block bg-white rounded-xl shadow-lg overflow-hidden" data-aos="fade-up">
@@ -557,22 +555,24 @@ const Dashboard = () => {
                       {filteredComments.map((comment, index) => (
                         <tr
                           key={comment.id || index}
-                          className={`${index % 2 === 0 ? "bg-white" : "bg-orange-50"} hover:bg-orange-100 transition duration-200`}
+                          className={`${
+                            index % 2 === 0 ? "bg-white" : "bg-orange-50"
+                          } hover:bg-orange-100 transition-all duration-200`}
                         >
                           <td className="p-4 text-gray-900 text-sm">{comment.name || "N/A"}</td>
-                          <td className="p-4 text-gray-900 text-sm">{comment.message || "N/A"}</td>
+                          <td className="p-4 text-gray-900 text-sm truncate max-w-md">{comment.message || "N/A"}</td>
                           <td className="p-4 text-gray-900 text-sm">{comment.createdAt?.toDate().toLocaleString() || "-"}</td>
                           <td className="p-4 flex gap-3">
                             <button
                               onClick={() => openForm("comments", comment)}
-                              className="text-orange-500 hover:text-orange-600 transition-transform hover:scale-110 duration-200"
+                              className="text-orange-500 hover:text-orange-600 transition-all duration-200"
                               title="Edit comment"
                             >
                               <FaEdit size={14} />
                             </button>
                             <button
                               onClick={() => handleDelete(comment.id, "comments")}
-                              className="text-red-500 hover:text-red-600 transition-transform hover:scale-110 duration-200"
+                              className="text-red-500 hover:text-red-600 transition-all duration-200"
                               title="Delete comment"
                               disabled={!comment.id}
                             >
@@ -584,7 +584,7 @@ const Dashboard = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="md:hidden space-y-6" data-aos="fade-up">
+                <div className="md:hidden space-y-4" data-aos="fade-up">
                   {filteredComments.map((comment, index) => (
                     <div key={comment.id || index} className="bg-white rounded-xl shadow-lg p-6">
                       <h3 className="text-lg font-semibold text-orange-600">{comment.name || "N/A"}</h3>
@@ -593,14 +593,14 @@ const Dashboard = () => {
                       <div className="flex gap-3 mt-4">
                         <button
                           onClick={() => openForm("comments", comment)}
-                          className="text-orange-500 hover:text-orange-600 transition-transform hover:scale-105 duration-200 flex items-center gap-2 text-sm"
+                          className="text-orange-500 hover:text-orange-600 flex items-center gap-2 text-sm transition-all duration-200"
                           title="Edit comment"
                         >
                           <FaEdit size={14} /> Edit
                         </button>
                         <button
                           onClick={() => handleDelete(comment.id, "comments")}
-                          className="text-red-500 hover:text-red-600 transition-transform hover:scale-105 duration-200 flex items-center gap-2 text-sm"
+                          className="text-red-500 hover:text-red-600 flex items-center gap-2 text-sm transition-all duration-200"
                           title="Delete comment"
                           disabled={!comment.id}
                         >
@@ -632,23 +632,25 @@ const Dashboard = () => {
                       {filteredProjects.map((project, index) => (
                         <tr
                           key={project.id || index}
-                          className={`${index % 2 === 0 ? "bg-white" : "bg-orange-50"} hover:bg-orange-100 transition duration-200`}
+                          className={`${
+                            index % 2 === 0 ? "bg-white" : "bg-orange-50"
+                          } hover:bg-orange-100 transition-all duration-200`}
                         >
                           <td className="p-4 text-gray-900 text-sm">{project.Title || "N/A"}</td>
                           <td className="p-4 text-gray-900 text-sm">{project.category || "N/A"}</td>
-                          <td className="p-4 text-gray-900 text-sm truncate max-w-xs">{project.Description || "N/A"}</td>
+                          <td className="p-4 text-gray-900 text-sm truncate max-w-md">{project.Description || "N/A"}</td>
                           <td className="p-4 text-gray-900 text-sm">{project.TechStack?.join(", ") || "N/A"}</td>
                           <td className="p-4 flex gap-3">
                             <button
                               onClick={() => openForm("projects", project)}
-                              className="text-orange-500 hover:text-orange-600 transition-transform hover:scale-110 duration-200"
+                              className="text-orange-500 hover:text-orange-600 transition-all duration-200"
                               title="Edit project"
                             >
                               <FaEdit size={14} />
                             </button>
                             <button
                               onClick={() => handleDelete(project.id, "projects")}
-                              className="text-red-500 hover:text-red-600 transition-transform hover:scale-110 duration-200"
+                              className="text-red-500 hover:text-red-600 transition-all duration-200"
                               title="Delete project"
                               disabled={!project.id}
                             >
@@ -660,7 +662,7 @@ const Dashboard = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="md:hidden space-y-6" data-aos="fade-up">
+                <div className="md:hidden space-y-4" data-aos="fade-up">
                   {filteredProjects.map((project, index) => (
                     <div key={project.id || index} className="bg-white rounded-xl shadow-lg p-6">
                       <h3 className="text-lg font-semibold text-orange-600">{project.Title || "N/A"}</h3>
@@ -673,14 +675,14 @@ const Dashboard = () => {
                       <div className="flex gap-3 mt-4">
                         <button
                           onClick={() => openForm("projects", project)}
-                          className="text-orange-500 hover:text-orange-600 transition-transform hover:scale-105 duration-200 flex items-center gap-2 text-sm"
+                          className="text-orange-500 hover:text-orange-600 flex items-center gap-2 text-sm transition-all duration-200"
                           title="Edit project"
                         >
                           <FaEdit size={14} /> Edit
                         </button>
                         <button
                           onClick={() => handleDelete(project.id, "projects")}
-                          className="text-red-500 hover:text-red-600 transition-transform hover:scale-105 duration-200 flex items-center gap-2 text-sm"
+                          className="text-red-500 hover:text-red-600 flex items-center gap-2 text-sm transition-all duration-200"
                           title="Delete project"
                           disabled={!project.id}
                         >
@@ -711,7 +713,9 @@ const Dashboard = () => {
                       {filteredCertificates.map((certificate, index) => (
                         <tr
                           key={certificate.id || index}
-                          className={`${index % 2 === 0 ? "bg-white" : "bg-orange-50"} hover:bg-orange-100 transition duration-200`}
+                          className={`${
+                            index % 2 === 0 ? "bg-white" : "bg-orange-50"
+                          } hover:bg-orange-100 transition-all duration-200`}
                         >
                           <td className="p-4 text-gray-900 text-sm">{certificate.title || "N/A"}</td>
                           <td className="p-4 text-gray-900 text-sm">{certificate.issuer || "N/A"}</td>
@@ -719,14 +723,14 @@ const Dashboard = () => {
                           <td className="p-4 flex gap-3">
                             <button
                               onClick={() => openForm("certificates", certificate)}
-                              className="text-orange-500 hover:text-orange-600 transition-transform hover:scale-110 duration-200"
+                              className="text-orange-500 hover:text-orange-600 transition-all duration-200"
                               title="Edit certificate"
                             >
                               <FaEdit size={14} />
                             </button>
                             <button
                               onClick={() => handleDelete(certificate.id, "certificates")}
-                              className="text-red-500 hover:text-red-600 transition-transform hover:scale-110 duration-200"
+                              className="text-red-500 hover:text-red-600 transition-all duration-200"
                               title="Delete certificate"
                               disabled={!certificate.id}
                             >
@@ -738,7 +742,7 @@ const Dashboard = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="md:hidden space-y-6" data-aos="fade-up">
+                <div className="md:hidden space-y-4" data-aos="fade-up">
                   {filteredCertificates.map((certificate, index) => (
                     <div key={certificate.id || index} className="bg-white rounded-xl shadow-lg p-6">
                       <h3 className="text-lg font-semibold text-orange-600">{certificate.title || "N/A"}</h3>
@@ -749,14 +753,14 @@ const Dashboard = () => {
                       <div className="flex gap-3 mt-4">
                         <button
                           onClick={() => openForm("certificates", certificate)}
-                          className="text-orange-500 hover:text-orange-600 transition-transform hover:scale-105 duration-200 flex items-center gap-2 text-sm"
+                          className="text-orange-500 hover:text-orange-600 flex items-center gap-2 text-sm transition-all duration-200"
                           title="Edit certificate"
                         >
                           <FaEdit size={14} /> Edit
                         </button>
                         <button
                           onClick={() => handleDelete(certificate.id, "certificates")}
-                          className="text-red-500 hover:text-red-600 transition-transform hover:scale-105 duration-200 flex items-center gap-2 text-sm"
+                          className="text-red-500 hover:text-red-600 flex items-center gap-2 text-sm transition-all duration-200"
                           title="Delete certificate"
                           disabled={!certificate.id}
                         >
@@ -771,273 +775,323 @@ const Dashboard = () => {
           )}
 
           {formOpen && formData && (
-            <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-lg w-full" data-aos="zoom-in">
-                <h2 className="text-2xl font-extrabold text-orange-600 mb-6">
-                  {formData.id ? `Edit ${formData.collection.slice(0, -1)}` : `Add ${formData.collection.slice(0, -1)}`}
-                </h2>
-                <form onSubmit={submitForm}>
-                  {(formData.collection === "comments" || formData.collection === "projects" || formData.collection === "certificates") && (
-                    <div className="mb-5">
-                      <label htmlFor="id" className="block text-orange-600 font-semibold mb-2 text-sm">ID:</label>
-                      <input
-                        type="text"
-                        name="id"
-                        id="id"
-                        value={formData.id}
-                        onChange={handleFormChange}
-                        required
-                        className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                      />
+            <div className="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center z-50 overflow-y-auto">
+              <div className="bg-white w-full max-w-4xl h-screen md:h-auto md:max-h-[90vh] rounded-none md:rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden transform transition-all duration-300" data-aos="zoom-in">
+                <div className="w-full md:w-1/2 p-8 overflow-y-auto">
+                  <h2 className="text-2xl font-bold text-orange-600 mb-6">
+                    {formData.id ? `Edit ${formData.collection.slice(0, -1)}` : `Add ${formData.collection.slice(0, -1)}`}
+                  </h2>
+                  <form onSubmit={submitForm} className="space-y-4">
+                    {(formData.collection === "comments" || formData.collection === "projects" || formData.collection === "certificates") && (
+                      <div>
+                        <label htmlFor="id" className="block text-sm font-medium text-gray-700 mb-1">ID</label>
+                        <input
+                          type="text"
+                          name="id"
+                          id="id"
+                          value={formData.id}
+                          onChange={handleFormChange}
+                          required
+                          className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                          placeholder="Enter unique ID"
+                        />
+                      </div>
+                    )}
+                    {formData.collection === "comments" && (
+                      <>
+                        <div>
+                          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                          <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            value={formData.name}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter name"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Comment</label>
+                          <textarea
+                            name="message"
+                            id="message"
+                            rows={4}
+                            value={formData.message}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter comment"
+                          />
+                        </div>
+                      </>
+                    )}
+                    {formData.collection === "projects" && (
+                      <>
+                        <div>
+                          <label htmlFor="Title" className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                          <input
+                            type="text"
+                            name="Title"
+                            id="Title"
+                            value={formData.Title}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter project title"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="Description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                          <textarea
+                            name="Description"
+                            id="Description"
+                            rows={3}
+                            value={formData.Description}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter project description"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="Img" className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                          <input
+                            type="text"
+                            name="Img"
+                            id="Img"
+                            value={formData.Img}
+                            onChange={handleFormChange}
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter image URL"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="Github" className="block text-sm font-medium text-gray-700 mb-1">Github URL</label>
+                          <input
+                            type="text"
+                            name="Github"
+                            id="Github"
+                            value={formData.Github}
+                            onChange={handleFormChange}
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter Github URL"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="Link" className="block text-sm font-medium text-gray-700 mb-1">Project URL</label>
+                          <input
+                            type="text"
+                            name="Link"
+                            id="Link"
+                            value={formData.Link}
+                            onChange={handleFormChange}
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter project URL"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Tech Stack</label>
+                          {formData.TechStack.map((item, index) => (
+                            <div key={index} className="flex items-center gap-2 mb-2">
+                              <input
+                                type="text"
+                                value={item}
+                                onChange={(e) => handleArrayChange(e, "TechStack", index)}
+                                className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                                placeholder={`Tech ${index + 1}`}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeArrayItem("TechStack", index)}
+                                className="text-red-500 hover:text-red-600 transition-all duration-200"
+                              >
+                                <FaTrash size={14} />
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => addArrayItem("TechStack")}
+                            className="text-orange-600 text-sm font-medium hover:text-orange-700 transition-all duration-200"
+                          >
+                            + Add Tech
+                          </button>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Features</label>
+                          {formData.Features.map((feature, index) => (
+                            <div key={index} className="flex items-center gap-2 mb-2">
+                              <input
+                                type="text"
+                                value={feature}
+                                onChange={(e) => handleArrayChange(e, "Features", index)}
+                                className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                                placeholder={`Feature ${index + 1}`}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => removeArrayItem("Features", index)}
+                                className="text-red-500 hover:text-red-600 transition-all duration-200"
+                              >
+                                <FaTrash size={14} />
+                              </button>
+                            </div>
+                          ))}
+                          <button
+                            type="button"
+                            onClick={() => addArrayItem("Features")}
+                            className="text-orange-600 text-sm font-medium hover:text-orange-700 transition-all duration-200"
+                          >
+                            + Add Feature
+                          </button>
+                        </div>
+                        <div>
+                          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                          <input
+                            type="text"
+                            name="category"
+                            id="category"
+                            value={formData.category}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter category"
+                          />
+                        </div>
+                      </>
+                    )}
+                    {formData.collection === "certificates" && (
+                      <>
+                        <div>
+                          <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                          <input
+                            type="text"
+                            name="title"
+                            id="title"
+                            value={formData.title}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter certificate title"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                          <textarea
+                            name="description"
+                            id="description"
+                            rows={3}
+                            value={formData.description}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter certificate description"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="Img" className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+                          <input
+                            type="text"
+                            name="Img"
+                            id="Img"
+                            value={formData.Img}
+                            onChange={handleFormChange}
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter image URL"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="issuer" className="block text-sm font-medium text-gray-700 mb-1">Issuer</label>
+                          <input
+                            type="text"
+                            name="issuer"
+                            id="issuer"
+                            value={formData.issuer}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter issuer"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                          <input
+                            type="text"
+                            name="date"
+                            id="date"
+                            value={formData.date}
+                            onChange={handleFormChange}
+                            required
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter date (e.g., YYYY-MM-DD)"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="Link" className="block text-sm font-medium text-gray-700 mb-1">Link URL</label>
+                          <input
+                            type="text"
+                            name="Link"
+                            id="Link"
+                            value={formData.Link}
+                            onChange={handleFormChange}
+                            className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter certificate URL"
+                          />
+                        </div>
+                      </>
+                    )}
+                    <div className="flex justify-end gap-3 pt-4">
+                      <button
+                        type="button"
+                        onClick={closeForm}
+                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 shadow-sm"
+                        disabled={formLoading}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={formLoading}
+                        className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all duration-200 shadow-sm"
+                      >
+                        {formLoading ? (
+                          <span className="flex items-center">
+                            <svg className="animate-spin h-5 w-5 mr-2 text-white" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                            </svg>
+                            Saving...
+                          </span>
+                        ) : (
+                          "Save"
+                        )}
+                      </button>
                     </div>
-                  )}
-                  {formData.collection === "comments" && (
-                    <>
-                      <div className="mb-5">
-                        <label htmlFor="name" className="block text-orange-600 font-semibold mb-2 text-sm">Name:</label>
-                        <input
-                          type="text"
-                          name="name"
-                          id="name"
-                          value={formData.name}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
+                  </form>
+                </div>
+                {(formData.collection === "projects" || formData.collection === "certificates") && (
+                  <div className="w-full md:w-1/2 bg-gray-50 p-8 flex items-center justify-center">
+                    {imagePreview ? (
+                      <div className="w-full max-w-md">
+                        <h3 className="text-lg font-medium text-gray-700 mb-4">Image Preview</h3>
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="w-full h-auto rounded-lg shadow-md object-cover"
+                          onError={(e) => (e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found")}
                         />
+                        <p className="text-sm text-gray-500 mt-2 text-center">Preview of the provided image URL</p>
                       </div>
-                      <div className="mb-5">
-                        <label htmlFor="message" className="block text-orange-600 font-semibold mb-2 text-sm">Comment:</label>
-                        <textarea
-                          name="message"
-                          id="message"
-                          rows={4}
-                          value={formData.message}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
+                    ) : (
+                      <div className="text-center text-gray-500">
+                        <p>No image URL provided</p>
+                        <p className="text-sm mt-2">Enter an image URL to see a preview</p>
                       </div>
-                    </>
-                  )}
-                  {formData.collection === "projects" && (
-                    <>
-                      <div className="mb-5">
-                        <label htmlFor="Title" className="block text-orange-600 font-semibold mb-2 text-sm">Title:</label>
-                        <input
-                          type="text"
-                          name="Title"
-                          id="Title"
-                          value={formData.Title}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="Description" className="block text-orange-600 font-semibold mb-2 text-sm">Description:</label>
-                        <textarea
-                          name="Description"
-                          id="Description"
-                          rows={4}
-                          value={formData.Description}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="Img" className="block text-orange-600 font-semibold mb-2 text-sm">Image URL:</label>
-                        <input
-                          type="text"
-                          name="Img"
-                          id="Img"
-                          value={formData.Img}
-                          onChange={handleFormChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="Github" className="block text-orange-600 font-semibold mb-2 text-sm">Github URL:</label>
-                        <input
-                          type="text"
-                          name="Github"
-                          id="Github"
-                          value={formData.Github}
-                          onChange={handleFormChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="Link" className="block text-orange-600 font-semibold mb-2 text-sm">Link URL:</label>
-                        <input
-                          type="text"
-                          name="Link"
-                          id="Link"
-                          value={formData.Link}
-                          onChange={handleFormChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label className="block text-orange-600 font-semibold mb-2 text-sm">Tech Stack:</label>
-                        {formData.TechStack.map((item, index) => (
-                          <div key={index} className="flex items-center gap-2 mb-2">
-                            <input
-                              type="text"
-                              value={item}
-                              onChange={(e) => handleArrayChange(e, "TechStack", index)}
-                              className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeArrayItem("TechStack", index)}
-                              className="text-red-500 hover:text-red-600 transition duration-200"
-                            >
-                              <FaTrash size={14} />
-                            </button>
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => addArrayItem("TechStack")}
-                          className="text-orange-600 text-sm font-semibold hover:underline"
-                        >
-                          + Add Tech
-                        </button>
-                      </div>
-                      <div className="mb-5">
-                        <label className="block text-orange-600 font-semibold mb-2 text-sm">Features:</label>
-                        {formData?.Features?.map((feature, index) => (
-                          <div key={index} className="flex items-center gap-2 mb-2">
-                            <input
-                              type="text"
-                              value={feature}
-                              onChange={(e) => handleArrayChange(e, "Features", index)}
-                              className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeArrayItem("Features", index)}
-                              className="text-right-500 hover:text-red-600 transition duration-200"
-                            >
-                              <FaTrash size={14} />
-                            </button>
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => addArrayItem("Features")}
-                          className="text-orange-600 text-sm font-semibold hover duration-200 transition duration-200"
-                        >
-                          + Add Feature
-                        </button>
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="category" className="block text-orange-600 font-semibold mb-2 text-sm">Category:</label>
-                        <input
-                          type="text"
-                          name="category"
-                          id="category"
-                          value={formData.category}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                    </>
-                  )}
-                  {formData.collection === "certificates" && (
-                    <>
-                      <div className="mb-5">
-                        <label htmlFor="title" className="block text-orange-600 font-semibold mb-2 text-sm">Title:</label>
-                        <input
-                          type="text"
-                          name="title"
-                          id="title"
-                          value={formData.title}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="description" className="block text-orange-600 font-semibold mb-2 text-sm">Description:</label>
-                        <textarea
-                          name="description"
-                          id="description"
-                          rows={4}
-                          value={formData.description}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="Img" className="block text-orange-600 font-semibold mb-2 text-sm">Image URL:</label>
-                        <input
-                          type="text"
-                          name="Img"
-                          id="Img"
-                          value={formData.Img}
-                          onChange={handleFormChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="issuer" className="block text-orange-600 font-semibold mb-2 text-sm">Issuer:</label>
-                        <input
-                          type="text"
-                          name="issuer"
-                          id="issuer"
-                          value={formData.issuer}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="date" className="block text-orange-600 font-semibold mb-2 text-sm">Date:</label>
-                        <input
-                          type="text"
-                          name="date"
-                          id="date"
-                          value={formData.date}
-                          onChange={handleFormChange}
-                          required
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <label htmlFor="Link" className="block text-orange-600 font-semibold mb-2 text-sm">Link URL:</label>
-                        <input
-                          type="text"
-                          name="Link"
-                          id="Link"
-                          value={formData.Link}
-                          onChange={handleFormChange}
-                          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition duration-200"
-                        />
-                      </div>
-                    </>
-                  )}
-                  <div className="flex justify-end gap-4">
-                    <button
-                      type="button"
-                      onClick={closeForm}
-                      className="px-4 py-3 bg-gray-200 text-gray-600 rounded-lg hover:bg-gray-300 transition-transform hover:scale-105 duration-200 text-sm"
-                      disabled={formLoading}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      disabled={formLoading}
-                      className="px-4 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-transform hover:scale-105 duration-200 text-sm"
-                    >
-                      {formLoading ? "Saving..." : "Save"}
-                    </button>
+                    )}
                   </div>
-                </form>
+                )}
               </div>
             </div>
           )}
@@ -1048,4 +1102,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-// fxi 
