@@ -13,7 +13,7 @@ import { Code, Award, Boxes } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Helmet } from "react-helmet";
-import data from "../data/data.json";
+import { db, collection, onSnapshot, query } from "../firebase";
 
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -91,11 +91,37 @@ export default function FullWidthTabs() {
       easing: "ease-out-quad",
     });
 
-    setProjects(data.projects || []);
-    setCertificates(data.certificates || []);
+    // Mengambil data projects dari Firestore
+    const projectsQuery = query(collection(db, "projects"));
+    const unsubscribeProjects = onSnapshot(projectsQuery, (snapshot) => {
+      const projectsData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setProjects(projectsData);
+      localStorage.setItem("projects", JSON.stringify(projectsData));
+    }, (error) => {
+      console.error("Error fetching projects:", error.message);
+    });
 
-    localStorage.setItem("projects", JSON.stringify(data.projects || []));
-    localStorage.setItem("certificates", JSON.stringify(data.certificates || []));
+    // Mengambil data certificates dari Firestore
+    const certificatesQuery = query(collection(db, "certificates"));
+    const unsubscribeCertificates = onSnapshot(certificatesQuery, (snapshot) => {
+      const certificatesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setCertificates(certificatesData);
+      localStorage.setItem("certificates", JSON.stringify(certificatesData));
+    }, (error) => {
+      console.error("Error fetching certificates:", error.message);
+    });
+
+    // Membersihkan listener saat komponen di-unmount
+    return () => {
+      unsubscribeProjects();
+      unsubscribeCertificates();
+    };
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -243,7 +269,7 @@ export default function FullWidthTabs() {
           `}
         </style>
 
-        <div id="Portofolio" className="glass-bg text-center py-6" data-aos="fadeIn">
+        <div id="Portfolio" className="glass-bg text-center py-6" data-aos="fadeIn">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-400">
             Portfolio
           </h2>
@@ -253,7 +279,6 @@ export default function FullWidthTabs() {
         </div>
 
         <Box sx={{ width: "100%", mt: 4 }}>
-          {/* Desktop Tabs */}
           <div className="tabs-container">
             <AppBar
               position="static"
@@ -301,7 +326,6 @@ export default function FullWidthTabs() {
             </AppBar>
           </div>
 
-          {/* Mobile Dropdown */}
           <div className="dropdown-container mb-4">
             <select
               value={value}
@@ -315,12 +339,10 @@ export default function FullWidthTabs() {
             </select>
           </div>
 
-          {/* Projects Tab */}
           <TabPanel value={value} index={0} dir={theme.direction}>
             <div className="flex justify-center gap-3 mb-6 flex-col md:flex-row items-center">
               {value === 0 && (
                 <>
-                  {/* Desktop Sub-Tabs */}
                   <div className="tabs-container">
                     <AppBar
                       position="static"
@@ -358,7 +380,6 @@ export default function FullWidthTabs() {
                     </AppBar>
                   </div>
 
-                  {/* Mobile Sub-Dropdown */}
                   <div className="dropdown-container w-full md:w-auto">
                     <select
                       value={projectCategoryValue}
@@ -402,7 +423,6 @@ export default function FullWidthTabs() {
             </div>
           </TabPanel>
 
-          {/* Certificates Tab */}
           <TabPanel value={value} index={1} dir={theme.direction}>
             <div className="flex justify-center mb-6">
               {value === 1 && (
@@ -433,12 +453,10 @@ export default function FullWidthTabs() {
             </div>
           </TabPanel>
 
-          {/* Tech Stack Tab */}
           <TabPanel value={value} index={2} dir={theme.direction}>
             <div className="flex justify-center gap-3 mb-6 flex-col md:flex-row items-center">
               {value === 2 && (
                 <>
-                  {/* Desktop Sub-Tabs */}
                   <div className="tabs-container">
                     <AppBar
                       position="static"
@@ -476,7 +494,6 @@ export default function FullWidthTabs() {
                     </AppBar>
                   </div>
 
-                  {/* Mobile Sub-Dropdown */}
                   <div className="dropdown-container w-full md:w-auto">
                     <select
                       value={techStackValue}
@@ -524,4 +541,3 @@ export default function FullWidthTabs() {
     </>
   );
 }
-// ----------- IFX
