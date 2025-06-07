@@ -322,7 +322,7 @@ const Login = () => {
 
   return (
     <div style={styles.container}>
-      {isMobile && (
+      {/* {isMobile && (
         <div style={styles.mobileWarning}>
           <div style={styles.mobileWarningContent} data-aos="fade">
             <FaExclamationTriangle size={24} color="#F97316" />
@@ -336,7 +336,7 @@ const Login = () => {
             </p>
           </div>
         </div>
-      )}
+      )} */}
 
       <header style={styles.navbar} data-aos="fade-down">
         <div style={styles.navbarBrand}>
