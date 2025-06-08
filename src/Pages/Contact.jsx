@@ -849,7 +849,7 @@ const ContactFooter = () => {
                               <p className="text-sm font-semibold text-orange">
                                 {name || (isUser ? "Me" : "Anonymous")}
                               </p>
-                              {/* Aktifkan pin  */}
+                              {/* Aktifkan pin  */} 
                               {/* {!isUser && (
                                 <button
                                   onClick={() => handlePinComment(id)}
