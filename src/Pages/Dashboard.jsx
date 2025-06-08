@@ -67,68 +67,68 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+useEffect(() => {
+  const handleResize = () => setIsMobile(window.innerWidth < 768);
+  window.addEventListener("resize", handleResize);
+  return () => window.removeEventListener("resize", handleResize);
+}, []);
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (!isLoggedIn) {
-      navigate("/login");
-      return;
-    }
+useEffect(() => {
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+  if (!isLoggedIn) {
+    navigate("/login");
+    return;
+  }
 
-    const fetchData = () => {
-      setLoading(true);
-      setError(null);
+  const fetchData = () => {
+    setLoading(true);
+    setError(null);
 
-      const unsubscribes = [];
-      try {
-        if (activeTab === "contacts" || activeTab === "all") {
-          const contactsUnsubscribe = onSnapshot(collection(db, "contacts"), (querySnapshot) => {
-            setContacts(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-            if (activeTab === "contacts") setLoading(false);
-          }, (error) => { setError(error.message); setLoading(false); });
-          unsubscribes.push(contactsUnsubscribe);
-        }
-        if (activeTab === "comments" || activeTab === "all") {
-          const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
-          const commentsUnsubscribe = onSnapshot(q, (querySnapshot) => {
-            setComments(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-            if (activeTab === "comments") setLoading(false);
-          }, (error) => { setError(error.message); setLoading(false); });
-          unsubscribes.push(commentsUnsubscribe);
-        }
-        if (activeTab === "projects" || activeTab === "all") {
-          const projectsUnsubscribe = onSnapshot(collection(db, "projects"), (querySnapshot) => {
-            const projectsData = querySnapshot.docs
-              .map((doc) => ({ id: doc.id, ...doc.data() }))
-              .sort((a, b) => parseInt(a.id) - parseInt(b.id)); // Urutkan berdasarkan id dokumen
-            setProjects(projectsData);
-            if (activeTab === "projects") setLoading(false);
-          }, (error) => { setError(error.message); setLoading(false); });
-          unsubscribes.push(projectsUnsubscribe);
-        }
-        if (activeTab === "certificates" || activeTab === "all") {
-          const certificatesUnsubscribe = onSnapshot(collection(db, "certificates"), (querySnapshot) => {
-            setCertificates(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-            if (activeTab === "certificates") setLoading(false);
-          }, (error) => { setError(error.message); setLoading(false); });
-          unsubscribes.push(certificatesUnsubscribe);
-        }
-        if (activeTab === "all") setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
+    const unsubscribes = [];
+    try {
+      if (activeTab === "contacts" || activeTab === "all") {
+        const contactsUnsubscribe = onSnapshot(collection(db, "contacts"), (querySnapshot) => {
+          setContacts(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+          if (activeTab === "contacts") setLoading(false);
+        }, (error) => { setError(error.message); setLoading(false); });
+        unsubscribes.push(contactsUnsubscribe);
       }
-      return () => unsubscribes.forEach((unsubscribe) => unsubscribe && unsubscribe());
-    };
+      if (activeTab === "comments" || activeTab === "all") {
+        const q = query(collection(db, "comments"), orderBy("createdAt", "desc"));
+        const commentsUnsubscribe = onSnapshot(q, (querySnapshot) => {
+          setComments(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+          if (activeTab === "comments") setLoading(false);
+        }, (error) => { setError(error.message); setLoading(false); });
+        unsubscribes.push(commentsUnsubscribe);
+      }
+      if (activeTab === "projects" || activeTab === "all") {
+        const projectsUnsubscribe = onSnapshot(collection(db, "projects"), (querySnapshot) => {
+          const projectsData = querySnapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }))
+            .sort((a, b) => parseInt(a.id) - parseInt(b.id)); // Urutkan berdasarkan id dokumen
+          setProjects(projectsData);
+          if (activeTab === "projects") setLoading(false);
+        }, (error) => { setError(error.message); setLoading(false); });
+        unsubscribes.push(projectsUnsubscribe);
+      }
+      if (activeTab === "certificates" || activeTab === "all") {
+        const certificatesUnsubscribe = onSnapshot(collection(db, "certificates"), (querySnapshot) => {
+          setCertificates(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+          if (activeTab === "certificates") setLoading(false);
+        }, (error) => { setError(error.message); setLoading(false); });
+        unsubscribes.push(certificatesUnsubscribe);
+      }
+      if (activeTab === "all") setLoading(false);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+    return () => unsubscribes.forEach((unsubscribe) => unsubscribe && unsubscribe());
+  };
 
-    const unsubscribe = fetchData();
-    return () => unsubscribe && unsubscribe();
-  }, [navigate, activeTab]);
+  const unsubscribe = fetchData();
+  return () => unsubscribe && unsubscribe();
+}, [navigate, activeTab]);
 
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
