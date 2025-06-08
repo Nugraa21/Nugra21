@@ -54,17 +54,19 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
     <div className="group relative w-full max-w-sm mx-auto animate-slide-in-up">
       <div className="relative overflow-hidden rounded-2xl bg-white border border-orange-300 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-orange-50 to-yellow-50">
         {/* Overlay Effect */}
-        <div className="absolute inset-0 bg-gradient-to-t from-orange-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-orange-500/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl pointer-events-none" />
 
-        {/* Image Section with Loading Effect */}
-        <div className="relative overflow-hidden">
+        {/* Image Section with Enhanced Loading Effect */}
+        <div className="relative overflow-hidden h-40 xs:h-44 sm:h-48">
           {!isImageLoaded && (
-            <div className="w-full h-40 xs:h-44 sm:h-48 bg-gray-200 animate-pulse" />
+            <div className="absolute inset-0 shimmer" />
           )}
           <img
             src={Img}
             alt={Title}
-            className={`w-full h-40 xs:h-44 sm:h-48 object-cover transform transition-all duration-500 group-hover:scale-105 ${isImageLoaded ? "opacity-100" : "opacity-0"}`}
+            className={`w-full h-full object-cover transform transition-all duration-700 ease-out ${
+              isImageLoaded ? "opacity-100 scale-100" : "opacity-0 scale-105"
+            }`}
             loading="lazy"
             onLoad={() => setIsImageLoaded(true)}
             onError={(e) => {
@@ -129,18 +131,25 @@ const CardProject = ({ Img, Title, Description, Link: ProjectLink, id }) => {
           animation: slideInUp 0.6s ease-out;
         }
         @keyframes slideInUp {
-          from { opacity: 0; transform: translateY(20px); }
+          from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
         }
         .group:hover .shadow-xl {
-          box-shadow: 0 8px 16px rgba(251, 146, 60, 0.2);
+          box-shadow: 0 10px 20px rgba(251, 146, 60, 0.25);
         }
-        .animate-pulse {
-          animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .shimmer {
+          background: linear-gradient(
+            90deg,
+            #f0f0f0 25%,
+            #e0e0e0 50%,
+            #f0f0f0 75%
+          );
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
         }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+        @keyframes shimmer {
+          0% { background-position: 200% 0; }
+          100% { background-position: -200% 0; }
         }
       `}</style>
     </div>
