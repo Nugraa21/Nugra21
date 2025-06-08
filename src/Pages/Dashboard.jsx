@@ -5,7 +5,6 @@ import {
   deleteDoc,
   doc,
   setDoc,
-  updateDoc,
   onSnapshot,
   query,
   orderBy,
@@ -43,9 +42,9 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-lg shadow-lg max-w-2xl mx-auto mt-10">
-          <h2 className="text-lg font-bold text-red-700">Something Went Wrong</h2>
-          <p className="mt-2 text-sm text-red-600">{this.state.error?.message || "Please check the console or try again later."}</p>
+        <div className="bg-rose-50 border-l-4 border-rose-500 p-6 rounded-xl shadow-lg max-w-md mx-auto mt-12">
+          <h2 className="text-xl font-semibold text-rose-700">Oops, Something Broke</h2>
+          <p className="mt-2 text-sm text-rose-600">{this.state.error?.message || "Check the console or try again later."}</p>
         </div>
       );
     }
@@ -348,16 +347,16 @@ const Dashboard = () => {
 
   return (
     <ErrorBoundary>
-      <div className={`min-h-screen transition-colors duration-300 ${theme === "light" ? "bg-gray-100 text-gray-900" : "bg-gray-900 text-gray-100"} font-sans`}>
+      <div className={`min-h-screen font-inter transition-colors duration-500 ${theme === "light" ? "bg-gray-50 text-gray-900" : "bg-gray-950 text-gray-100"}`}>
         {isMobile && (
-          <div className="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-xl shadow-2xl max-w-md text-center">
-              <FaExclamationTriangle className="text-red-500 text-5xl mb-4 mx-auto" />
-              <h2 className="text-xl font-bold text-gray-800">Mobile Not Supported</h2>
-              <p className="mt-2 text-gray-600">Please use a desktop device for the best experience.</p>
+          <div className="fixed inset-0 bg-gray-950 bg-opacity-90 flex items-center justify-center z-50">
+            <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-sm text-center">
+              <FaExclamationTriangle className="text-rose-500 text-4xl mb-4 mx-auto" />
+              <h2 className="text-lg font-semibold text-gray-800">Mobile Not Supported</h2>
+              <p className="mt-2 text-sm text-gray-600">Use a desktop for the full experience.</p>
               <button
                 onClick={() => setNavbarOpen(false)}
-                className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all"
+                className="mt-4 px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-all duration-300"
               >
                 Close
               </button>
@@ -365,165 +364,162 @@ const Dashboard = () => {
           </div>
         )}
 
-        <header className={`sticky top-0 z-50 shadow-lg ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
-          <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <div className="flex items-center gap-6">
+        <header className={`sticky top-0 z-50 ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm`}>
+          <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div className="flex items-center gap-4">
               <button
                 onClick={() => setNavbarOpen(!navbarOpen)}
-                className="text-orange-500 hover:text-orange-600 md:hidden focus:outline-none"
+                className="text-teal-500 hover:text-teal-600 md:hidden"
               >
-                {navbarOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+                {navbarOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
               </button>
-              <h1 className="text-2xl font-bold text-orange-600">Nugra21 Dashboard</h1>
+              <h1 className="text-xl font-semibold text-teal-600">Nugra21 Studio</h1>
             </div>
             <nav
               className={`${
                 navbarOpen ? "flex" : "hidden md:flex"
-              } flex-col md:flex-row gap-2 absolute md:static top-16 left-0 w-full md:w-auto ${theme === "light" ? "bg-white" : "bg-gray-800"} p-4 md:p-0 shadow-lg md:shadow-none rounded-lg md:rounded-none`}
+              } flex-col md:flex-row gap-2 absolute md:static top-14 left-0 w-full md:w-auto ${theme === "light" ? "bg-white" : "bg-gray-900"} p-4 md:p-0 shadow-md md:shadow-none`}
             >
               {["contacts", "comments", "projects", "certificates"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => { setActiveTab(tab); setSearchTerm(""); setCategoryFilter("All"); setNavbarOpen(false); }}
-                  className={`flex items-center gap-3 px-5 py-2 rounded-md text-base font-medium transition-all duration-300 ${
+                  className={`flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
                     activeTab === tab
-                      ? "bg-orange-600 text-white shadow-md"
+                      ? "bg-teal-500 text-white"
                       : theme === "light"
-                      ? "text-gray-700 hover:bg-orange-100 hover:text-orange-600"
-                      : "text-gray-200 hover:bg-orange-700 hover:text-white"
+                      ? "text-gray-600 hover:bg-teal-50 hover:text-teal-600"
+                      : "text-gray-300 hover:bg-teal-900 hover:text-teal-400"
                   }`}
                 >
-                  {tab === "contacts" && <FaTable size={18} />}
-                  {tab === "comments" && <FaComments size={18} />}
-                  {tab === "projects" && <FaProjectDiagram size={18} />}
-                  {tab === "certificates" && <FaCertificate size={18} />}
+                  {tab === "contacts" && <FaTable size={16} />}
+                  {tab === "comments" && <FaComments size={16} />}
+                  {tab === "projects" && <FaProjectDiagram size={16} />}
+                  {tab === "certificates" && <FaCertificate size={16} />}
                   {tab.charAt(0).toUpperCase() + tab.slice(1)}
                 </button>
               ))}
               <button
                 onClick={toggleTheme}
-                className="flex items-center gap-3 px-5 py-2 rounded-md text-base font-medium bg-orange-500 text-white hover:bg-orange-600 transition-all duration-300"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all duration-300"
               >
-                {theme === "light" ? <FaMoon size={18} /> : <FaSun size={18} />}
-                {theme === "light" ? "Dark Mode" : "Light Mode"}
+                {theme === "light" ? <FaMoon size={16} /> : <FaSun size={16} />}
+                {theme === "light" ? "Dark" : "Light"}
               </button>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-3 px-5 py-2 rounded-md text-base font-medium bg-red-600 text-white hover:bg-red-700 transition-all duration-300 mt-3 md:mt-0"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition-all duration-300 mt-2 md:mt-0"
               >
-                <FaSignOutAlt size={18} /> Logout
+                <FaSignOutAlt size={16} /> Logout
               </button>
             </nav>
           </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-6 py-8">
+        <main className="max-w-7xl mx-auto px-4 py-8">
           {error && (
-            <div className={`border-l-4 border-red-400 p-4 rounded-lg shadow-md mb-6 text-sm ${theme === "light" ? "bg-red-50 text-red-600" : "bg-red-900 text-red-200"}`}>
-              <strong className="font-medium">Error:</strong> {error}
+            <div className={`bg-rose-50 text-rose-600 p-4 rounded-xl text-sm shadow-sm mb-6 ${theme === "dark" && "bg-rose-900 text-rose-200"}`}>
+              <strong className="font-semibold">Error:</strong> {error}
             </div>
           )}
-          <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-            <h2 className="text-3xl font-bold flex items-center gap-2">
-              {activeTab === "contacts" && "Contacts"}
-              {activeTab === "comments" && "Comments"}
-              {activeTab === "projects" && "Projects"}
-              {activeTab === "certificates" && "Certificates"}
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h2 className="text-2xl font-semibold text-teal-600">
+              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
             </h2>
             <div className="flex flex-col md:flex-row gap-3 w-full md:w-auto">
               <div className="relative">
                 <input
                   type="text"
-                  placeholder={`🔍 Search ${activeTab}...`}
+                  placeholder={`Search ${activeTab}...`}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className={`w-full md:w-72 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 shadow-sm ${
-                    theme === "light" ? "bg-white text-gray-800 border-gray-300" : "bg-gray-700 text-gray-200 border-gray-600"
+                  className={`w-full md:w-64 px-4 py-2 rounded-lg text-sm border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                    theme === "light" ? "bg-white border-gray-200 text-gray-800" : "bg-gray-800 border-gray-700 text-gray-200"
                   }`}
                 />
-                <span className="absolute right-3 top-2 text-gray-400">{searchTerm.length}</span>
+                <span className="absolute right-3 top-2.5 text-xs text-gray-400">{searchTerm.length}</span>
               </div>
               {activeTab === "projects" && (
                 <div className="relative">
                   <select
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
-                    className={`w-full md:w-40 px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 shadow-sm ${
-                      theme === "light" ? "bg-white text-gray-800 border-gray-300" : "bg-gray-700 text-gray-200 border-gray-600"
+                    className={`w-full md:w-36 px-4 py-2 rounded-lg text-sm border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                      theme === "light" ? "bg-white border-gray-200 text-gray-800" : "bg-gray-800 border-gray-700 text-gray-200"
                     }`}
                   >
                     {categories.map((cat) => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
                   </select>
-                  <FaFilter className="absolute right-3 top-3 text-gray-400" />
+                  <FaFilter className="absolute right-3 top-3 text-gray-400 text-xs" />
                 </div>
               )}
               {(activeTab === "comments" || activeTab === "projects" || activeTab === "certificates") && (
                 <button
                   onClick={() => openForm(activeTab)}
-                  className="flex items-center gap-2 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-all duration-300 shadow-md"
+                  className="flex items-center gap-2 px-4 py-2 bg-teal-500 text-white text-sm rounded-lg hover:bg-teal-600 transition-all duration-300"
                 >
-                  <FaPlus size={16} /> Add New
+                  <FaPlus size={12} /> Add
                 </button>
               )}
               {selectedItems.length > 0 && (
                 <button
                   onClick={() => handleBulkDelete(activeTab)}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 shadow-md"
+                  className="flex items-center gap-2 px-4 py-2 bg-rose-500 text-white text-sm rounded-lg hover:bg-rose-600 transition-all duration-300"
                 >
-                  <FaTrash size={16} /> Delete Selected ({selectedItems.length})
+                  <FaTrash size={12} /> Delete ({selectedItems.length})
                 </button>
               )}
               <button
                 onClick={exportData}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all duration-300 shadow-md"
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white text-sm rounded-lg hover:bg-emerald-600 transition-all duration-300"
               >
-                <FaFileExport size={16} /> Export
+                <FaFileExport size={12} /> Export
               </button>
             </div>
           </div>
 
           {loading ? (
             <div className="flex justify-center items-center h-32">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-orange-600"></div>
+              <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-teal-500"></div>
             </div>
           ) : activeTab === "contacts" ? (
             filteredContacts.length === 0 ? (
-              <div className={`text-center py-10 rounded-lg shadow-md ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
-                <p className="text-lg">📭 No contacts found.</p>
+              <div className={`text-center py-12 rounded-xl ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm`}>
+                <p className="text-sm text-gray-500">No contacts found.</p>
               </div>
             ) : (
-              <div className={`overflow-x-auto rounded-lg shadow-md ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
-                <table className="w-full">
-                  <thead className="bg-orange-50">
+              <div className={`rounded-xl overflow-hidden ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm`}>
+                <table className="w-full text-sm">
+                  <thead className={`${theme === "light" ? "bg-gray-100" : "bg-gray-800"}`}>
                     <tr>
-                      <th className="px-6 py-3 text-left text-sm font-semibold">
+                      <th className="px-4 py-3 text-left font-medium">
                         <input
                           type="checkbox"
                           onChange={(e) => setSelectedItems(e.target.checked ? filteredContacts.map((c) => c.id) : [])}
                           className="rounded border-gray-300"
                         />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold cursor-pointer" onClick={() => handleSort("name")}>
-                        Name <FaSort />
+                      <th className="px-4 py-3 text-left font-medium cursor-pointer" onClick={() => handleSort("name")}>
+                        Name <FaSort size={12} className="inline" />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold cursor-pointer" onClick={() => handleSort("email")}>
-                        Email <FaSort />
+                      <th className="px-4 py-3 text-left font-medium cursor-pointer" onClick={() => handleSort("email")}>
+                        Email <FaSort size={12} className="inline" />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold cursor-pointer" onClick={() => handleSort("message")}>
-                        Message <FaSort />
+                      <th className="px-4 py-3 text-left font-medium cursor-pointer" onClick={() => handleSort("message")}>
+                        Message <FaSort size={12} className="inline" />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold cursor-pointer" onClick={() => handleSort("createdAt")}>
-                        Date <FaSort />
+                      <th className="px-4 py-3 text-left font-medium cursor-pointer" onClick={() => handleSort("createdAt")}>
+                        Date <FaSort size={12} className="inline" />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold">Actions</th>
+                      <th className="px-4 py-3 text-left font-medium">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredContacts.map((contact, index) => (
-                      <tr key={contact.id || index} className={`border-b transition-colors duration-200 ${theme === "light" ? "hover:bg-gray-50" : "hover:bg-gray-700"}`}>
-                        <td className="px-6 py-4 text-sm">
+                      <tr key={contact.id || index} className={`border-t ${theme === "light" ? "border-gray-100 hover:bg-gray-50" : "border-gray-800 hover:bg-gray-800"}`}>
+                        <td className="px-4 py-3">
                           <input
                             type="checkbox"
                             checked={selectedItems.includes(contact.id)}
@@ -531,16 +527,16 @@ const Dashboard = () => {
                             className="rounded border-gray-300"
                           />
                         </td>
-                        <td className="px-6 py-4 text-sm">{contact.name || "N/A"}</td>
-                        <td className="px-6 py-4 text-sm">{contact.email || "N/A"}</td>
-                        <td className="px-6 py-4 text-sm">{contact.message || "N/A"}</td>
-                        <td className="px-6 py-4 text-sm">{contact.createdAt?.toDate().toLocaleString() || "-"}</td>
-                        <td className="px-6 py-4 text-sm">
+                        <td className="px-4 py-3">{contact.name || "N/A"}</td>
+                        <td className="px-4 py-3">{contact.email || "N/A"}</td>
+                        <td className="px-4 py-3">{contact.message || "N/A"}</td>
+                        <td className="px-4 py-3">{contact.createdAt?.toDate().toLocaleString() || "-"}</td>
+                        <td className="px-4 py-3">
                           <button
                             onClick={() => handleDelete(contact.id, "contacts")}
-                            className="text-red-600 hover:text-red-800 flex items-center gap-1 transition-colors duration-200"
+                            className="text-rose-500 hover:text-rose-600 flex items-center gap-1 transition-colors duration-300"
                           >
-                            <FaTrash size={14} /> Delete
+                            <FaTrash size={12} />
                           </button>
                         </td>
                       </tr>
@@ -551,37 +547,37 @@ const Dashboard = () => {
             )
           ) : activeTab === "comments" ? (
             filteredComments.length === 0 ? (
-              <div className={`text-center py-10 rounded-lg shadow-md ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
-                <p className="text-lg">💬 No comments found.</p>
+              <div className={`text-center py-12 rounded-xl ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm`}>
+                <p className="text-sm text-gray-500">No comments found.</p>
               </div>
             ) : (
-              <div className={`overflow-x-auto rounded-lg shadow-md ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
-                <table className="w-full">
-                  <thead className="bg-orange-50">
+              <div className={`rounded-xl overflow-hidden ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm`}>
+                <table className="w-full text-sm">
+                  <thead className={`${theme === "light" ? "bg-gray-100" : "bg-gray-800"}`}>
                     <tr>
-                      <th className="px-6 py-3 text-left text-sm font-semibold">
+                      <th className="px-4 py-3 text-left font-medium">
                         <input
                           type="checkbox"
                           onChange={(e) => setSelectedItems(e.target.checked ? filteredComments.map((c) => c.id) : [])}
                           className="rounded border-gray-300"
                         />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold cursor-pointer" onClick={() => handleSort("name")}>
-                        Name <FaSort />
+                      <th className="px-4 py-3 text-left font-medium cursor-pointer" onClick={() => handleSort("name")}>
+                        Name <FaSort size={12} className="inline" />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold cursor-pointer" onClick={() => handleSort("message")}>
-                        Comment <FaSort />
+                      <th className="px-4 py-3 text-left font-medium cursor-pointer" onClick={() => handleSort("message")}>
+                        Comment <FaSort size={12} className="inline" />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold cursor-pointer" onClick={() => handleSort("createdAt")}>
-                        Date <FaSort />
+                      <th className="px-4 py-3 text-left font-medium cursor-pointer" onClick={() => handleSort("createdAt")}>
+                        Date <FaSort size={12} className="inline" />
                       </th>
-                      <th className="px-6 py-3 text-left text-sm font-semibold">Actions</th>
+                      <th className="px-4 py-3 text-left font-medium">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredComments.map((comment, index) => (
-                      <tr key={comment.id || index} className={`border-b transition-colors duration-200 ${theme === "light" ? "hover:bg-gray-50" : "hover:bg-gray-700"}`}>
-                        <td className="px-6 py-4 text-sm">
+                      <tr key={comment.id || index} className={`border-t ${theme === "light" ? "border-gray-100 hover:bg-gray-50" : "border-gray-800 hover:bg-gray-800"}`}>
+                        <td className="px-4 py-3">
                           <input
                             type="checkbox"
                             checked={selectedItems.includes(comment.id)}
@@ -589,24 +585,22 @@ const Dashboard = () => {
                             className="rounded border-gray-300"
                           />
                         </td>
-                        <td className="px-6 py-4 text-sm">{comment.name || "N/A"}</td>
-                        <td className="px-6 py-4 text-sm">{comment.message || "N/A"}</td>
-                        <td className="px-6 py-4 text-sm">{comment.createdAt?.toDate().toLocaleString() || "-"}</td>
-                        <td className="px-6 py-4 text-sm">
-                          <div className="flex gap-3">
-                            <button
-                              onClick={() => openForm("comments", comment)}
-                              className="text-orange-600 hover:text-orange-800 flex items-center gap-1 transition-colors duration-200"
-                            >
-                              <FaEdit size={14} /> Edit
-                            </button>
-                            <button
-                              onClick={() => handleDelete(comment.id, "comments")}
-                              className="text-red-600 hover:text-red-800 flex items-center gap-1 transition-colors duration-200"
-                            >
-                              <FaTrash size={14} /> Delete
-                            </button>
-                          </div>
+                        <td className="px-4 py-3">{comment.name || "N/A"}</td>
+                        <td className="px-4 py-3">{comment.message || "N/A"}</td>
+                        <td className="px-4 py-3">{comment.createdAt?.toDate().toLocaleString() || "-"}</td>
+                        <td className="px-4 py-3 flex gap-2">
+                          <button
+                            onClick={() => openForm("comments", comment)}
+                            className="text-teal-500 hover:text-teal-600 flex items-center gap-1 transition-colors duration-300"
+                          >
+                            <FaEdit size={12} />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(comment.id, "comments")}
+                            className="text-rose-500 hover:text-rose-600 flex items-center gap-1 transition-colors duration-300"
+                          >
+                            <FaTrash size={12} />
+                          </button>
                         </td>
                       </tr>
                     ))}
@@ -616,20 +610,18 @@ const Dashboard = () => {
             )
           ) : activeTab === "projects" ? (
             filteredProjects.length === 0 ? (
-              <div className={`text-center py-10 rounded-lg shadow-md ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
-                <p className="text-lg">🚀 No projects found.</p>
+              <div className={`text-center py-12 rounded-xl ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm`}>
+                <p className="text-sm text-gray-500">No projects found.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProjects.map((project, index) => (
                   <div
                     key={project.id || index}
-                    className={`rounded-xl p-6 shadow-lg border transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
-                      theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-600"
-                    }`}
+                    className={`rounded-xl p-5 ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm hover:shadow-md transition-all duration-300`}
                   >
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-bold text-orange-600 truncate">{project.Title || "N/A"}</h3>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-teal-600 truncate">{project.Title || "N/A"}</h3>
                       <input
                         type="checkbox"
                         checked={selectedItems.includes(project.id)}
@@ -641,42 +633,44 @@ const Dashboard = () => {
                       <img
                         src={project.Img}
                         alt={project.Title}
-                        className="w-full h-40 object-cover rounded-lg mt-3"
+                        className="w-full h-36 object-cover rounded-lg mb-3"
                         onError={(e) => (e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found")}
                       />
                     )}
-                    <p className="text-sm mt-2"><strong>Category:</strong> {project.category || "N/A"}</p>
-                    <p className="text-sm mt-1 line-clamp-2">{project.Description || "N/A"}</p>
-                    <div className="flex flex-wrap gap-1 mt-3">
+                    <p className="text-xs text-gray-500 mb-1">{project.category || "N/A"}</p>
+                    <p className="text-sm text-gray-600 line-clamp-2">{project.Description || "N/A"}</p>
+                    <div className="flex flex-wrap gap-1 mt-2">
                       {project.TechStack?.map((tech, idx) => (
-                        <span key={idx} className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full">
+                        <span key={idx} className="bg-teal-100 text-teal-700 text-xs px-2 py-0.5 rounded-full">
                           {tech || "N/A"}
                         </span>
                       ))}
                     </div>
-                    <div className="flex justify-between gap-3 mt-4">
-                      {project.Github && (
-                        <a href={project.Github} target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:text-orange-800 text-sm">
-                          GitHub
-                        </a>
-                      )}
-                      {project.Link && (
-                        <a href={project.Link} target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:text-orange-800 text-sm">
-                          Live
-                        </a>
-                      )}
+                    <div className="flex justify-between mt-4 text-xs">
+                      <div className="flex gap-3">
+                        {project.Github && (
+                          <a href={project.Github} target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:text-teal-600">
+                            GitHub
+                          </a>
+                        )}
+                        {project.Link && (
+                          <a href={project.Link} target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:text-teal-600">
+                            Live
+                          </a>
+                        )}
+                      </div>
                       <div className="flex gap-3">
                         <button
                           onClick={() => openForm("projects", project)}
-                          className="text-orange-600 hover:text-orange-800 flex items-center gap-1 text-sm transition-colors duration-200"
+                          className="text-teal-500 hover:text-teal-600"
                         >
-                          <FaEdit size={14} /> Edit
+                          <FaEdit size={12} />
                         </button>
                         <button
                           onClick={() => handleDelete(project.id, "projects")}
-                          className="text-red-600 hover:text-red-800 flex items-center gap-1 text-sm transition-colors duration-200"
+                          className="text-rose-500 hover:text-rose-600"
                         >
-                          <FaTrash size={14} /> Delete
+                          <FaTrash size={12} />
                         </button>
                       </div>
                     </div>
@@ -686,20 +680,18 @@ const Dashboard = () => {
             )
           ) : (
             filteredCertificates.length === 0 ? (
-              <div className={`text-center py-10 rounded-lg shadow-md ${theme === "light" ? "bg-white" : "bg-gray-800"}`}>
-                <p className="text-lg">🏆 No certificates found.</p>
+              <div className={`text-center py-12 rounded-xl ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm`}>
+                <p className="text-sm text-gray-500">No certificates found.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredCertificates.map((certificate, index) => (
                   <div
                     key={certificate.id || index}
-                    className={`rounded-xl p-6 shadow-lg border transition-all duration-300 transform hover:-translate-y-1 hover:shadow-xl ${
-                      theme === "light" ? "bg-white border-gray-200" : "bg-gray-800 border-gray-600"
-                    }`}
+                    className={`rounded-xl p-5 ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-sm hover:shadow-md transition-all duration-300`}
                   >
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-bold text-orange-600 truncate">{certificate.title || "N/A"}</h3>
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-lg font-semibold text-teal-600 truncate">{certificate.title || "N/A"}</h3>
                       <input
                         type="checkbox"
                         checked={selectedItems.includes(certificate.id)}
@@ -711,30 +703,30 @@ const Dashboard = () => {
                       <img
                         src={certificate.Img}
                         alt={certificate.title}
-                        className="w-full h-40 object-cover rounded-lg mt-3"
+                        className="w-full h-36 object-cover rounded-lg mb-3"
                         onError={(e) => (e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found")}
                       />
                     )}
-                    <p className="text-sm mt-2"><strong>Issuer:</strong> {certificate.issuer || "N/A"}</p>
-                    <p className="text-sm mt-1"><strong>Date:</strong> {certificate.date || "N/A"}</p>
-                    <div className="flex justify-between gap-3 mt-4">
+                    <p className="text-xs text-gray-500 mb-1">{certificate.issuer || "N/A"}</p>
+                    <p className="text-xs text-gray-500">{certificate.date || "N/A"}</p>
+                    <div className="flex justify-between mt-4 text-xs">
                       {certificate.Link && (
-                        <a href={certificate.Link} target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:text-orange-800 text-sm">
-                          View Certificate
+                        <a href={certificate.Link} target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:text-teal-600">
+                          View
                         </a>
                       )}
                       <div className="flex gap-3">
                         <button
                           onClick={() => openForm("certificates", certificate)}
-                          className="text-orange-600 hover:text-orange-800 flex items-center gap-1 text-sm transition-colors duration-200"
+                          className="text-teal-500 hover:text-teal-600"
                         >
-                          <FaEdit size={14} /> Edit
+                          <FaEdit size={12} />
                         </button>
                         <button
                           onClick={() => handleDelete(certificate.id, "certificates")}
-                          className="text-red-600 hover:text-red-800 flex items-center gap-1 text-sm transition-colors duration-200"
+                          className="text-rose-500 hover:text-rose-600"
                         >
-                          <FaTrash size={14} /> Delete
+                          <FaTrash size={12} />
                         </button>
                       </div>
                     </div>
@@ -745,323 +737,362 @@ const Dashboard = () => {
           )}
 
           {formOpen && formData && (
-            <div className="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center z-50 animate-fade-in">
-              <div className={`w-full max-w-4xl h-[85vh] rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 ${
-                theme === "light" ? "bg-white" : "bg-gray-800"
-              }`}>
-                <div className="flex flex-col h-full">
-                  <div className="p-6 border-b border-gray-200">
-                    <h2 className={`text-2xl font-bold ${theme === "light" ? "text-gray-800" : "text-gray-100"}`}>
-                      {formData.id ? `Edit ${formData.collection.slice(0, -1)}` : `Add New ${formData.collection.slice(0, -1)}`}
+            <div className="fixed inset-0 bg-gray-950 bg-opacity-80 flex items-center justify-center z-50">
+              <div className={`w-full max-w-4xl rounded-2xl ${theme === "light" ? "bg-white" : "bg-gray-900"} shadow-2xl transform transition-all duration-500 scale-95 hover:scale-100`}>
+                <div className="flex flex-col max-h-[85vh]">
+                  <div className="p-6 flex items-center justify-between">
+                    <h2 className="text-xl font-semibold text-teal-600">
+                      {formData.id ? `Edit ${formData.collection.slice(0, -1)}` : `New ${formData.collection.slice(0, -1)}`}
                     </h2>
                     <button
                       onClick={closeForm}
-                      className="absolute top-6 right-6 text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                      className="text-gray-500 hover:text-gray-600 transition-colors duration-300"
                     >
                       <FaTimes size={20} />
                     </button>
                   </div>
-                  <div className="flex-1 p-6 overflow-y-auto space-y-6">
-                    <form onSubmit={submitForm} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {(formData.collection === "comments" || formData.collection === "projects" || formData.collection === "certificates") && (
-                        <div>
-                          <label htmlFor="id" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>ID <span className="text-red-500">*</span></label>
-                          <input
-                            type="text"
-                            name="id"
-                            id="id"
-                            value={formData.id}
-                            onChange={handleFormChange}
-                            required
-                            className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                              theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                            } ${!formData.id.trim() ? "border-red-500" : ""}`}
-                          />
-                          {!formData.id.trim() && <p className="text-red-500 text-xs mt-1">ID is required</p>}
+                  <div className="flex-1 overflow-y-auto p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                      <form onSubmit={submitForm} className="lg:col-span-2 space-y-4">
+                        {(formData.collection === "comments" || formData.collection === "projects" || formData.collection === "certificates") && (
+                          <div>
+                            <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>ID <span className="text-rose-500">*</span></label>
+                            <input
+                              type="text"
+                              name="id"
+                              value={formData.id}
+                              onChange={handleFormChange}
+                              required
+                              className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                              } ${!formData.id.trim() ? "border-rose-500" : ""}`}
+                            />
+                            {!formData.id.trim() && <p className="text-rose-500 text-xs mt-1">ID is required</p>}
+                          </div>
+                        )}
+                        {formData.collection === "comments" && (
+                          <>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Name <span className="text-rose-500">*</span></label>
+                              <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.name.trim() ? "border-rose-500" : ""}`}
+                              />
+                              {!formData.name.trim() && <p className="text-rose-500 text-xs mt-1">Name is required</p>}
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Comment <span className="text-rose-500">*</span></label>
+                              <textarea
+                                name="message"
+                                rows={4}
+                                value={formData.message}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 resize-y ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.message.trim() ? "border-rose-500" : ""}`}
+                              />
+                              {!formData.message.trim() && <p className="text-rose-500 text-xs mt-1">Comment is required</p>}
+                            </div>
+                          </>
+                        )}
+                        {formData.collection === "projects" && (
+                          <>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Title <span className="text-rose-500">*</span></label>
+                              <input
+                                type="text"
+                                name="Title"
+                                value={formData.Title}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.Title.trim() ? "border-rose-500" : ""}`}
+                              />
+                              {!formData.Title.trim() && <p className="text-rose-500 text-xs mt-1">Title is required</p>}
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Description <span className="text-rose-500">*</span></label>
+                              <textarea
+                                name="Description"
+                                rows={3}
+                                value={formData.Description}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 resize-y ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.Description.trim() ? "border-rose-500" : ""}`}
+                              />
+                              {!formData.Description.trim() && <p className="text-rose-500 text-xs mt-1">Description is required</p>}
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Image URL</label>
+                              <input
+                                type="text"
+                                name="Img"
+                                value={formData.Img}
+                                onChange={handleFormChange}
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                }`}
+                              />
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Github URL</label>
+                              <input
+                                type="text"
+                                name="Github"
+                                value={formData.Github}
+                                onChange={handleFormChange}
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                }`}
+                              />
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Project URL</label>
+                              <input
+                                type="text"
+                                name="Link"
+                                value={formData.Link}
+                                onChange={handleFormChange}
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                }`}
+                              />
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Tech Stack</label>
+                              {formData.TechStack.map((item, index) => (
+                                <div key={index} className="flex items-center gap-2 mb-2">
+                                  <input
+                                    type="text"
+                                    value={item}
+                                    onChange={(e) => handleArrayChange(e, "TechStack", index)}
+                                    className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                      theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                    }`}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => removeArrayItem("TechStack", index)}
+                                    className="text-rose-500 hover:text-rose-600"
+                                  >
+                                    <FaTrash size={12} />
+                                  </button>
+                                </div>
+                              ))}
+                              <button
+                                type="button"
+                                onClick={() => addArrayItem("TechStack")}
+                                className="text-teal-500 text-xs hover:text-teal-600 flex items-center gap-1 mt-1"
+                              >
+                                <FaPlus size={10} /> Add Tech
+                              </button>
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Features</label>
+                              {formData.Features.map((feature, index) => (
+                                <div key={index} className="flex items-center gap-2 mb-2">
+                                  <input
+                                    type="text"
+                                    value={feature}
+                                    onChange={(e) => handleArrayChange(e, "Features", index)}
+                                    className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                      theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                    }`}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => removeArrayItem("Features", index)}
+                                    className="text-rose-500 hover:text-rose-600"
+                                  >
+                                    <FaTrash size={12} />
+                                  </button>
+                                </div>
+                              ))}
+                              <button
+                                type="button"
+                                onClick={() => addArrayItem("Features")}
+                                className="text-teal-500 text-xs hover:text-teal-600 flex items-center gap-1 mt-1"
+                              >
+                                <FaPlus size={10} /> Add Feature
+                              </button>
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Category <span className="text-rose-500">*</span></label>
+                              <select
+                                name="category"
+                                value={formData.category}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.category.trim() ? "border-rose-500" : ""}`}
+                              >
+                                <option value="">Select Category</option>
+                                {categories.slice(1).map((cat) => (
+                                  <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                              </select>
+                              {!formData.category.trim() && <p className="text-rose-500 text-xs mt-1">Category is required</p>}
+                            </div>
+                          </>
+                        )}
+                        {formData.collection === "certificates" && (
+                          <>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Title <span className="text-rose-500">*</span></label>
+                              <input
+                                type="text"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.title.trim() ? "border-rose-500" : ""}`}
+                              />
+                              {!formData.title.trim() && <p className="text-rose-500 text-xs mt-1">Title is required</p>}
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Description <span className="text-rose-500">*</span></label>
+                              <textarea
+                                name="description"
+                                rows={3}
+                                value={formData.description}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 resize-y ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.description.trim() ? "border-rose-500" : ""}`}
+                              />
+                              {!formData.description.trim() && <p className="text-rose-500 text-xs mt-1">Description is required</p>}
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Image URL</label>
+                              <input
+                                type="text"
+                                name="Img"
+                                value={formData.Img}
+                                onChange={handleFormChange}
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                }`}
+                              />
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Issuer <span className="text-rose-500">*</span></label>
+                              <input
+                                type="text"
+                                name="issuer"
+                                value={formData.issuer}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.issuer.trim() ? "border-rose-500" : ""}`}
+                              />
+                              {!formData.issuer.trim() && <p className="text-rose-500 text-xs mt-1">Issuer is required</p>}
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Date <span className="text-rose-500">*</span></label>
+                              <input
+                                type="text"
+                                name="date"
+                                value={formData.date}
+                                onChange={handleFormChange}
+                                required
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                } ${!formData.date.trim() ? "border-rose-500" : ""}`}
+                              />
+                              {!formData.date.trim() && <p className="text-rose-500 text-xs mt-1">Date is required</p>}
+                            </div>
+                            <div>
+                              <label className={`block text-xs font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-1`}>Link URL</label>
+                              <input
+                                type="text"
+                                name="Link"
+                                value={formData.Link}
+                                onChange={handleFormChange}
+                                className={`w-full px-3 py-2 text-sm rounded-lg border focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-300 ${
+                                  theme === "light" ? "bg-gray-50 border-gray-200" : "bg-gray-800 border-gray-700"
+                                }`}
+                              />
+                            </div>
+                          </>
+                        )}
+                      </form>
+                      {(formData.collection === "projects" || formData.collection === "certificates") && (
+                        <div className="lg:col-span-1">
+                          <h3 className={`text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"} mb-2`}>Preview</h3>
+                          <div className={`rounded-xl p-4 ${theme === "light" ? "bg-gray-50" : "bg-gray-800"} shadow-sm`}>
+                            <h4 className="text-base font-semibold text-teal-600 mb-2">{formData.Title || formData.title || "Untitled"}</h4>
+                            {imagePreview && (
+                              <img
+                                src={imagePreview}
+                                alt="Preview"
+                                className="w-full h-32 object-cover rounded-lg mb-2"
+                                onError={(e) => (e.target.src = "https://via.placeholder.com/300?text=Image+Not+Found")}
+                              />
+                            )}
+                            <p className="text-xs text-gray-500 mb-1">{formData.category || formData.issuer || "N/A"}</p>
+                            <p className="text-xs text-gray-600 line-clamp-2">{formData.Description || formData.description || "N/A"}</p>
+                            {formData.collection === "projects" && (
+                              <>
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {formData.TechStack?.map((tech, idx) => (
+                                    <span key={idx} className="bg-teal-100 text-teal-700 text-xs px-2 py-0.5 rounded-full">
+                                      {tech || "N/A"}
+                                    </span>
+                                  ))}
+                                </div>
+                                {formData.Features?.length > 0 && (
+                                  <div className="mt-2">
+                                    <p className="text-xs text-gray-500">Features:</p>
+                                    <ul className="list-disc list-inside text-xs text-gray-600">
+                                      {formData.Features.map((feature, idx) => (
+                                        <li key={idx}>{feature || "N/A"}</li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+                              </>
+                            )}
+                            {formData.collection === "certificates" && (
+                              <p className="text-xs text-gray-500 mt-1">{formData.date || "N/A"}</p>
+                            )}
+                            <div className="flex gap-3 mt-3 text-xs">
+                              {formData.Github && (
+                                <a href={formData.Github} target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:text-teal-600">
+                                  GitHub
+                                </a>
+                              )}
+                              {formData.Link && (
+                                <a href={formData.Link} target="_blank" rel="noopener noreferrer" className="text-teal-500 hover:text-teal-600">
+                                  {formData.collection === "projects" ? "Live" : "View"}
+                                </a>
+                              )}
+                            </div>
+                          </div>
                         </div>
                       )}
-                      {formData.collection === "comments" && (
-                        <>
-                          <div>
-                            <label htmlFor="name" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Name <span className="text-red-500">*</span></label>
-                            <input
-                              type="text"
-                              name="name"
-                              id="name"
-                              value={formData.name}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.name.trim() ? "border-red-500" : ""}`}
-                            />
-                            {!formData.name.trim() && <p className="text-red-500 text-xs mt-1">Name is required</p>}
-                          </div>
-                          <div className="md:col-span-2">
-                            <label htmlFor="message" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Comment <span className="text-red-500">*</span></label>
-                            <textarea
-                              name="message"
-                              id="message"
-                              rows={4}
-                              value={formData.message}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.message.trim() ? "border-red-500" : ""}`}
-                            />
-                            {!formData.message.trim() && <p className="text-red-500 text-xs mt-1">Comment is required</p>}
-                          </div>
-                        </>
-                      )}
-                      {formData.collection === "projects" && (
-                        <>
-                          <div>
-                            <label htmlFor="Title" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Title <span className="text-red-500">*</span></label>
-                            <input
-                              type="text"
-                              name="Title"
-                              id="Title"
-                              value={formData.Title}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.Title.trim() ? "border-red-500" : ""}`}
-                            />
-                            {!formData.Title.trim() && <p className="text-red-500 text-xs mt-1">Title is required</p>}
-                          </div>
-                          <div className="md:col-span-2">
-                            <label htmlFor="Description" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Description <span className="text-red-500">*</span></label>
-                            <textarea
-                              name="Description"
-                              id="Description"
-                              rows={3}
-                              value={formData.Description}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.Description.trim() ? "border-red-500" : ""}`}
-                            />
-                            {!formData.Description.trim() && <p className="text-red-500 text-xs mt-1">Description is required</p>}
-                          </div>
-                          <div>
-                            <label htmlFor="Img" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Image URL</label>
-                            <input
-                              type="text"
-                              name="Img"
-                              id="Img"
-                              value={formData.Img}
-                              onChange={handleFormChange}
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              }`}
-                            />
-                          </div>
-                          <div>
-                            <label htmlFor="Github" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Github URL</label>
-                            <input
-                              type="text"
-                              name="Github"
-                              id="Github"
-                              value={formData.Github}
-                              onChange={handleFormChange}
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              }`}
-                            />
-                          </div>
-                          <div>
-                            <label htmlFor="Link" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Project URL</label>
-                            <input
-                              type="text"
-                              name="Link"
-                              id="Link"
-                              value={formData.Link}
-                              onChange={handleFormChange}
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              }`}
-                            />
-                          </div>
-                          <div className="md:col-span-2">
-                            <label className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Tech Stack</label>
-                            {formData.TechStack.map((item, index) => (
-                              <div key={index} className="flex items-center gap-2 mb-2">
-                                <input
-                                  type="text"
-                                  value={item}
-                                  onChange={(e) => handleArrayChange(e, "TechStack", index)}
-                                  className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                    theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                                  }`}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => removeArrayItem("TechStack", index)}
-                                  className="text-red-600 hover:text-red-800 transition-colors duration-200"
-                                >
-                                  <FaTrash size={14} />
-                                </button>
-                              </div>
-                            ))}
-                            <button
-                              type="button"
-                              onClick={() => addArrayItem("TechStack")}
-                              className={`text-orange-600 text-sm font-medium hover:text-orange-700 transition-colors duration-200`}
-                            >
-                              + Add Tech
-                            </button>
-                          </div>
-                          <div className="md:col-span-2">
-                            <label className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Features</label>
-                            {formData.Features.map((feature, index) => (
-                              <div key={index} className="flex items-center gap-2 mb-2">
-                                <input
-                                  type="text"
-                                  value={feature}
-                                  onChange={(e) => handleArrayChange(e, "Features", index)}
-                                  className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                    theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                                  }`}
-                                />
-                                <button
-                                  type="button"
-                                  onClick={() => removeArrayItem("Features", index)}
-                                  className="text-red-600 hover:text-red-800 transition-colors duration-200"
-                                >
-                                  <FaTrash size={14} />
-                                </button>
-                              </div>
-                            ))}
-                            <button
-                              type="button"
-                              onClick={() => addArrayItem("Features")}
-                              className={`text-orange-600 text-sm font-medium hover:text-orange-700 transition-colors duration-200`}
-                            >
-                              + Add Feature
-                            </button>
-                          </div>
-                          <div>
-                            <label htmlFor="category" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Category <span className="text-red-500">*</span></label>
-                            <select
-                              name="category"
-                              id="category"
-                              value={formData.category}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.category.trim() ? "border-red-500" : ""}`}
-                            >
-                              <option value="">Select Category</option>
-                              {categories.slice(1).map((cat) => (
-                                <option key={cat} value={cat}>{cat}</option>
-                              ))}
-                            </select>
-                            {!formData.category.trim() && <p className="text-red-500 text-xs mt-1">Category is required</p>}
-                          </div>
-                        </>
-                      )}
-                      {formData.collection === "certificates" && (
-                        <>
-                          <div>
-                            <label htmlFor="title" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Title <span className="text-red-500">*</span></label>
-                            <input
-                              type="text"
-                              name="title"
-                              id="title"
-                              value={formData.title}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.title.trim() ? "border-red-500" : ""}`}
-                            />
-                            {!formData.title.trim() && <p className="text-red-500 text-xs mt-1">Title is required</p>}
-                          </div>
-                          <div className="md:col-span-2">
-                            <label htmlFor="description" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Description <span className="text-red-500">*</span></label>
-                            <textarea
-                              name="description"
-                              id="description"
-                              rows={3}
-                              value={formData.description}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.description.trim() ? "border-red-500" : ""}`}
-                            />
-                            {!formData.description.trim() && <p className="text-red-500 text-xs mt-1">Description is required</p>}
-                          </div>
-                          <div>
-                            <label htmlFor="Img" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Image URL</label>
-                            <input
-                              type="text"
-                              name="Img"
-                              id="Img"
-                              value={formData.Img}
-                              onChange={handleFormChange}
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              }`}
-                            />
-                          </div>
-                          <div>
-                            <label htmlFor="issuer" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Issuer <span className="text-red-500">*</span></label>
-                            <input
-                              type="text"
-                              name="issuer"
-                              id="issuer"
-                              value={formData.issuer}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.issuer.trim() ? "border-red-500" : ""}`}
-                            />
-                            {!formData.issuer.trim() && <p className="text-red-500 text-xs mt-1">Issuer is required</p>}
-                          </div>
-                          <div>
-                            <label htmlFor="date" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Date <span className="text-red-500">*</span></label>
-                            <input
-                              type="text"
-                              name="date"
-                              id="date"
-                              value={formData.date}
-                              onChange={handleFormChange}
-                              required
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              } ${!formData.date.trim() ? "border-red-500" : ""}`}
-                            />
-                            {!formData.date.trim() && <p className="text-red-500 text-xs mt-1">Date is required</p>}
-                          </div>
-                          <div>
-                            <label htmlFor="Link" className={`block text-sm font-medium ${theme === "light" ? "text-gray-700" : "text-gray-300"}`}>Link URL</label>
-                            <input
-                              type="text"
-                              name="Link"
-                              id="Link"
-                              value={formData.Link}
-                              onChange={handleFormChange}
-                              className={`w-full px-4 py-2 mt-1 rounded-lg border focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all duration-300 ${
-                                theme === "light" ? "bg-white border-gray-300 text-gray-900" : "bg-gray-700 border-gray-600 text-gray-100"
-                              }`}
-                            />
-                          </div>
-                        </>
-                      )}
-                    </form>
+                    </div>
                   </div>
-                  <div className="p-6 border-t border-gray-200 flex justify-end space-x-4">
+                  <div className="p-6 flex justify-end gap-3">
                     <button
                       type="button"
                       onClick={closeForm}
-                      className={`px-6 py-2 rounded-lg transition-all duration-300 ${
-                        theme === "light" ? "bg-gray-200 text-gray-800 hover:bg-gray-300" : "bg-gray-700 text-gray-200 hover:bg-gray-600"
+                      className={`px-4 py-2 text-sm rounded-lg transition-all duration-300 ${
+                        theme === "light" ? "bg-gray-200 text-gray-700 hover:bg-gray-300" : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                       }`}
                       disabled={formLoading}
                     >
@@ -1071,20 +1102,20 @@ const Dashboard = () => {
                       type="submit"
                       onClick={submitForm}
                       disabled={formLoading || !validateForm()}
-                      className={`px-6 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 ${
-                        theme === "light" ? "bg-orange-600 text-white hover:bg-orange-700" : "bg-orange-500 text-white hover:bg-orange-600"
+                      className={`px-4 py-2 text-sm rounded-lg flex items-center gap-2 transition-all duration-300 ${
+                        theme === "light" ? "bg-teal-500 text-white hover:bg-teal-600" : "bg-teal-600 text-white hover:bg-teal-700"
                       } ${!validateForm() || formLoading ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
                       {formLoading ? (
                         <span className="flex items-center">
-                          <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                          <svg className="animate-spin h-4 w-4 mr-2" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                           </svg>
                           Saving...
                         </span>
                       ) : (
-                        "Save Changes"
+                        "Save"
                       )}
                     </button>
                   </div>
