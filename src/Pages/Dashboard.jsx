@@ -381,7 +381,7 @@ const Dashboard = () => {
               </div>
               <div className="hidden md:flex items-center space-x-4">
                 {[
-                  { tab: "dashboard", label: "Dashboard", icon: <FaHome size={16} /> },
+                  // { tab: "dashboard", label: "Dashboard", icon: <FaHome size={16} /> },
                   { tab: "contacts", label: "Contacts", icon: <FaTable size={16} /> },
                   { tab: "comments", label: "Comments", icon: <FaComments size={16} /> },
                   { tab: "projects", label: "Projects", icon: <FaProjectDiagram size={16} /> },
@@ -432,7 +432,7 @@ const Dashboard = () => {
             <div className={`md:hidden ${theme === "light" ? "bg-white" : "bg-gray-800"} shadow-md`}>
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {[
-                  { tab: "dashboard", label: "Dashboard", icon: <FaHome size={16} /> },
+                  // { tab: "dashboard", label: "Dashboard", icon: <FaHome size={16} /> },
                   { tab: "contacts", label: "Contacts", icon: <FaTable size={16} /> },
                   { tab: "comments", label: "Comments", icon: <FaComments size={16} /> },
                   { tab: "projects", label: "Projects", icon: <FaProjectDiagram size={16} /> },
