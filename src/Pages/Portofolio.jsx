@@ -93,17 +93,21 @@ export default function FullWidthTabs() {
 
     // Mengambil data projects dari Firestore
     const projectsQuery = query(collection(db, "projects"));
-    const unsubscribeProjects = onSnapshot(projectsQuery, (snapshot) => {
-      const projectsData = snapshot.docs
-        .map((doc) => ({
-          id: doc.id, // id di sini adalah ID dokumen (misalnya "1", "2", dst.)
-          ...doc.data(),
-        }))
-        .sort((a, b) => parseInt(a.id) - parseInt(b.id)); // Urutkan berdasarkan id dokumen
-      setProjects(projectsData);
-    }, (error) => {
-      console.error("Error fetching projects:", error.message);
-    });
+    const unsubscribeProjects = onSnapshot(
+      projectsQuery,
+      (snapshot) => {
+        const projectsData = snapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .sort((b, a) => parseInt(b.id) - parseInt(a.id)); // Urutkan dari besar ke kecil
+        setProjects(projectsData);
+      },
+      (error) => {
+        console.error("Error fetching projects:", error.message);
+      }
+    );
 
     // Mengambil data certificates dari Firestore
     const certificatesQuery = query(collection(db, "certificates"));
