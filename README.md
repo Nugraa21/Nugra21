@@ -10,3 +10,53 @@
 | 6  | A.5.9.2                   | Inventarisasi Aset         | Dokumentasi perangkat POS & Wi-Fi     | Apakah ada dokumentasi aset seperti router dan POS?         |
 | 7  | A.5.32                    | Backup                     | Backup rutin dan otomatis sistem POS  | Apakah sistem POS dibackup secara rutin dan otomatis?       |
 | 8  | A.6.3                     | Awareness (Kesadaran Staf) | Pelatihan keamanan informasi          | Apakah staf sudah mendapat pelatihan keamanan informasi?    |
+
+Bagus! Dari dokumen **"AUDIT KAFE MAIN-MAIN"**, sudah ada penjelasan soal klausa ISO, temuan, dan ruang lingkup audit. Sekarang kamu tinggal menambahkan **3 tabel penting** yang diminta dosen, yaitu:
+
+---
+
+### 📋 **1. Tabel Klausa ISO/IEC 27001:2022**
+
+| No | Klausa ISO/IEC 27001:2022 | Deskripsi Singkat                  | Temuan di Cafe Main-Main                        |
+| -- | ------------------------- | ---------------------------------- | ----------------------------------------------- |
+| 1  | A.5.9                     | Penggunaan Akun Pengguna           | Semua staf menggunakan satu akun login bersama. |
+| 2  | A.5.13                    | Pengelolaan Autentikasi (Password) | Password tidak pernah diganti sejak dipasang.   |
+| 3  | A.5.20                    | Perlindungan Informasi Pelanggan   | Nomor HP pelanggan sudah dienkripsi.            |
+| 4  | A.5.23                    | Logging dan Monitoring             | Transaksi tercatat, tapi login tidak dicatat.   |
+| 5  | A.5.30                    | Segmentasi Jaringan                | Wi-Fi pelanggan dan staf masih satu jaringan.   |
+| 6  | A.5.9.2                   | Inventarisasi Aset Informasi       | Belum ada dokumentasi perangkat.                |
+| 7  | A.5.32                    | Pengelolaan Backup                 | Tidak ada sistem backup otomatis.               |
+| 8  | A.6.3                     | Kesadaran Keamanan Informasi       | Belum ada pelatihan keamanan untuk staf.        |
+
+---
+
+### 🔍 **2. Tabel Fokus Audit**
+
+| No | Domain               | Subdomain               | Fokus Audit                           | Temuan                                   |
+| -- | -------------------- | ----------------------- | ------------------------------------- | ---------------------------------------- |
+| 1  | Keamanan Akses       | Akun pengguna           | Penggunaan akun unik per staf         | Semua staf menggunakan satu akun bersama |
+| 2  | Manajemen Password   | Password kasir          | Kompleksitas dan pergantian password  | Password kuat tapi tidak pernah diganti  |
+| 3  | Keamanan Data        | Enkripsi data pelanggan | Perlindungan nomor HP pelanggan       | Sudah terenkripsi                        |
+| 4  | Keamanan Jaringan    | Segmentasi Wi-Fi        | Pemisahan jaringan staf dan pelanggan | Masih satu jaringan                      |
+| 5  | Logging & Monitoring | Audit trail             | Logging transaksi & login pengguna    | Transaksi tercatat, login belum          |
+| 6  | Inventarisasi Aset   | Perangkat POS & Wi-Fi   | Dokumentasi aset informasi            | Belum terdokumentasi                     |
+| 7  | Backup & Recovery    | Backup sistem POS       | Backup rutin dan otomatis             | Tidak tersedia                           |
+| 8  | Awareness            | Edukasi staf            | Pelatihan keamanan informasi          | Belum dilakukan                          |
+
+---
+
+### ❓ **3. Tabel Pertanyaan Audit**
+
+| No | Pertanyaan Audit                                            | Tujuan                        | Domain Terkait       |
+| -- | ----------------------------------------------------------- | ----------------------------- | -------------------- |
+| 1  | Apakah setiap staf memiliki akun login masing-masing?       | Menilai akuntabilitas         | Keamanan Akses       |
+| 2  | Seberapa sering password diubah?                            | Evaluasi keamanan autentikasi | Manajemen Password   |
+| 3  | Apakah data pelanggan disimpan dalam bentuk terenkripsi?    | Menilai keamanan data         | Keamanan Data        |
+| 4  | Apakah jaringan Wi-Fi pelanggan dipisah dari jaringan staf? | Evaluasi segmentasi jaringan  | Keamanan Jaringan    |
+| 5  | Apakah aktivitas login pengguna dicatat?                    | Menilai sistem logging        | Logging & Monitoring |
+| 6  | Apakah ada dokumentasi aset seperti router dan POS?         | Menilai inventarisasi aset    | Inventarisasi Aset   |
+| 7  | Apakah sistem POS dibackup secara rutin dan otomatis?       | Menilai kesiapan pemulihan    | Backup               |
+| 8  | Apakah staf sudah mendapat pelatihan keamanan informasi?    | Menilai kesadaran staf        | Awareness            |
+
+---
+
