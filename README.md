@@ -58,6 +58,6 @@ Bagus! Dari dokumen **"AUDIT KAFE MAIN-MAIN"**, sudah ada penjelasan soal klausa
 | 7  | Apakah sistem POS dibackup secara rutin dan otomatis?       | Menilai kesiapan pemulihan    | Backup               |
 | 8  | Apakah staf sudah mendapat pelatihan keamanan informasi?    | Menilai kesadaran staf        | Awareness            |
 
----  
-     
-          
+---   
+       
+           
