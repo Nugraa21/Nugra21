@@ -6,7 +6,7 @@ import LinkIcon from "@mui/icons-material/Link";
 
 const Certificate = ({ ImgSertif, title, description, issuer, date, Link }) => {
   const [open, setOpen] = useState(false);
-
+ 
   const handleOpen = () => {  
     setOpen(true);  
   };  
