@@ -9,7 +9,7 @@ const Certificate = ({ ImgSertif, title, description, issuer, date, Link }) => {
 
   const handleOpen = () => {  
     setOpen(true);  
-  }; 
+  };  
 
   const handleClose = () => {
     setOpen(false);
