@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Modal, IconButton, Box, Typography, Card, CardContent, Backdrop } from "@mui/material";
+import { Modal, IconButton, Box, Typography, Card, CardContent, Backdrop, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import LinkIcon from "@mui/icons-material/Link";
 
-const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
+const Certificate = ({ ImgSertif, title, description, issuer, date, Link }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
@@ -14,19 +15,25 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
     setOpen(false);
   };
 
+  const handleLinkClick = () => {
+    if (Link) {
+      window.open(Link, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
-    <Box component="div" sx={{ width: "100%", maxWidth: 400, mx: "auto" }}>
+    <Box component="div" sx={{ width: "100%", maxWidth: 400, mx: "auto", my: 2 }}>
       {/* Thumbnail Container */}
       <Card
         sx={{
           position: "relative",
           overflow: "hidden",
-          borderRadius: 2,
-          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          borderRadius: 3,
+          boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
           transition: "all 0.3s ease",
           "&:hover": {
-            transform: "translateY(-3px)",
-            boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+            transform: "scale(1.02) translateY(-5px)",
+            boxShadow: "0 12px 24px rgba(0,0,0,0.2)",
             "& .overlay": {
               opacity: 1,
             },
@@ -35,16 +42,19 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
               opacity: 1,
             },
             "& .certificate-image": {
-              filter: "contrast(1.05) brightness(1) saturate(1.1)",
+              filter: "contrast(1.1) brightness(1.05) saturate(1.2)",
             },
           },
           bgcolor: "background.paper",
+          border: "2px solid #f5f5f5",
+          minHeight: 380, // Fixed height for consistency
         }}
       >
         {/* Certificate Image with Initial Filter */}
         <Box
           sx={{
             position: "relative",
+            overflow: "hidden",
             "&::before": {
               content: '""',
               position: "absolute",
@@ -52,7 +62,7 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              background: "linear-gradient(to top, rgba(0,0,0,0.3), transparent)",
               zIndex: 1,
             },
           }}
@@ -66,7 +76,7 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
               height: "auto",
               display: "block",
               objectFit: "cover",
-              filter: "contrast(1.10) brightness(0.95) saturate(1.1)",
+              filter: "contrast(1.1) brightness(0.95) saturate(1.1)",
               transition: "filter 0.3s ease",
             }}
             onClick={handleOpen}
@@ -85,12 +95,12 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
+            bottom: 0, // Full card coverage
             opacity: 0,
             transition: "opacity 0.3s ease",
             cursor: "pointer",
             zIndex: 2,
-            backgroundColor: "rgba(0,0,0,0.5)",
+            background: "linear-gradient(135deg, rgba(255, 138, 0, 0.7), rgba(0, 0, 0, 0.5))",
           }}
           onClick={handleOpen}
         >
@@ -106,20 +116,23 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
               transition: "all 0.3s ease",
               textAlign: "center",
               width: "100%",
-              color: "white",
+              color: "#fff",
             }}
           >
             <FullscreenIcon
               sx={{
-                fontSize: { xs: 28, sm: 36 },
+                fontSize: { xs: 32, sm: 40 },
                 mb: 1,
+                color: "#ff8a00",
               }}
             />
             <Typography
               variant="h6"
               sx={{
-                fontWeight: 600,
-                fontSize: { xs: "0.9rem", sm: "1.1rem" },
+                fontWeight: 700,
+                fontSize: { xs: "1rem", sm: "1.2rem" },
+                color: "#fff",
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)",
               }}
             >
               View Certificate
@@ -130,16 +143,25 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
         {/* Certificate Information */}
         <CardContent
           sx={{
-            p: { xs: 1.5, sm: 2 },
+            p: { xs: 2, sm: 3 },
             bgcolor: "background.paper",
+            borderTop: "2px solid #ff8a00",
+            minHeight: 160, // Ensure consistent content height
           }}
         >
           <Typography
             variant="h6"
             sx={{
-              fontWeight: 600,
-              mb: 0.5,
-              fontSize: { xs: "1rem", sm: "1.1rem" },
+              fontWeight: 700,
+              mb: 1,
+              fontSize: { xs: "1.1rem", sm: "1.25rem" },
+              color: "#ff8a00",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "normal",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
             }}
           >
             {title || "Certificate"}
@@ -148,9 +170,15 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
             variant="body2"
             color="text.secondary"
             sx={{
-              mb: 0.5,
-              fontSize: { xs: "0.8rem", sm: "0.85rem" },
-              lineHeight: 1.4,
+              mb: 1,
+              fontSize: { xs: "0.85rem", sm: "0.9rem" },
+              lineHeight: 1.5,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "normal",
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
             }}
           >
             {description || "No description available"}
@@ -158,10 +186,40 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
           <Typography
             variant="caption"
             color="text.secondary"
-            sx={{ fontSize: { xs: "0.7rem", sm: "0.75rem" } }}
+            sx={{
+              fontSize: { xs: "0.75rem", sm: "0.8rem" },
+              display: "block",
+              mb: 1.5,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
           >
             Issuer: {issuer || "Unknown"} | Date: {date || "Unknown"}
           </Typography>
+          {Link && (
+            <Button
+              variant="contained"
+              startIcon={<LinkIcon />}
+              onClick={handleLinkClick}
+              sx={{
+                backgroundColor: "#ff8a00",
+                color: "#fff",
+                fontWeight: 600,
+                textTransform: "none",
+                borderRadius: 2,
+                px: 3,
+                py: 1,
+                "&:hover": {
+                  backgroundColor: "#e07b00",
+                  transform: "translateY(-1px)",
+                },
+                transition: "all 0.2s ease",
+              }}
+            >
+              View Certificate Link
+            </Button>
+          )}
         </CardContent>
       </Card>
 
@@ -176,8 +234,8 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
         BackdropProps={{
           timeout: 300,
           sx: {
-            backgroundColor: "rgba(0,0,0,0.8)",
-            backdropFilter: "blur(5px)",
+            backgroundColor: "rgba(0,0,0,0.85)",
+            backdropFilter: "blur(8px)",
           },
         }}
         sx={{
@@ -190,13 +248,14 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
         <Box
           sx={{
             position: "relative",
-            width: { xs: "90vw", sm: "80vw", md: "70vw", lg: "60vw" },
-            maxWidth: 800,
+            width: { xs: "95vw", sm: "85vw", md: "75vw", lg: "65vw" },
+            maxWidth: 900,
             maxHeight: "90vh",
             bgcolor: "background.paper",
-            borderRadius: 2,
+            borderRadius: 3,
             overflowY: "auto",
-            p: { xs: 1.5, sm: 2, md: 3 },
+            p: { xs: 2, sm: 3, md: 4 },
+            border: "2px solid #ff8a00",
           }}
         >
           {/* Close Button */}
@@ -205,17 +264,19 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
             aria-label="Close certificate modal"
             sx={{
               position: "absolute",
-              right: { xs: 8, sm: 12 },
-              top: { xs: 8, sm: 12 },
-              color: "text.primary",
-              bgcolor: "rgba(0,0,0,0.1)",
-              p: { xs: 0.5, sm: 0.75 },
+              right: { xs: 10, sm: 16 },
+              top: { xs: 10, sm: 16 },
+              color: "#fff",
+              bgcolor: "#ff8a00",
+              p: { xs: 0.75, sm: 1 },
               "&:hover": {
-                bgcolor: "rgba(0,0,0,0.2)",
+                bgcolor: "#e07b00",
+                transform: "rotate(90deg)",
               },
+              transition: "all 0.2s ease",
             }}
           >
-            <CloseIcon sx={{ fontSize: { xs: 18, sm: 22 } }} />
+            <CloseIcon sx={{ fontSize: { xs: 20, sm: 24 } }} />
           </IconButton>
 
           {/* Certificate Image */}
@@ -223,9 +284,11 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
             sx={{
               display: "flex",
               justifyContent: "center",
-              mb: { xs: 1.5, sm: 2 },
-              maxHeight: { xs: "50vh", sm: "55vh", md: "60vh" },
+              mb: { xs: 2, sm: 3 },
+              maxHeight: { xs: "55vh", sm: "60vh", md: "65vh" },
               overflow: "hidden",
+              borderRadius: 2,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
             }}
           >
             <img
@@ -236,6 +299,7 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
                 height: "auto",
                 maxHeight: "100%",
                 objectFit: "contain",
+                borderRadius: 2,
               }}
               onError={(e) => {
                 console.error(`Failed to load modal image: ${ImgSertif}`);
@@ -247,22 +311,23 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
           {/* Certificate Details */}
           <Box sx={{ textAlign: "center" }}>
             <Typography
-              variant="h6"
+              variant="h5"
               sx={{
-                fontWeight: 600,
-                mb: 1,
-                fontSize: { xs: "1.1rem", sm: "1.25rem", md: "1.5rem" },
+                fontWeight: 700,
+                mb: 1.5,
+                fontSize: { xs: "1.25rem", sm: "1.5rem", md: "1.75rem" },
+                color: "#ff8a00",
               }}
             >
               {title || "Certificate"}
             </Typography>
             <Typography
-              variant="body2"
+              variant="body1"
               color="text.secondary"
               sx={{
-                mb: 1,
-                fontSize: { xs: "0.8rem", sm: "0.9rem" },
-                lineHeight: 1.4,
+                mb: 1.5,
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+                lineHeight: 1.6,
               }}
             >
               {description || "No description available"}
@@ -271,11 +336,37 @@ const Certificate = ({ ImgSertif, title, description, issuer, date }) => {
               variant="caption"
               color="text.secondary"
               sx={{
-                fontSize: { xs: "0.7rem", sm: "0.75rem" },
+                fontSize: { xs: "0.8rem", sm: "0.85rem" },
+                mb: 2,
+                display: "block",
               }}
             >
               Issuer: {issuer || "Unknown"} | Date: {date || "Unknown"}
             </Typography>
+            {Link && (
+              <Button
+                variant="outlined"
+                startIcon={<LinkIcon />}
+                onClick={handleLinkClick}
+                sx={{
+                  borderColor: "#ff8a00",
+                  color: "#ff8a00",
+                  fontWeight: 600,
+                  textTransform: "none",
+                  borderRadius: 2,
+                  px: 3,
+                  py: 1,
+                  "&:hover": {
+                    backgroundColor: "#ff8a00",
+                    color: "#fff",
+                    borderColor: "#ff8a00",
+                  },
+                  transition: "all 0.2s ease",
+                }}
+              >
+                View Certificate Link
+              </Button>
+            )}
           </Box>
         </Box>
       </Modal>
