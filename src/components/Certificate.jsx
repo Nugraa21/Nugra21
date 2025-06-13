@@ -8,7 +8,7 @@ const Certificate = ({ ImgSertif, title, description, issuer, date, Link }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => {
-    setOpen(true);
+    setOpen(true); 
   }; 
 
   const handleClose = () => {
