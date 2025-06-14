@@ -14,7 +14,7 @@ import Pengalaman from "./components/Pengalaman.jsx";
 import Dashboard from "./Pages/Dashboard.jsx";
 import { AnimatePresence } from 'framer-motion';
 import NotFound from "./NotFound.jsx";
-import Galeri from "./Pages/Galeri.jsx"
+// import Galeri from "./Pages/Galeri.jsx"
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   return (
@@ -35,7 +35,7 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
             <Pengalaman />
             <Portofolio />
             <ContactPage />
-            <Galeri />
+            {/* <Galeri /> */}
           </main>
 
           {/* Footer */}
