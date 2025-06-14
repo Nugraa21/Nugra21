@@ -101,7 +101,7 @@ export default function FullWidthTabs() {
             id: doc.id,
             ...doc.data(),
           }))
-          .sort((b, a) => parseInt(b.id) - parseInt(a.id)); // Urutkan dari besar ke kecil
+          .sort((a, b) => parseInt(b.id) - parseInt(a.id)); // Urutkan dari besar ke kecil
         setProjects(projectsData);
       },
       (error) => {
