@@ -6,11 +6,12 @@ import { Helmet } from "react-helmet";
 import { experienceData } from "../data/data"; // Tetap impor experienceData untuk YearExperience
 import { db, collection, onSnapshot, query } from "../firebase"; // Import Firebase utilities
 
+// --- Komponen Header ---
 const Header = memo(() => (
   <div className="text-center mb-4 xs:mb-6 sm:mb-8 px-2 xs:px-4 sm:px-6">
     <div className="inline-block relative group">
       <h2
-        className="text-3xl xs:text-4xl sm:text-5xl font-extrabold text-orange-600 tracking-wide"
+        className="text-3xl xs:text-4xl sm:text-5xl font-extrabold text-orange-700 tracking-wide drop-shadow-md" // Warna oranye lebih gelap, sedikit drop shadow
         data-aos="zoom-in-up"
         data-aos-duration="600"
       >
@@ -18,33 +19,60 @@ const Header = memo(() => (
       </h2>
     </div>
     <p
-      className="mt-2 xs:mt-3 text-orange-400 max-w-3xl mx-auto text-base xs:text-lg sm:text-xl flex items-center justify-center gap-2 xs:gap-3 font-semibold"
+      className="mt-2 xs:mt-3 text-orange-500 max-w-3xl mx-auto text-base xs:text-lg sm:text-xl flex items-center justify-center gap-2 xs:gap-3 font-semibold" // Warna oranye yang vibrant
       data-aos="zoom-in-up"
       data-aos-duration="800"
       aria-hidden="true"
     >
-      - - - - - - - -
+      — — — — — — — —
     </p>
   </div>
 ));
 
+// --- Loading Skeleton (untuk ProfileImage) ---
 const LoadingSkeleton = () => (
-  <div className="animate-pulse bg-orange-200 rounded-xl w-full max-w-[280px] xs:max-w-xs h-[300px] xs:h-[320px] mx-auto">
-    <div className="flex flex-col items-center py-6 xs:py-8 px-4 xs:px-6 space-y-4 xs:space-y-6">
-      <div className="rounded-full bg-orange-300 w-24 xs:w-28 h-24 xs:h-28 border-4 border-orange-100" />
-      <div className="h-5 xs:h-6 bg-orange-300 rounded w-3/4"></div>
-      <div className="h-4 bg-orange-300 rounded w-1/2"></div>
-      <div className="h-4 bg-orange-300 rounded w-5/6"></div>
+  <div className="animate-pulse bg-white rounded-xl w-full max-w-sm h-[400px] shadow-lg border border-orange-100 mx-auto">
+    <div className="w-full h-52 xs:h-60 overflow-hidden bg-gray-100 rounded-t-xl relative">
+      <div className="absolute inset-0 shimmer" /> {/* Efek shimmer */}
     </div>
-    <div className="bg-orange-300 h-10 xs:h-12 rounded-b-xl mt-4 px-4 xs:px-6 py-2 xs:py-3" />
+    <div className="flex flex-col items-center p-6 space-y-4">
+      <div className="h-6 bg-orange-200 rounded w-3/4"></div>
+      <div className="h-4 bg-orange-200 rounded w-1/2"></div>
+      <div className="h-4 bg-orange-200 rounded w-5/6"></div>
+    </div>
+    <div className="bg-orange-200 h-12 rounded-b-xl" />
   </div>
 );
 
+// --- Komponen ProfileImage ---
 const ProfileImage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
+    // Simulasi loading gambar
+    const img1 = new Image();
+    img1.src = "p1.jpg";
+    const img2 = new Image();
+    img2.src = "p2.jpg";
+
+    let loadedCount = 0;
+    const checkLoaded = () => {
+      loadedCount++;
+      if (loadedCount === 2) {
+        setLoading(false);
+      }
+    };
+
+    img1.onload = checkLoaded;
+    img2.onload = checkLoaded;
+    img1.onerror = checkLoaded; // Handle error as loaded
+    img2.onerror = checkLoaded; // Handle error as loaded
+
+    // Fallback if images are cached or very fast
+    const timer = setTimeout(() => {
+      if (loading) setLoading(false);
+    }, 2000); // Max 2 seconds for skeleton
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -52,12 +80,13 @@ const ProfileImage = () => {
 
   return (
     <div
-      className="relative w-full max-w-sm bg-white border border-orange-400 rounded-xl shadow-xl overflow-hidden transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_15px_40px_rgba(234,88,12,0.4)] cursor-pointer mx-auto group"
+      className="relative w-full max-w-sm bg-white border border-orange-300 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_20px_50px_rgba(234,88,12,0.3)] cursor-pointer mx-auto group z-10" // Rounded-2xl, shadow lebih tebal saat hover
       data-aos="fade-up"
       data-aos-duration="1000"
       aria-label="Profile Card of Ludang Prasetyo Nugroho"
     >
-      <div className="w-full h-52 xs:h-60 overflow-hidden bg-gray-100 relative">
+      <div className="w-full h-52 xs:h-60 overflow-hidden relative">
+        {/* Gambar default */}
         <img
           src="p1.jpg"
           alt="Ludang Prasetyo Nugroho"
@@ -65,6 +94,7 @@ const ProfileImage = () => {
           loading="lazy"
           onError={(e) => (e.currentTarget.src = '/fallback.png')}
         />
+        {/* Gambar saat hover */}
         <img
           src="p2.jpg"
           alt="Ludang Prasetyo Nugroho Hover"
@@ -72,19 +102,21 @@ const ProfileImage = () => {
           loading="lazy"
           onError={(e) => (e.currentTarget.src = '/fallback.png')}
         />
+        {/* Overlay kecil di bagian bawah gambar */}
+        <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-orange-100 to-transparent opacity-70 group-hover:from-orange-200 transition-colors duration-300"></div>
       </div>
-      <div className="flex flex-col items-center bg-gradient-to-br from-orange-50 to-yellow-100 px-6 py-4 xs:py-6 transition-colors duration-300 group-hover:from-orange-100 group-hover:to-yellow-200">
-        <h3 className="text-xl font-extrabold text-orange-700 text-center transition-colors duration-300 group-hover:text-orange-800 group-hover:scale-105">
+      <div className="flex flex-col items-center bg-gradient-to-br from-orange-50 to-yellow-50 px-6 py-4 xs:py-6 transition-all duration-300 group-hover:from-orange-100 group-hover:to-yellow-100"> {/* Gradient lebih halus */}
+        <h3 className="text-xl sm:text-2xl font-extrabold text-orange-700 text-center transition-all duration-300 group-hover:text-orange-800">
           Ludang Prasetyo Nugroho
         </h3>
-        <p className="text-sm text-orange-600 font-semibold mt-1 text-center transition-colors duration-300 group-hover:text-orange-700">
-          Teknik Komputer - UTDI
+        <p className="text-sm sm:text-base text-orange-600 font-semibold mt-1 text-center transition-colors duration-300 group-hover:text-orange-700">
+          Computer Engineering - UTDI
         </p>
-        <p className="text-xs italic text-orange-500 mt-2 text-center max-w-xs transition-colors duration-300 group-hover:text-orange-600 group-hover:scale-105">
+        <p className="text-xs sm:text-sm italic text-orange-500 mt-2 text-center max-w-xs transition-colors duration-300 group-hover:text-orange-600">
           "Innovating with code & creativity."
         </p>
       </div>
-      <div className="flex flex-col items-center text-orange-700 bg-orange-50 px-6 py-3 border-t border-orange-300 space-y-1 transition-colors duration-300 group-hover:bg-orange-100">
+      <div className="flex flex-col items-center text-orange-700 bg-orange-100 px-6 py-3 border-t border-orange-200 space-y-1 transition-colors duration-300 group-hover:bg-orange-200"> {/* Warna latar belakang lebih terang */}
         <span className="font-bold text-sm text-center transition-colors duration-300 group-hover:text-orange-800">NIM: 225510017</span>
         <span className="font-semibold text-xs text-center transition-colors duration-300 group-hover:text-orange-800">Yogyakarta, Indonesia</span>
       </div>
@@ -92,16 +124,18 @@ const ProfileImage = () => {
   );
 };
 
+// --- Komponen SkillBar ---
 const SkillBar = ({ name, percent }) => {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    const timeout = setTimeout(() => setWidth(percent), 400);
+    // Animasi skill bar saat komponen mount
+    const timeout = setTimeout(() => setWidth(percent), 400); // Delay untuk animasi
     return () => clearTimeout(timeout);
   }, [percent]);
 
   return (
-    <div className="mb-3 xs:mb-4">
+    <div className="mb-3 xs:mb-4" data-aos="fade-left" data-aos-once="true" data-aos-duration="800"> {/* AOS added */}
       <div className="flex justify-between text-xs xs:text-sm font-semibold text-gray-700 mb-1">
         <span>{name}</span>
         <span>{percent}%</span>
@@ -116,16 +150,17 @@ const SkillBar = ({ name, percent }) => {
   );
 };
 
+// --- Komponen StatsCard ---
 const StatsCard = ({ icon: Icon, value, label, description, delay }) => (
   <div
-    className="flex items-center p-4 xs:p-5 rounded-xl bg-white bg-opacity-20 backdrop-blur-md border border-orange-300 shadow-md transition-transform hover:scale-105 hover:shadow-xl cursor-pointer"
+    className="flex items-center p-4 xs:p-5 rounded-xl bg-white border-2 border-orange-200 shadow-md transition-transform hover:scale-105 hover:shadow-xl cursor-pointer group" // Border lebih tebal, shadow lebih menonjol
     data-aos="fade-up"
     data-aos-delay={delay}
     role="group"
     tabIndex={0}
     aria-label={`${label}: ${value}`}
   >
-    <div className="bg-gradient-to-tr from-orange-400 to-yellow-300 text-white p-3 xs:p-4 rounded-full shadow-md flex-shrink-0 mr-3 xs:mr-5">
+    <div className="bg-gradient-to-tr from-orange-500 to-yellow-400 text-white p-3 xs:p-4 rounded-full shadow-lg flex-shrink-0 mr-3 xs:mr-5 group-hover:rotate-6 transition-transform duration-300"> {/* Warna gradien lebih kuat, rotasi ikon saat hover */}
       <Icon className="w-5 xs:w-6 sm:w-7 h-5 xs:h-6 sm:h-7" aria-hidden="true" />
     </div>
     <div className="flex flex-col flex-grow">
@@ -134,30 +169,32 @@ const StatsCard = ({ icon: Icon, value, label, description, delay }) => (
         <div className="text-xs xs:text-sm text-gray-600 mt-0.5 xs:mt-1">{description}</div>
       )}
     </div>
-    <div className="text-orange-700 font-extrabold text-lg xs:text-xl sm:text-2xl ml-4 xs:ml-6 self-end">{value}</div>
+    <div className="text-orange-700 font-extrabold text-lg xs:text-xl sm:text-2xl ml-4 xs:ml-6 self-end group-hover:text-orange-800 transition-colors duration-300">{value}</div> {/* Warna lebih gelap saat hover */}
   </div>
 );
 
+// --- Komponen Chip (untuk SkillCard tools) ---
 const Chip = ({ text }) => (
-  <span className="inline-block bg-orange-200 text-orange-800 text-[10px] xs:text-xs font-semibold px-2 xs:px-3 py-0.5 xs:py-1 rounded-full mr-1 xs:mr-2 mb-1 xs:mb-2 shadow-sm select-none">
+  <span className="inline-block bg-orange-100 text-orange-700 text-[10px] xs:text-xs font-semibold px-2 xs:px-3 py-0.5 xs:py-1 rounded-full mr-1 xs:mr-2 mb-1 xs:mb-2 shadow-sm select-none hover:bg-orange-200 transition-colors duration-200"> {/* Warna lebih terang, hover effect */}
     {text}
   </span>
 );
 
+// --- Komponen SkillCard ---
 const SkillCard = ({ icon: Icon, title, description, tools = [], delay }) => (
   <div
-    className="bg-white bg-opacity-30 backdrop-blur-md border border-orange-300 rounded-xl p-4 xs:p-5 sm:p-6 flex flex-col items-center text-center cursor-pointer shadow-md hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out"
+    className="bg-white border-2 border-orange-200 rounded-xl p-4 xs:p-5 sm:p-6 flex flex-col items-center text-center cursor-pointer shadow-md hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out group" // Border lebih tebal, shadow lebih menonjol
     data-aos="fade-up"
     data-aos-delay={delay}
     role="group"
     tabIndex={0}
     aria-label={`${title} skill`}
   >
-    <div className="bg-gradient-to-tr from-orange-500 to-yellow-400 text-white p-3 xs:p-4 sm:p-5 rounded-full shadow-lg mb-3 xs:mb-4 flex items-center justify-center">
+    <div className="bg-gradient-to-tr from-orange-500 to-yellow-400 text-white p-3 xs:p-4 sm:p-5 rounded-full shadow-lg mb-3 xs:mb-4 flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-transform duration-300"> {/* Warna gradien lebih kuat, animasi ikon saat hover */}
       <Icon className="w-8 xs:w-10 sm:w-12 h-8 xs:h-10 sm:h-12" aria-hidden="true" />
     </div>
-    <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-orange-700 mb-2 xs:mb-3">{title}</h3>
-    <p className="text-xs xs:text-sm text-gray-800 mb-3 xs:mb-4">{description}</p>
+    <h3 className="text-lg xs:text-xl sm:text-2xl font-bold text-orange-700 mb-2 xs:mb-3 group-hover:text-orange-800 transition-colors duration-300">{title}</h3> {/* Warna lebih gelap saat hover */}
+    <p className="text-xs xs:text-sm text-gray-700 mb-3 xs:mb-4">{description}</p>
     <div className="flex flex-wrap justify-center max-w-full">
       {tools.map((tool) => (
         <Chip key={tool} text={tool} />
@@ -166,19 +203,21 @@ const SkillCard = ({ icon: Icon, title, description, tools = [], delay }) => (
   </div>
 );
 
+// --- Komponen Utama AboutPage ---
 const AboutPage = () => {
   const [totalProjects, setTotalProjects] = useState(0);
   const [totalCertificates, setTotalCertificates] = useState(0);
   const YearExperience = useMemo(() => {
-    return experienceData.length || 0; // Tetap menggunakan experienceData dari lokal
+    return experienceData.length || 0; // Mengambil dari data lokal
   }, []);
 
   useEffect(() => {
     AOS.init({
-      once: false,
+      once: false, // Animasi setiap kali elemen masuk viewport
       duration: window.innerWidth < 640 ? 600 : 800,
       easing: "ease-in-out",
     });
+    // Refresh AOS pada resize untuk animasi yang benar
     let resizeTimer;
     const handleResize = () => {
       clearTimeout(resizeTimer);
@@ -225,18 +264,19 @@ const AboutPage = () => {
         <link rel="canonical" href="https://nugra.my.id/about" />
       </Helmet>
 
+      {/* Main Section - Background putih */}
       <section
-        className="min-h-screen text-gray-900 overflow-hidden px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 pt-16 xs:pt-20 sm:pt-24 pb-10 sm:pb-12"
+        className="min-h-screen text-gray-900 overflow-hidden px-2 xs:px-4 sm:px-6 md:px-8 lg:px-12 pt-16 xs:pt-20 sm:pt-24 pb-10 sm:pb-12 " // Background putih
         id="About"
       >
         <div className="max-w-7xl w-full mx-auto">
           <Header />
 
           <div className="pt-8 xs:pt-10 sm:pt-14">
-            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-12 md:gap-16 lg:gap-20 items-center">
+            <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 xs:gap-10 sm:gap-14 md:gap-20 items-center justify-center"> {/* Spasi lebih besar */}
               <div className="space-y-4 xs:space-y-6 sm:space-y-8 text-center lg:text-left">
                 <h2
-                  className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
+                  className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight" // Line height lebih ketat
                   data-aos="fade-right"
                   data-aos-duration="1000"
                 >
@@ -246,7 +286,7 @@ const AboutPage = () => {
                   </span>
                 </h2>
                 <p
-                  className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed text-justify"
+                  className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed text-justify max-w-xl lg:max-w-none mx-auto" // Max width di mobile
                   data-aos="fade-right"
                   data-aos-duration="1500"
                 >
@@ -267,7 +307,7 @@ const AboutPage = () => {
                     rel="noreferrer noopener"
                   >
                     <button
-                      className="w-full sm:w-auto px-6 xs:px-8 py-2 xs:py-3 rounded-xl bg-gradient-to-r from-orange-500 to-yellow-400 text-white font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 xs:gap-3 shadow-lg hover:shadow-xl"
+                      className="w-full sm:w-auto px-6 xs:px-8 py-2 xs:py-3 rounded-full bg-gradient-to-r from-orange-500 to-yellow-400 text-white font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 xs:gap-3 shadow-lg hover:shadow-xl hover:from-orange-600 hover:to-yellow-500" // Rounded-full, gradient hover
                     >
                       <FileText className="w-4 xs:w-5 sm:w-6 h-4 xs:h-5 sm:h-6" />
                       Download CV
@@ -275,7 +315,7 @@ const AboutPage = () => {
                   </a>
                   <a href="#Portofolio" className="w-full sm:w-auto">
                     <button
-                      className="w-full sm:w-auto px-6 xs:px-8 py-2 xs:py-3 rounded-xl border-2 border-orange-400 text-orange-600 font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 xs:gap-3 hover:bg-orange-100"
+                      className="w-full sm:w-auto px-6 xs:px-8 py-2 xs:py-3 rounded-full border-2 border-orange-500 text-orange-600 font-semibold transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 xs:gap-3 hover:bg-orange-50 hover:text-orange-700" // Rounded-full, hover bg
                       data-aos="fade-up"
                       data-aos-duration="1000"
                     >
@@ -289,15 +329,17 @@ const AboutPage = () => {
               <ProfileImage />
             </div>
 
+            {/* Skill Bars Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mt-12 xs:mt-16 sm:mt-20">
               <SkillBar name="Programming" percent={70} />
               <SkillBar name="Web Design" percent={80} />
               <SkillBar name="Video Editing" percent={80} />
-              <SkillBar name="IOT" percent={50} />
+              <SkillBar name="IoT" percent={50} />
               <SkillBar name="UI/UX Design" percent={75} />
               <SkillBar name="Photography" percent={65} />
             </div>
 
+            {/* Stats Cards Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mt-12 xs:mt-16 sm:mt-20">
               <StatsCard
                 icon={Code2}
@@ -322,9 +364,10 @@ const AboutPage = () => {
               />
             </div>
 
+            {/* My Skills Section */}
             <div id="Skils" className="mt-12 xs:mt-16 sm:mt-20">
               <h3
-                className="text-3xl xs:text-4xl sm:text-5xl font-extrabold text-orange-600 mb-8 xs:mb-10 sm:mb-12 text-center"
+                className="text-3xl xs:text-4xl sm:text-5xl font-extrabold text-orange-700 mb-8 xs:mb-10 sm:mb-12 text-center drop-shadow-md" // Warna oranye lebih gelap, drop shadow
                 data-aos="fade-up"
                 data-aos-duration="800"
               >
@@ -335,7 +378,7 @@ const AboutPage = () => {
                   icon={Code2}
                   title="Programming"
                   description="Expertise in multiple programming languages and algorithms."
-                  tools={["JavaScript", "Python", "C++", "Dart", "html", "css"]}
+                  tools={["JavaScript", "Python", "C++", "Dart", "HTML", "CSS"]} // HTML dan CSS huruf besar
                   delay={100}
                 />
                 <SkillCard
@@ -364,6 +407,19 @@ const AboutPage = () => {
           </div>
         </div>
       </section>
+
+      {/* CSS Kustom untuk efek shimmer */}
+      <style jsx>{`
+        @keyframes shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        .shimmer {
+          background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+          background-size: 200% 100%;
+          animation: shimmer 1.5s infinite;
+        }
+      `}</style>
     </>
   );
 };
