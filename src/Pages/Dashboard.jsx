@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import {
   collection,
-  deleteDoc,
+  deleteDoc, 
   doc,
-  setDoc,
-  onSnapshot, 
+  setDoc, 
+  onSnapshot,  
   query,
-  orderBy, 
+  orderBy,  
   serverTimestamp, 
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
