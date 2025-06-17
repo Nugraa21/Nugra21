@@ -36,7 +36,7 @@ import "tailwindcss/tailwind.css";
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
   state = { hasError: false, error: null };
-
+     
   static getDerivedStateFromError(error) {
     return { hasError: true, error };
   }
@@ -53,7 +53,7 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-
+   
 const Dashboard = () => {
   const [contacts, setContacts] = useState([]);
   const [comments, setComments] = useState([]);
