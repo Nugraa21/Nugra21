@@ -32,7 +32,7 @@ import {
   FaHome,
 } from "react-icons/fa";
 import "tailwindcss/tailwind.css";
-
+   
 // Error Boundary Component
 class ErrorBoundary extends React.Component {
   state = { hasError: false, error: null };
