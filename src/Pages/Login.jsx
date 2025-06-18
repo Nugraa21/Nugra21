@@ -112,11 +112,11 @@ const Login = () => {
           >
             <i className="fas fa-home"></i> {settings.language === "id" ? "Home" : "Home"}
           </button>
-          <button
+          {/* <button
             className={`flex items-center gap-2 px-4 py-2 text-orange-500 border-2 border-orange-500 rounded-lg transition-all hover:bg-orange-500 hover:text-white ${navbarOpen || isMobile ? "bg-orange-500 text-white border-orange-600" : ""}`}
           >
             <i className="fas fa-sign-in-alt"></i> {settings.language === "id" ? "Login" : "Login"}
-          </button>
+          </button> */}
         </nav>
       </header>
 
