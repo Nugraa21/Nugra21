@@ -57,7 +57,7 @@ Bagus! Dari dokumen **"AUDIT KAFE MAIN-MAIN"**, sudah ada penjelasan soal klausa
 | 6  | Apakah ada dokumentasi aset seperti router dan POS?         | Menilai inventarisasi aset    | Inventarisasi Aset   |
 | 7  | Apakah sistem POS dibackup secara rutin dan otomatis?       | Menilai kesiapan pemulihan    | Backup               |
 | 8  | Apakah staf sudah mendapat pelatihan keamanan informasi?    | Menilai kesadaran staf        | Awareness            |
-   
----                   
-                          
-          
+    
+---                    
+                           
+            
