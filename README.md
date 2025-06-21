@@ -60,4 +60,55 @@ Bagus! Dari dokumen **"AUDIT KAFE MAIN-MAIN"**, sudah ada penjelasan soal klausa
  
 ---               
                              
-                                
+                                # 📋 Daftar Pertanyaan Audit ISO/IEC 27001:2022 (Format Markdown)
+
+Berikut ini adalah contoh-contoh pertanyaan audit berdasarkan kontrol ISO/IEC 27001:2022. Format ini dapat digunakan untuk keperluan asesmen internal atau eksternal.
+
+---
+
+## 🛡️ A.5.9 Penggunaan Informasi
+- Apakah setiap staf memiliki akun login masing-masing dan tidak saling berbagi akun?
+- Apakah ada kebijakan tertulis tentang penggunaan informasi hanya untuk keperluan pekerjaan?
+- Apakah sistem memonitor aktivitas pengguna untuk mendeteksi penyalahgunaan informasi?
+
+## 🗂️ A.5.9.2 Inventaris Aset Informasi
+- Apakah ada dokumentasi aset seperti router, switch, dan sistem POS?
+- Apakah setiap aset memiliki penanggung jawab yang ditetapkan?
+- Apakah inventaris aset diperbarui secara berkala?
+
+## 🔐 A.5.13 Manajemen Kredensial
+- Seberapa sering password pengguna diwajibkan untuk diubah?
+- Apakah password disimpan dalam bentuk terenkripsi?
+- Apakah terdapat kebijakan reset password yang aman?
+
+## 🛡️ A.5.20 Perlindungan Informasi
+- Apakah data pelanggan disimpan dalam bentuk terenkripsi?
+- Apakah komunikasi antar sistem menggunakan protokol aman (misal HTTPS/TLS)?
+- Apakah backup juga dilindungi dengan enkripsi?
+
+## 🌐 A.5.30 Keamanan Jaringan
+- Apakah jaringan Wi-Fi pelanggan dipisah dari jaringan staf?
+- Apakah firewall diterapkan untuk membatasi lalu lintas jaringan?
+- Apakah ada IDS/IPS yang aktif memonitor jaringan?
+
+## 📝 A.5.23 Pencatatan Aktivitas
+- Apakah aktivitas login pengguna dicatat secara otomatis?
+- Apakah log mencatat percobaan akses yang gagal?
+- Apakah log tidak dapat diubah oleh pengguna biasa?
+
+## 💾 A.5.32 Backup Informasi
+- Apakah sistem POS dibackup secara rutin dan otomatis?
+- Apakah hasil backup diuji secara berkala?
+- Apakah ada kebijakan retensi data backup?
+
+## 👩‍🏫 A.6.3 Pelatihan & Kesadaran Keamanan Informasi
+- Apakah staf sudah mendapat pelatihan keamanan informasi?
+- Apakah pelatihan dilakukan secara berkala?
+- Apakah pemahaman staf dievaluasi setelah pelatihan?
+
+---
+
+Kamu bisa menambahkan checklist ✅ atau ❌ setelah setiap pertanyaan sesuai hasil audit lapangan.
+
+Jika kamu ingin meng-export ini ke Excel/Google Sheet atau ingin versi yang dapat diisi langsung oleh auditor, beri tahu saya!
+  
