@@ -59,5 +59,5 @@ Bagus! Dari dokumen **"AUDIT KAFE MAIN-MAIN"**, sudah ada penjelasan soal klausa
 | 8  | Apakah staf sudah mendapat pelatihan keamanan informasi?    | Menilai kesadaran staf        | Awareness            |
  
 ---               
-                           
+                             
                                 
