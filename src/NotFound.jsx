@@ -77,5 +77,5 @@ const NotFound = () => {
     </>
   );
 };
-            
+              
 export default memo(NotFound);
