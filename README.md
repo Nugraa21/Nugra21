@@ -111,4 +111,4 @@ Berikut ini adalah contoh-contoh pertanyaan audit berdasarkan kontrol ISO/IEC 27
 Kamu bisa menambahkan checklist ✅ atau ❌ setelah setiap pertanyaan sesuai hasil audit lapangan.
 
 Jika kamu ingin meng-export ini ke Excel/Google Sheet atau ingin versi yang dapat diisi langsung oleh auditor, beri tahu saya!
-  
+    
