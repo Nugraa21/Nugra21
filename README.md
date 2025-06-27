@@ -13,7 +13,7 @@
 
 Bagus! Dari dokumen **"AUDIT KAFE MAIN-MAIN"**, sudah ada penjelasan soal klausa ISO, temuan, dan ruang lingkup audit. Sekarang kamu tinggal menambahkan **3 tabel penting** yang diminta dosen, yaitu:
 
----
+---  
 
 ### 📋 **1. Tabel Klausa ISO/IEC 27001:2022**
 
