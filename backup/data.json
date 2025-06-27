@@ -1,0 +1,112 @@
+{
+  "projects": [
+  {
+    "id": "1",
+    "Title": "Aplikasi IoT Kolam Lele",
+    "Description": "Aplikasi Flutter untuk monitoring kolam lele dengan ESP32 dan MQTT, menampilkan data sensor secara real-time dari 3 kolam.",
+    "Img": "/images/kolam-lele.jpg",
+    "Link": "https://github.com/ludangprasetyo/kolam-lele-flutter",
+    "Github": "https://github.com/ludangprasetyo/kolam-lele-flutter",
+    "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
+    "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"]
+  },
+  {
+    "id": "2",
+    "Title": "Sistem Monitoring Gempa",
+    "Description": "Proyek simulasi deteksi gempa menggunakan ESP32, potensiometer sebagai sensor, dan buzzer, dikirim ke broker MQTT tiap detik.",
+    "Img": "/images/monitoring-gempa.jpg",
+    "Link": "https://wokwi.com/projects/earthquake-monitoring",
+    "Github": "https://github.com/ludangprasetyo/gempa-mqtt",
+    "TechStack": ["ESP32", "MQTT", "Wokwi", "Potensiometer", "Buzzer"],
+    "Features": ["Simulasi gempa", "Pengiriman data tiap detik", "MQTT integration"]
+  },
+  {
+    "id": "3",
+    "Title": "Monitoring Suhu dan Kelembaban Tanah",
+    "Description": "Proyek IoT menggunakan DHT11 dan ESP32 dengan dashboard HTML, CSS, JS untuk monitoring suhu dan kelembaban tanah.",
+    "Img": "/images/monitoring-tanah.jpg",
+    "Link": "https://nugra.online/monitoring-tanah",
+    "Github": "https://github.com/ludangprasetyo/dht11-dashboard",
+    "TechStack": ["ESP32", "DHT11", "HTML", "CSS", "JavaScript"],
+    "Features": ["Realtime sensor", "Dashboard web", "Monitoring suhu dan kelembaban"]
+  },
+  {
+    "id": "4",
+    "Title": "CLI CSV Database & To-Do Manager",
+    "Description": "Aplikasi CLI Python untuk manajemen data kompleks dalam CSV, termasuk fitur to-do list dan sistem manajemen data seperti database kecil.",
+    "Img": "/images/cli-csv.jpg",
+    "Link": "https://github.com/ludangprasetyo/python-cli-csv",
+    "Github": "https://github.com/ludangprasetyo/python-cli-csv",
+    "TechStack": ["Python", "CSV", "CLI"],
+    "Features": ["CRUD data CSV", "To-do list", "Filter & search data"]
+  },
+  {
+    "id": "5",
+    "Title": "Portofolio Website - nugra.my.id",
+    "Description": "Website portofolio pribadi dengan React dan Tailwind, menampilkan project, sertifikat, dan tech stack.",
+    "Img": "/images/portofolio.jpg",
+    "Link": "https://nugra.my.id",
+    "Github": "https://github.com/ludangprasetyo/portofolio-react",
+    "TechStack": ["React", "Tailwind CSS"],
+    "Features": ["Tampilan terang dengan aksen oranye", "Responsive", "Halaman detail proyek"]
+  },
+    {
+    "id": "6",
+    "Title": "Aplikasi Manajemen Keuangan",
+    "Description": "Aplikasi berbasis web untuk mencatat dan mengelola pemasukan serta pengeluaran pribadi.",
+    "Img": "/images/keuangan-app.jpg",
+    "Link": "https://github.com/ludangprasetyo/keuangan-app",
+    "Github": "https://github.com/ludangprasetyo/keuangan-app",
+    "TechStack": ["React", "Node.js", "Express", "MongoDB"],
+    "Features": ["Pencatatan transaksi", "Laporan keuangan", "Autentikasi pengguna"]
+  },
+  {
+    "id": "7",
+    "Title": "Sistem Informasi Perpustakaan",
+    "Description": "Sistem untuk mengelola data buku, anggota, dan peminjaman di perpustakaan sekolah.",
+    "Img": "/images/perpustakaan-system.jpg",
+    "Link": "https://github.com/ludangprasetyo/perpustakaan-system",
+    "Github": "https://github.com/ludangprasetyo/perpustakaan-system",
+    "TechStack": ["PHP", "MySQL", "Bootstrap"],
+    "Features": ["Manajemen buku", "Peminjaman dan pengembalian", "Laporan aktivitas"]
+  },
+  {
+    "id": "8",
+    "Title": "Aplikasi Catatan Harian",
+    "Description": "Aplikasi mobile untuk mencatat kegiatan harian dengan fitur pengingat.",
+    "Img": "/images/catatan-harian.jpg",
+    "Link": "https://github.com/ludangprasetyo/catatan-harian",
+    "Github": "https://github.com/ludangprasetyo/catatan-harian",
+    "TechStack": ["Flutter", "Firebase"],
+    "Features": ["Pencatatan harian", "Pengingat", "Sinkronisasi cloud"]
+  },
+  {
+    "id": "9",
+    "Title": "Website Portfolio Pribadi",
+    "Description": "Website untuk menampilkan profil, proyek, dan kontak pribadi.",
+    "Img": "/images/portfolio-website.jpg",
+    "Link": "https://github.com/ludangprasetyo/portfolio-website",
+    "Github": "https://github.com/ludangprasetyo/portfolio-website",
+    "TechStack": ["HTML", "CSS", "JavaScript"],
+    "Features": ["Profil pribadi", "Daftar proyek", "Formulir kontak"]
+  },
+  {
+    "id": "10",
+    "Title": "Aplikasi Resep Masakan",
+    "Description": "Aplikasi untuk mencari dan menyimpan resep masakan favorit.",
+    "Img": "/images/resep-masakan.jpg",
+    "Link": "https://github.com/ludangprasetyo/resep-masakan",
+    "Github": "https://github.com/ludangprasetyo/resep-masakan",
+    "TechStack": ["React Native", "SQLite"],
+    "Features": ["Pencarian resep", "Penyimpanan lokal", "Kategori resep"]
+  }
+  ],
+  "certificates": [
+    {
+      "Img": "/images/certificate1.jpg"
+    },
+    {
+      "Img": "/images/certificate2.jpg"
+    }
+  ]
+}

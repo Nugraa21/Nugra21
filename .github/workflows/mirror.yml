@@ -1,0 +1,20 @@
+name: Mirror ke Akun 2
+
+on:
+  push:
+    branches:
+      - main  # Ganti kalau branch kamu bukan "main"
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repo
+        uses: actions/checkout@v3
+
+      - name: Push ke akun 2 (mirror)
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "action@github.com"
+          git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/nugraaa21/nama-repo.git
+          git push --force mirror main

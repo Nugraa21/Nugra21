@@ -1,0 +1,252 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "Title": "Aplikasi IoT Kolam Lele",
+      "Description": "Aplikasi Flutter untuk monitoring kolam lele dengan ESP32 dan MQTT, menampilkan data sensor secara real-time dari 3 kolam.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/prj1.png?raw=true",
+      "Link": "https://github.com/ludangprasetyo/kolam-lele-flutter",
+      "Github": "https://github.com/ludangprasetyo/kolam-lele-flutter",
+      "TechStack": ["Flutter", "MQTT", "ESP32", "Dart"],
+      "Features": ["Monitoring 3 kolam", "Real-time MQTT data", "Modern UI crypto-style"],
+      "category": "Project"
+    },
+    {
+      "id": "2",
+      "Title": "Ilustrasi 1",
+      "Description": "Gambar yang saya buat dengan tema alam menggunakan Adobe Illustrator.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i1.png?raw=true",
+      "TechStack": ["Adobe Illustrator"],
+      "Features": ["Gambar sederhana", "Tema alam"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "3",
+      "Title": "Ilustrasi 2",
+      "Description": "Ilustrasi digital bertema teknologi masa depan.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i3.png?raw=true",
+      "TechStack": ["Adobe Illustrator"],
+      "Features": ["Gambar sederhana", "Desain futuristik"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "4",
+      "Title": "Ilustrasi 3",
+      "Description": "Sketsa karakter animasi untuk proyek multimedia.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/i4.png?raw=true",
+      "TechStack": ["Adobe Illustrator"],
+      "Features": ["Gambar sederhana", "Karakter animasi"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "5",
+      "Title": "Menjalankan web di docker dengan nginx",
+      "Description": "Membuat sebuah server sederhana dengan nginx untuk hosting aplikasi web.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/t1.jpg?raw=true",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
+      "TechStack": ["Docker", "Nginx"],
+      "Features": ["Simple server setup", "Containerized web deployment"],
+      "category": "Project"
+    },
+    {
+      "id": "6",
+      "Title": "Kumpulan modul belajar dasar HTML",
+      "Description": "Kumpulan tutorial dasar tentang HTML, CSS, JavaScript, dan PHP untuk pemula.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w1.png?raw=true",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
+      "TechStack": ["HTML", "CSS", "JavaScript", "PHP"],
+      "Features": ["Basic web tutorials", "Beginner-friendly content"],
+      "category": "Materi"
+    },
+    {
+      "id": "7",
+      "Title": "Game ULAR",
+      "Description": "Game berbasis website menggunakan JavaScript, replika klasik permainan ular.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w3.png?raw=true",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": ["Web-based snake game", "Interactive gameplay"],
+      "category": "Game"
+    },
+    {
+      "id": "8",
+      "Title": "Web Himatek",
+      "Description": "Website himpunan mahasiswa teknik komputer sebagai pusat informasi organisasi.",
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/images/w4.png?raw=true",
+      "Link": "https://youtu.be/--IZaVqQkyk?si=zNCoRZ3ktv-x_pDZ",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": ["Student organization website", "Informational hub"],
+      "category": "Web"
+    },
+    {
+      "id": "9",
+      "Title": "Smart Home Automation",
+      "Description": "Aplikasi berbasis IoT untuk mengontrol perangkat rumah pintar menggunakan Raspberry Pi dan Node-RED.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Smart+Home",
+      "Link": "https://github.com/example/smart-home",
+      "Github": "https://github.com/example/smart-home",
+      "TechStack": ["Node-RED", "Raspberry Pi", "JavaScript", "MQTT"],
+      "Features": ["Remote device control", "Real-time monitoring", "Customizable dashboard"],
+      "category": "Project"
+    },
+    {
+      "id": "10",
+      "Title": "E-Commerce Platform",
+      "Description": "Website e-commerce sederhana dengan fitur keranjang belanja dan pembayaran online.",
+      "Img": "https://via.placeholder.com/300x200.png?text=E-Commerce",
+      "Link": "https://github.com/example/ecommerce",
+      "Github": "https://github.com/example/ecommerce",
+      "TechStack": ["React", "Node.js", "MongoDB", "Express"],
+      "Features": ["Shopping cart", "Payment gateway integration", "User authentication"],
+      "category": "Web"
+    },
+    {
+      "id": "11",
+      "Title": "Ilustrasi 4",
+      "Description": "Desain poster untuk acara teknologi menggunakan elemen futuristik.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Poster+Tech",
+      "TechStack": ["Adobe Illustrator", "Photoshop"],
+      "Features": ["Desain poster", "Tema futuristik"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "12",
+      "Title": "Tutorial Python Dasar",
+      "Description": "Seri video tutorial untuk belajar dasar-dasar pemrograman Python.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Python+Tutorial",
+      "Link": "https://youtu.be/example-python",
+      "TechStack": ["Python"],
+      "Features": ["Beginner-friendly tutorials", "Practical examples"],
+      "category": "Materi"
+    },
+    {
+      "id": "13",
+      "Title": "Game Tic-Tac-Toe",
+      "Description": "Permainan Tic-Tac-Toe berbasis web dengan mode dua pemain.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Tic-Tac-Toe",
+      "Link": "https://github.com/example/tic-tac-toe",
+      "Github": "https://github.com/example/tic-tac-toe",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": ["Two-player mode", "Simple UI"],
+      "category": "Game"
+    },
+    {
+      "id": "14",
+      "Title": "Weather Monitoring App",
+      "Description": "Aplikasi mobile untuk memantau cuaca secara real-time menggunakan API publik.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Weather+App",
+      "Link": "https://github.com/example/weather-app",
+      "Github": "https://github.com/example/weather-app",
+      "TechStack": ["Flutter", "Dart", "REST API"],
+      "Features": ["Real-time weather data", "Location-based updates", "Clean UI"],
+      "category": "Project"
+    },
+    {
+      "id": "15",
+      "Title": "Ilustrasi 5",
+      "Description": "Desain karakter untuk game 2D bertema petualangan.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Game+Character",
+      "TechStack": ["Adobe Illustrator"],
+      "Features": ["Karakter 2D", "Tema petualangan"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "16",
+      "Title": "Portfolio Website",
+      "Description": "Website portofolio pribadi untuk menampilkan proyek dan keterampilan.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Portfolio",
+      "Link": "https://github.com/example/portfolio",
+      "Github": "https://github.com/example/portfolio",
+      "TechStack": ["React", "Tailwind CSS", "JavaScript"],
+      "Features": ["Responsive design", "Project showcase"],
+      "category": "Web"
+    },
+    {
+      "id": "17",
+      "Title": "Tutorial Machine Learning",
+      "Description": "Modul pembelajaran dasar machine learning menggunakan Python dan TensorFlow.",
+      "Img": "https://via.placeholder.com/300x200.png?text=ML+Tutorial",
+      "Link": "https://youtu.be/example-ml",
+      "TechStack": ["Python", "TensorFlow", "Jupyter Notebook"],
+      "Features": ["Hands-on examples", "Beginner-friendly ML concepts"],
+      "category": "Materi"
+    },
+    {
+      "id": "18",
+      "Title": "Chat Application",
+      "Description": "Aplikasi chat real-time menggunakan WebSocket dan Node.js.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Chat+App",
+      "Link": "https://github.com/example/chat-app",
+      "Github": "https://github.com/example/chat-app",
+      "TechStack": ["Node.js", "WebSocket", "React"],
+      "Features": ["Real-time messaging", "User authentication"],
+      "category": "Project"
+    },
+    {
+      "id": "19",
+      "Title": "Ilustrasi 6",
+      "Description": "Desain logo untuk startup teknologi.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Logo+Design",
+      "TechStack": ["Adobe Illustrator"],
+      "Features": ["Minimalist logo", "Branding"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "20",
+      "Title": "Pong Game",
+      "Description": "Permainan Pong klasik berbasis web menggunakan canvas.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Pong+Game",
+      "Link": "https://github.com/example/pong-game",
+      "Github": "https://github.com/example/pong-game",
+      "TechStack": ["HTML", "CSS", "JavaScript"],
+      "Features": ["Single-player mode", "Retro design"],
+      "category": "Game"
+    },
+    {
+      "id": "21",
+      "Title": "Task Management App",
+      "Description": "Aplikasi manajemen tugas dengan fitur kolaborasi tim.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Task+App",
+      "Link": "https://github.com/example/task-app",
+      "Github": "https://github.com/example/task-app",
+      "TechStack": ["Vue.js", "Firebase", "JavaScript"],
+      "Features": ["Task assignment", "Team collaboration", "Deadline tracking"],
+      "category": "Project"
+    },
+    {
+      "id": "22",
+      "Title": "Tutorial DevOps",
+      "Description": "Panduan lengkap untuk memulai DevOps dengan CI/CD menggunakan Jenkins.",
+      "Img": "https://via.placeholder.com/300x200.png?text=DevOps+Tutorial",
+      "Link": "https://youtu.be/example-devops",
+      "TechStack": ["Jenkins", "Docker", "Kubernetes"],
+      "Features": ["CI/CD pipeline setup", "Container orchestration"],
+      "category": "Materi"
+    },
+    {
+      "id": "23",
+      "Title": "Ilustrasi 7",
+      "Description": "Desain UI mockup untuk aplikasi mobile.",
+      "Img": "https://via.placeholder.com/300x200.png?text=UI+Mockup",
+      "TechStack": ["Figma", "Adobe XD"],
+      "Features": ["Mobile UI design", "Prototyping"],
+      "category": "Ilustrasi"
+    },
+    {
+      "id": "24",
+      "Title": "Inventory Management System",
+      "Description": "Sistem manajemen inventaris berbasis web untuk usaha kecil.",
+      "Img": "https://via.placeholder.com/300x200.png?text=Inventory+System",
+      "Link": "https://github.com/example/inventory-system",
+      "Github": "https://github.com/example/inventory-system",
+      "TechStack": ["Django", "PostgreSQL", "Python"],
+      "Features": ["Stock tracking", "User management", "Reporting"],
+      "category": "Project"
+    }
+  ],
+  "certificates": [
+    {
+      "Img": "https://github.com/Nugraa21/Nugra21/blob/main/public/Sertivicate/Cuplikan%20layar%202025-05-25%20133314.png?raw=true"
+    }
+  ]
+}

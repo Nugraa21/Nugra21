@@ -1,0 +1,245 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* === RESET & GLOBAL === */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Poppins", serif;
+	scroll-behavior: smooth;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(239, 241, 99, 0.737) rgba(12, 5, 53, 0);
+}
+
+html,
+body {
+	overflow-x: hidden;
+	background: #ffffff00;
+	scroll-behavior: smooth !important;
+}
+
+/* === SCROLLBAR STYLE MODERN (Dark Neon) === */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+	background: rgba(3, 0, 20, 0.4);
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(99, 102, 241, 0.3);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	border-radius: 20px;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	box-shadow:
+		inset 0 0 20px rgba(168, 85, 247, 0.2),
+		0 0 10px rgba(99, 102, 241, 0.2);
+	transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(99, 102, 241, 0.5);
+	border: 1px solid rgba(168, 85, 247, 0.3);
+	box-shadow:
+		inset 0 0 30px rgba(168, 85, 247, 0.3),
+		0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+::-webkit-scrollbar-thumb:active {
+	background: rgba(99, 102, 241, 0.6);
+	border: 1px solid rgba(168, 85, 247, 0.4);
+	box-shadow:
+		inset 0 0 40px rgba(168, 85, 247, 0.4),
+		0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+/* === AOS OPTIMIZATION === */
+[data-aos] {
+	will-change: transform, opacity !important;
+}
+
+/* === KEYFRAMES ANIMASI === */
+@keyframes blob {
+	0%, 100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-20px);
+	}
+}
+
+@keyframes shine {
+	from {
+		left: -100%;
+	}
+	to {
+		left: 200%;
+	}
+}
+
+@keyframes blink {
+	to {
+		visibility: hidden;
+	}
+}
+
+@keyframes scrollTech {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(-50%);
+	}
+}
+
+/* === ANIMASI UTILITY === */
+.animate-blob {
+	animation: blob 8s infinite;
+}
+
+.animation-delay-2000 {
+	animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+	animation-delay: 4s;
+}
+
+.animate-shine {
+	animation: shine 1.5s ease-in-out infinite;
+}
+
+@layer utilities {
+	.animate-blink {
+		animation: blink 1s steps(2, start) infinite;
+	}
+}
+
+/* === SCROLLING TECH STACK === */
+.scrolling-tech-wrapper {
+	position: relative;
+	overflow: hidden;
+	max-width: 800px;
+	margin: 0 auto;
+	padding-top: 5rem;
+
+	-webkit-mask-image: linear-gradient(
+		to right,
+		transparent 0%,
+		black 10%,
+		black 90%,
+		transparent 100%
+	);
+	mask-image: linear-gradient(
+		to right,
+		transparent 0%,
+		black 10%,
+		black 90%,
+		transparent 100%
+	);
+}
+
+.scrolling-tech-text {
+	display: inline-flex;
+	align-items: center;
+	gap: 3rem;
+	animation: scrollTech 25s linear infinite;
+	will-change: transform;
+	user-select: none;
+}
+
+@keyframes sparkle {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+.animate-sparkle {
+  animation: sparkle 1.5s infinite linear;
+}
+/*  */
+
+/* .lanyard-wrapper {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: scale(1);
+  transform-origin: center;
+} */
+.lanyard-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  top: -100px;
+
+}
+
+/* Extra small screens (xs: ≥360px) */
+@media (min-width: 360px) {
+  .lanyard-container {
+  position: relative;
+    height: 300px;
+    top: -20;
+  }
+}
+
+/* Small screens (sm: ≥640px) */
+@media (min-width: 640px) {
+  .lanyard-container {
+  position: absolute;
+    height: 350px;
+    top: -10rem;
+  }
+}
+
+/* Medium screens (md: ≥768px) */
+@media (min-width: 768px) {
+  .lanyard-container {
+  position: absolute;
+    height: 400px;
+    top: -10rem;
+  }
+}
+
+/* Large screens (lg: ≥1024px) */
+@media (min-width: 1024px) {
+  .lanyard-container {
+  position: absolute;
+    width: 50%;
+    height: 450px;
+    top: -10rem; /* Adjusted to 20px (lower than 40px for a slightly higher start) */
+    right: 2rem; /* Adjusted to 2rem (32px) for a closer right alignment */
+  }
+}
+
+/* Extra large screens (xl: ≥1280px) */
+@media (min-width: 1280px) {
+  .lanyard-container {
+  position: absolute;
+    height: 500px;
+    top: -100px;
+    right: 2rem;
+  }
+}
